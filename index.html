@@ -1,0 +1,322 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>ColetorPRO | Dashboard por Indústria</title><style>
+:root{--navy:#0b2742;--navy2:#123b5f;--red:#e30613;--bg:#f4f6f8;--card:#fff;--muted:#6c7783;--line:#e5e9ee;--green:#20a36a;--amber:#f0a51a;--danger:#d92935;--shadow:0 8px 24px rgba(11,39,66,.08)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--navy);font-family:Arial,Helvetica,sans-serif}.header{min-height:150px;background:#fff;position:relative;overflow:hidden;border-bottom:1px solid #e8ebef;padding:28px 44px 24px}.header:after{content:"";position:absolute;right:-30px;top:-100px;width:270px;height:310px;background:var(--red);transform:rotate(16deg);border-radius:24px}.header:before{content:"";position:absolute;right:105px;top:-95px;width:85px;height:300px;border:2px solid var(--red);transform:rotate(16deg);border-radius:20px}.brand{position:relative;z-index:2}.eyebrow{font-size:12px;letter-spacing:3px;font-weight:800;color:var(--red);text-transform:uppercase}h1{margin:4px 0 3px;font-size:38px;letter-spacing:-1.4px;font-weight:900}h1 span{color:var(--red)}.subtitle{font-size:14px;color:var(--muted);font-weight:600}.period{position:absolute;z-index:3;right:45px;bottom:24px;background:var(--navy);color:#fff;padding:9px 15px;border-radius:8px;font-size:12px;font-weight:800}.wrap{padding:24px 44px 44px;max-width:1700px;margin:auto}.grid-kpi{display:grid;grid-template-columns:repeat(8,1fr);gap:12px;margin-bottom:20px}.kpi{background:var(--card);border-radius:12px;padding:16px;box-shadow:var(--shadow);border-top:4px solid var(--red);min-height:112px}.kpi.dark{background:var(--navy);color:#fff}.kpi .label{font-size:10px;color:var(--muted);text-transform:uppercase;font-weight:800;letter-spacing:.7px}.kpi.dark .label{color:#d8e1e9}.kpi .value{font-size:27px;font-weight:900;margin-top:7px;letter-spacing:-1px}.kpi .note{font-size:10px;color:var(--muted);margin-top:5px}.kpi.dark .note{color:#d8e1e9}.section-title{display:flex;align-items:center;gap:10px;margin:25px 0 12px;font-size:18px;font-weight:900;text-transform:uppercase}.section-title:before{content:"";width:7px;height:24px;background:var(--red);border-radius:3px}.grid2{display:grid;grid-template-columns:1fr;gap:18px}.visits-day-card{min-height:0}.operation-card{min-height:0}.grid3{display:grid;grid-template-columns:.82fr .82fr 1.36fr;gap:18px}.card{background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:20px}.card-title{font-size:14px;font-weight:900;text-transform:uppercase;margin-bottom:4px}.card-sub{font-size:11px;color:var(--muted);margin-bottom:14px}.bar-chart{height:350px;display:flex;align-items:flex-end;gap:9px;padding:18px 8px 70px;border-bottom:1px solid var(--line);overflow:visible!important}.bar-group{height:100%;flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;position:relative;min-width:35px}.bars{height:245px;width:100%;display:flex;align-items:flex-end;justify-content:center;gap:4px}.bar{width:24px;border-radius:5px 5px 0 0;position:relative;min-height:2px}.bar.red{background:var(--red)}.bar.navy{background:var(--navy)}.bar span{position:absolute;top:-17px;left:50%;transform:translateX(-50%);font-size:8px;font-weight:800;white-space:nowrap}.bar-label{font-size:8px;color:var(--muted);font-weight:800;position:absolute;bottom:-48px;width:88px;white-space:normal;line-height:1.15;text-align:center;overflow:visible;word-break:break-word;transform:translateX(-50%);left:50%;transform-origin:center top}.legend{display:flex;gap:15px;font-size:10px;color:var(--muted);margin-top:12px}.legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px}.legend .r{background:var(--red)}.legend .n{background:var(--navy)}.progress-wrap{margin:15px 0}.progress-top{display:flex;justify-content:space-between;font-size:11px;font-weight:800}.progress{height:13px;background:#e9edf1;border-radius:8px;overflow:hidden;margin-top:6px}.progress>div{height:100%;border-radius:8px}.exec{background:var(--red)}.hours{background:var(--navy)}.grid3>.card:nth-child(1),.grid3>.card:nth-child(2){padding:16px}.grid3>.card:nth-child(1) .score,.grid3>.card:nth-child(2) .score{gap:12px}.grid3>.card:nth-child(1) .score-num,.grid3>.card:nth-child(2) .score-num{font-size:44px}.grid3>.card:nth-child(1) .score-num[style],.grid3>.card:nth-child(2) .score-num[style]{font-size:28px!important}.score{display:flex;align-items:center;gap:20px}.score-num{font-size:52px;font-weight:900;color:var(--red);line-height:1}.score-max{font-size:13px;color:var(--muted);font-weight:800}.stars{font-size:22px;letter-spacing:2px;color:#f0a51a}.metric-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);font-size:12px}.metric-row:last-child{border-bottom:0}.metric-row b{font-size:13px}.callout{background:#f8fafb;border-left:5px solid var(--red);border-radius:8px;padding:12px 13px;margin-top:15px;font-size:12px;line-height:1.45}.tabs{display:flex;gap:8px;margin-bottom:12px}.tab{border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 12px;font-size:11px;font-weight:900;cursor:pointer}.tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}.table-tools{display:flex;justify-content:space-between;gap:10px;margin-bottom:10px;align-items:center}.search{border:1px solid var(--line);border-radius:8px;padding:9px 11px;width:300px;font-size:12px}select{border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-size:12px;background:#fff;color:var(--navy)}.table-wrap{overflow:auto;max-height:650px}table{width:100%;border-collapse:collapse;font-size:10px}th{position:sticky;top:0;background:var(--navy);color:#fff;text-align:left;padding:10px 8px;font-size:9px;text-transform:uppercase;letter-spacing:.3px;cursor:pointer;z-index:1}td{padding:8px;border-bottom:1px solid var(--line);font-weight:600;white-space:nowrap}tr:hover td{background:#fafbfc}.badge{padding:4px 7px;border-radius:5px;font-size:9px;font-weight:900}.ok{background:#e4f6ee;color:#13724b}.warn{background:#fff1d8;color:#95650b}.bad{background:#ffe5e7;color:#b51d28}.footer{margin-top:18px;color:#8a949e;font-size:10px;display:flex;justify-content:space-between}.small-note{font-size:10px;color:var(--muted);line-height:1.4}.rank-list{display:flex;flex-direction:column;gap:9px}.rank-item{display:grid;grid-template-columns:30px 1fr 70px;gap:8px;align-items:center;font-size:10px}.rank-num{font-weight:900;color:var(--red)}.rank-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rank-bar{height:7px;background:#e9edf1;border-radius:5px;overflow:hidden;margin-top:4px}.rank-bar>div{height:100%;background:var(--navy)}.rank-val{text-align:right;font-weight:900}
+.rank-switch{display:flex;gap:5px;margin:10px 0 12px}
+.rank-switch button{border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:6px;padding:6px 8px;font-size:9px;font-weight:900;cursor:pointer;flex:1;white-space:nowrap}
+.rank-switch button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.rank-empty{padding:18px 0;text-align:center;color:var(--muted);font-size:10px;font-weight:700}
+.rank-count{font-size:9px;color:var(--muted);font-weight:700;margin:-4px 0 9px}
+.visits-store-card{margin-top:18px;padding-bottom:28px}.store-chart{height:410px;overflow:visible!important;padding-bottom:110px}.store-chart .bars{height:285px}.store-chart .bar-label{bottom:-88px;width:105px;max-width:105px;overflow:visible;text-overflow:clip;font-size:8px;white-space:normal;word-break:break-word;transform:translateX(-50%);left:50%;}.operation-card{padding-top:18px;padding-bottom:18px}.operation-card .progress-wrap{margin:10px 0}.operation-card .metric-row{padding:7px 0}.rank-list{max-height:250px;overflow-y:auto;padding-right:4px}.rank-list.all-none{max-height:none;overflow:visible;display:grid;grid-template-columns:1fr 1fr;column-gap:18px;row-gap:6px}.rank-list.all-none .rank-item{grid-template-columns:24px 1fr 64px}.rank-list.all-none .rank-bar{display:none}
+@media(max-width:700px){.store-chart{height:380px;padding-bottom:95px}.store-chart .bars{height:255px}.store-chart .bar-label{bottom:-78px;width:90px;max-width:90px}.rank-list{max-height:300px}}
+.visits-store-card{margin-top:18px}.store-chart{height:410px;gap:10px;padding-bottom:110px;overflow-x:auto!important;overflow-y:visible!important;justify-content:flex-start}.store-chart .bar-group{flex:0 0 105px}.store-chart .bar-label{position:absolute;white-space:normal;word-break:normal;overflow-wrap:anywhere;width:100px;max-width:100px;bottom:-88px;left:50%;transform:translateX(-50%)}.store-chart .bars{height:285px}.store-chart .bar-label{bottom:-88px;width:105px;max-width:105px;overflow:visible;text-overflow:clip;font-size:8px;white-space:normal;word-break:break-word;transform:translateX(-50%);left:50%}.store-chart .bar{width:22px}.industry-chart{overflow-x:auto!important;overflow-y:visible!important;justify-content:flex-start;padding-bottom:95px}.industry-chart .bar-group{flex:0 0 120px}.industry-chart .bar-label{width:112px;max-width:112px;white-space:normal;word-break:normal;overflow-wrap:anywhere;line-height:1.15;bottom:-70px;transform:translateX(-50%);left:50%}.pdf-context{font-size:11px;font-weight:800;margin:0 0 8px}.hidden{display:none}@media(max-width:1200px){.grid-kpi{grid-template-columns:repeat(4,1fr)}.grid2,.grid3{grid-template-columns:1fr}}@media(max-width:700px){.header{padding:24px}.wrap{padding:18px}.grid-kpi{grid-template-columns:repeat(2,1fr)}h1{font-size:28px}.period{right:24px}.search{width:190px}}
+
+.topbar{display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:14px 18px;margin-bottom:20px;position:sticky;top:8px;z-index:20}
+.topbar label{font-size:10px;font-weight:900;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px}
+.topbar select{min-width:420px;max-width:100%;font-weight:800;font-size:13px}
+.btn{background:var(--red);color:#fff;border:0;border-radius:8px;padding:10px 16px;font-weight:900;font-size:12px;cursor:pointer}
+#empty{text-align:center;padding:80px 20px;color:var(--muted);font-size:14px}
+.pill{background:#eef2f6;border-radius:6px;padding:3px 7px;font-size:9px;font-weight:800}
+.bar-label{max-width:110px}
+.topbar{position:relative;padding-right:150px}
+.combo{position:relative;flex:1;min-width:280px;max-width:760px}
+.combo input{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:13px;font-weight:800;color:var(--navy);background:#fff}
+.combo input:disabled{background:#f4f6f8}
+.combo-list{position:absolute;left:0;right:0;top:100%;margin-top:4px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);max-height:340px;overflow:auto;z-index:50}
+.combo-list div{padding:9px 12px;font-size:12px;font-weight:700;cursor:pointer;border-bottom:1px solid #f0f2f5}
+.combo-list div:hover,.combo-list div.act{background:#eef2f6}
+.combo-list div.all{font-weight:900;color:var(--red)}
+.combo-list .none{color:var(--muted);cursor:default}
+.btn-pdf{background:var(--navy);margin-top:15px}
+.btn-pdf:disabled{opacity:.4;cursor:default}
+.csvlink{position:absolute;top:5px;right:12px;font-size:9px;color:#aab2bb;cursor:pointer;opacity:.55;text-align:right;max-width:140px;line-height:1.2}
+.csvlink:hover{opacity:1;color:var(--navy)}
+.grid-kpi.k6{grid-template-columns:repeat(6,1fr)}
+@media(max-width:1200px){.grid-kpi.k6{grid-template-columns:repeat(3,1fr)}.topbar{padding-right:18px;padding-top:24px}}
+@media(max-width:700px){.grid-kpi.k6{grid-template-columns:repeat(2,1fr)}}
+@media print{
+ @page{size:A4 landscape;margin:8mm}
+ *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ body{background:#fff}
+ .topbar,.tabs,.search,#empty{display:none!important}
+ .header{min-height:0;padding:14px 24px}.header:before,.header:after{display:none}
+ .period{position:static;display:inline-block;margin-top:8px}
+ .wrap{padding:8px 0;max-width:none}
+ .card,.kpi{box-shadow:none;border:1px solid var(--line);break-inside:avoid}
+ .grid-kpi{gap:8px}
+ .section-title{break-after:avoid;margin:14px 0 8px}
+ .table-wrap{max-height:none!important;overflow:visible!important}
+ th{position:static}thead{display:table-header-group}tr{break-inside:avoid}
+ .bar-chart{overflow:visible}
+ .pdf-detail{display:block!important}
+ .pdf-detail .pdf-table-wrap{overflow:visible!important}
+ .pdf-detail table{font-size:6.5px;table-layout:fixed}
+ .pdf-detail th{font-size:6px;padding:3px 3px;white-space:nowrap}
+ .pdf-detail td{font-size:6.5px;padding:2.5px 3px;white-space:nowrap}
+ .pdf-detail .section-title{margin-top:12px;page-break-before:always}
+ .pdf-detail .section-title:first-of-type{page-break-before:auto}
+ .pdf-detail .pdf-context{font-size:8px;margin-bottom:5px}
+ .pdf-detail .pdf-table-wrap{page-break-inside:auto}
+ .pdf-detail tr{page-break-inside:avoid}
+}
+.pdf-detail{display:none}
+.pdf-detail table{width:100%;border-collapse:collapse}
+.pdf-detail th{background:var(--navy);color:#fff;text-align:left}
+.pdf-detail td,.pdf-detail th{border-bottom:1px solid var(--line)}
+</style>
+<style id="pdf-completo-fix">
+@media print{
+@page{size:A4 landscape;margin:8mm}
+*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+body{background:#fff!important}
+.header,.topbar,.tabs,.search,#empty,#app>.grid-kpi,#app>.section-title,#app>.grid2,#app>.visits-store-card,#app>.card,#app>.grid3,#app>.footer,.footer{display:none!important}
+.wrap{padding:0!important;max-width:none!important;margin:0!important}
+#app{display:block!important}
+.pdf-detail{display:block!important;width:100%!important;margin:0!important}
+.pdf-report-head{border-bottom:2px solid var(--red);padding:0 0 7px;margin-bottom:8px}
+.pdf-report-kicker{font-size:8px;letter-spacing:1.5px;font-weight:900;color:var(--red);text-transform:uppercase}
+.pdf-report-title{font-size:18px;font-weight:900;color:var(--navy);margin-top:2px}
+.pdf-detail .pdf-context{font-size:8px!important;margin:3px 0 0!important;color:var(--muted)}
+.pdf-detail .section-title{font-size:11px!important;margin:10px 0 5px!important;page-break-before:auto!important;break-after:avoid!important}
+.pdf-detail .section-title:before{width:4px!important;height:15px!important}
+.pdf-summary{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-bottom:5px}
+.pdf-summary .pdf-summary-item{border:1px solid var(--line);border-top:2px solid var(--red);padding:5px 6px;min-height:38px}
+.pdf-summary .label{font-size:6px;text-transform:uppercase;font-weight:900;color:var(--muted)}
+.pdf-summary .value{font-size:10px;font-weight:900;color:var(--navy);margin-top:2px}
+.pdf-summary .note{font-size:6px;color:var(--muted);margin-top:1px}
+.pdf-detail .pdf-table-wrap{overflow:visible!important;width:100%!important;max-width:none!important;page-break-inside:auto!important}
+.pdf-detail table{width:100%!important;table-layout:auto!important;border-collapse:collapse!important;font-size:6.2px!important}
+.pdf-detail th{background:var(--navy)!important;color:#fff!important;font-size:5.8px!important;line-height:1.1!important;padding:3px 3px!important;white-space:normal!important;word-break:break-word!important;position:static!important}
+.pdf-detail td{font-size:6.2px!important;line-height:1.15!important;padding:2.5px 3px!important;white-space:normal!important;word-break:break-word!important;overflow:visible!important}
+.pdf-detail tr{page-break-inside:avoid!important}
+.pdf-detail .section-title{break-inside:avoid}
+.pdf-rank th,.pdf-rank td{font-size:5.6px!important;padding:1.6px 2.5px!important}
+.pdf-rank th.gs,.pdf-rank td.gs{border-left:1.5px solid #9aa6b2!important}
+.pdf-rank td:first-child,.pdf-rank td.gs{color:var(--muted)}
+.pdf-op{display:grid;grid-template-columns:1.7fr 1fr;gap:8px;margin-bottom:6px}
+.pdf-op>div{border:1px solid var(--line);padding:6px;break-inside:avoid}
+.pdf-chart-title{font-size:8px;font-weight:900;text-transform:uppercase;margin-bottom:5px;color:var(--navy)}
+.pdf-vchart{display:flex;align-items:flex-end;gap:2px;height:118px;border-bottom:1px solid var(--line)}
+.pdf-vchart .g{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}
+.pdf-vchart .bs{display:flex;align-items:flex-end;justify-content:center;gap:1px;width:100%;height:88px}
+.pdf-vchart .b{flex:1;max-width:9px;position:relative;min-height:1px}
+.pdf-vchart .b i{position:absolute;top:-7px;left:50%;transform:translateX(-50%);font-style:normal;font-size:5px;font-weight:800;color:var(--navy)}
+.pdf-vchart .lb{height:26px;font-size:5px;color:var(--muted);font-weight:800;writing-mode:vertical-rl;padding-top:2px}
+.pdf-legend{display:flex;gap:10px;font-size:6.5px;color:var(--muted);margin:2px 0 4px;font-weight:700}
+.pdf-legend i{display:inline-block;width:6px;height:6px;margin-right:3px;border-radius:1px}
+.n{background:var(--navy)!important}.r{background:var(--red)!important}
+.pdf-prog{margin:5px 0 7px}.pdf-prog .t{display:flex;justify-content:space-between;font-size:7px;font-weight:900}
+.pdf-prog .pb{height:6px;background:#e9edf1;border-radius:3px;overflow:hidden;margin-top:2px}.pdf-prog .pb>div{height:100%}
+.pdf-m{display:flex;justify-content:space-between;font-size:7px;padding:2.2px 0;border-bottom:1px solid var(--line)}
+.hb{height:3px;border-radius:1px;margin:.6px 0}
+.pdf-detail thead{display:table-header-group!important}
+}
+
+.top-actions{display:flex;gap:8px;align-items:center;margin-top:15px}.top-actions .btn{margin-top:0}.btn-html{background:#123b5f}.exported-view .top-actions #htmlBtn{display:none}.exported-view .combo input{cursor:default}.exported-view .topbar{position:relative}
+</style>
+</head><body>
+<header class="header"><div class="brand"><div class="eyebrow">Resultados em campo • ColetorPRO</div><h1 id="ttl">EXECUÇÃO POR INDÚSTRIA <span>| Dashboard</span></h1><div class="subtitle" id="sub">Dashboard público • dados carregados automaticamente</div></div><div class="period" id="period">CARREGANDO DADOS</div></header>
+<main class="wrap">
+<div class="topbar"><div class="combo"><label>Indústria (fornecedor)</label><input id="indIn" placeholder="Carregando dados publicados..." autocomplete="off" disabled><div class="combo-list hidden" id="indList"></div></div>
+<div class="top-actions"><button class="btn btn-pdf" id="pdfBtn" disabled onclick="exportPDF()">Exportar PDF</button><button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML()">Baixar HTML</button></div>
+</div>
+<div id="empty">Carregando dados publicados...</div>
+<div id="app" class="hidden">
+<div class="grid-kpi" id="kpis"></div>
+<div class="section-title">Visão operacional</div>
+<div class="grid2"><section class="card visits-day-card"><div class="card-title" id="chTitle"></div><div class="card-sub" id="chSub"></div><div class="bar-chart" id="chart"></div><div class="legend"><span><i class="r"></i>Realizadas</span><span><i class="n"></i>Agendadas</span></div></section>
+<section class="card operation-card"><div class="card-title">Aproveitamento da operação</div><div class="card-sub">Execução das visitas e utilização das horas contratadas</div><div class="progress-wrap"><div class="progress-top"><span>Visitas realizadas</span><strong id="vp"></strong></div><div class="progress"><div class="exec" id="vb"></div></div></div><div class="progress-wrap"><div class="progress-top"><span>Horas executadas</span><strong id="hp"></strong></div><div class="progress"><div class="hours" id="hb"></div></div></div><div class="metric-row"><span>Gap de visitas</span><b id="vg"></b></div><div class="metric-row"><span>Gap de horas</span><b id="hg"></b></div><div class="metric-row"><span>Não compareceu</span><b id="nc"></b></div><div class="metric-row"><span>Em andamento</span><b id="ea"></b></div><div class="metric-row"><span>Agendado (a realizar)</span><b id="sc"></b></div></section></div>
+<section class="card visits-store-card"><div class="card-title" id="storeChTitle">Visitas por loja</div><div class="card-sub" id="storeChSub">Agendadas x realizadas por loja</div><div class="bar-chart store-chart" id="storeChart"></div><div class="legend"><span><i class="r"></i>Realizadas</span><span><i class="n"></i>Agendadas</span></div></section>
+<div class="section-title">Tempo de atendimento e qualidade</div>
+<div class="grid3"><section class="card"><div class="card-title">Tempo médio de atendimento</div><div class="card-sub">Por visita realizada</div><div class="score"><div><div class="score-num" id="at"></div><div class="score-max">por visita</div></div><div><div class="small-note">Menor atendimento</div><div class="score-num" style="font-size:32px" id="mt"></div><div class="score-max">minutos</div></div></div></section>
+<section class="card"><div class="card-title">Nota média do repositor</div><div class="card-sub">Escala máxima = 5,0</div><div class="score"><div class="score-num" id="as"></div><div><div class="stars">★★★★★</div><div class="small-note">média das avaliações registradas</div></div></div></section>
+<section class="card"><div class="card-title" id="rkTitle"></div><div class="card-sub" id="rkSub"></div><div class="rank-switch" id="rankSwitch"><button class="active" data-rank="more">Mais horas</button><button data-rank="less">Menos horas</button><button data-rank="none">Sem visitas</button></div><div class="rank-count" id="rankCount"></div><div class="rank-list" id="rank"></div></section></div>
+<div class="section-title">Detalhamento completo</div>
+<section class="card"><div class="tabs" id="tabs"></div><div class="table-tools"><div><div class="card-title" id="tbTitle"></div><div class="card-sub" id="tbSub"></div></div><input class="search" id="q" placeholder="Buscar..."></div><div class="table-wrap"><table id="tb"><thead></thead><tbody></tbody></table></div></section>
+<div id="pdfDetail" class="pdf-detail">
+<div class="pdf-report-head"><div class="pdf-report-kicker">COLETORPRO • RELATÓRIO COMPLETO</div><div class="pdf-report-title" id="pdfTitle">Execução por indústria</div><div class="card-sub pdf-context" id="pdfContext"></div></div>
+<div class="section-title">Resumo da indústria</div>
+<div class="pdf-summary" id="pdfSummary"></div>
+<div class="section-title">Visão operacional</div>
+<div class="pdf-op"><div><div class="pdf-chart-title">Visitas por dia — agendadas x realizadas</div><div class="pdf-vchart" id="pdfDayChart"></div><div class="pdf-legend"><span><i class="n"></i>Agendadas</span><span><i class="r"></i>Realizadas</span></div></div><div id="pdfOpSide"></div></div>
+<div class="section-title" id="pdfIndChartTitle">Visitas por indústria</div><div class="pdf-legend"><span><i class="n"></i>Agendadas</span><span><i class="r"></i>Realizadas</span></div><div class="pdf-table-wrap" id="pdfIndChartWrap"><table id="pdfIndChart" class="pdf-rank"><thead></thead><tbody></tbody></table></div>
+<div class="section-title" id="pdfStoreTitle">Visitas por loja</div><div class="pdf-legend"><span><i class="n"></i>Agendadas</span><span><i class="r"></i>Realizadas</span></div><div class="pdf-table-wrap"><table id="pdfStoreChart" class="pdf-rank"><thead></thead><tbody></tbody></table></div>
+<div class="section-title" id="pdfMoreTitle">Mais horas</div><div class="pdf-table-wrap"><table id="pdfRankMore" class="pdf-rank"><thead></thead><tbody></tbody></table></div>
+<div class="section-title" id="pdfLessTitle">Menos horas</div><div class="pdf-table-wrap"><table id="pdfRankLess" class="pdf-rank"><thead></thead><tbody></tbody></table></div>
+<div class="section-title" id="pdfNoneTitle">Sem visitas</div><div class="pdf-table-wrap"><table id="pdfRankNone" class="pdf-rank"><thead></thead><tbody></tbody></table></div>
+<div class="section-title" id="pdfIndTitle">Detalhamento completo — Indústrias</div><div class="pdf-table-wrap" id="pdfIndWrap"><table id="pdfInd"><thead></thead><tbody></tbody></table></div>
+<div class="section-title">Detalhamento completo — Lojas</div><div class="pdf-table-wrap"><table id="pdfLojas"><thead></thead><tbody></tbody></table></div>
+<div class="section-title">Detalhamento completo — Promotores</div><div class="pdf-table-wrap"><table id="pdfProm"><thead></thead><tbody></tbody></table></div>
+<div class="section-title">Detalhamento completo — Visitas</div><div class="pdf-table-wrap"><table id="pdfVisitas"><thead></thead><tbody></tbody></table></div>
+</div>
+</div>
+<div class="footer"><span>Fonte: Relatório “Horas Contratadas x Executadas – Completo” • ColetorPRO</span><span id="upd"></span></div></main>
+<script>
+const $=id=>document.getElementById(id);
+const fI=n=>new Intl.NumberFormat('pt-BR').format(Math.round(n)),fP=n=>(Number(n)||0).toFixed(1).replace('.',',')+'%',fH=m=>{m=Math.round(Number(m)||0);const s=m<0?'-':'';m=Math.abs(m);return s+String(Math.floor(m/60)).padStart(2,'0')+'h'+String(m%60).padStart(2,'0')},fMin=m=>m==null?'—':Math.round(m)+' min',fN=n=>n?n.toFixed(2).replace('.',','):'—';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const normSt=s=>{const t=(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();if(t.startsWith('conclu')||t.includes('avaliacao pendente'))return 'Concluido';if(t.includes('andamento'))return 'Em Andamento';if(t.includes('agendad'))return 'Agendado';if(t.includes('compareceu'))return 'Não Compareceu';return s.trim()};
+const hm=s=>{s=(s||'').trim();if(!s.includes(':'))return 0;const[a,b]=s.split(':');return (+a||0)*60+(+b||0)};
+
+/* CORREÇÃO: normaliza datas com ano de 2 ou 4 dígitos para o mesmo padrão DD/MM/AAAA. */
+const normalizarData=s=>{
+ s=String(s||'').trim();
+ const m=s.match(/^(\d{2})\/(\d{2})\/(\d{2}|\d{4})/);
+ if(!m)return '';
+ let ano=m[3];
+ if(ano.length===2)ano='20'+ano;
+ return `${m[1]}/${m[2]}/${ano}`;
+};
+
+const dataOrdenavel=d=>{
+ const m=String(d||'').match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+ return m?Number(m[3]+m[2]+m[1]):0;
+};
+
+const badge=p=>p==null?'—':`<span class="badge ${p>=90?'ok':p>=60?'warn':'bad'}">${fP(p)}</span>`;
+let ALL=[],cur=[],tab='lojas',sortS={key:'real',dir:-1},suppliers=[];
+function parse(txt){
+ const lines=txt.replace(/^\uFEFF/,'').split(/\r?\n/);const out=[];
+ for(let i=1;i<lines.length;i++){const l=lines[i];if(!l.trim())continue;const c=l.split(';');if(c.length<15)continue;
+  const st=normSt(c[5]),ent=(c[6]||'').split(' - '),d=normalizarData(ent[0]||c[4]||'');
+  out.push({loja:c[0].trim(),forn:c[1].trim(),comp:c[2].trim(),prom:c[3].trim(),status:st,date:d,tempo:hm(c[7]),nota:parseFloat(c[10])||0,contr:hm(c[13]),loja_ok:1,aval:c[9]});}
+ return out
+}
+function agg(rows){
+ const lojas=new Set(),cm={};let ag=0,re=0,nc=0,ea=0,sc=0,tm=0,mn=null,ns=0,nn=0;
+ for(const r of rows){lojas.add(r.loja);cm[r.forn+'|'+r.loja]=r.contr;ag++;
+  if(r.status==='Não Compareceu')nc++;else if(r.status==='Em Andamento')ea++;else if(r.status==='Agendado')sc++;
+  else if(r.status==='Concluido'){re++;tm+=r.tempo;if(r.tempo>0&&(mn==null||r.tempo<mn))mn=r.tempo;if(r.nota>0){ns+=r.nota;nn++}}}
+ let c=0;for(const k in cm)c+=cm[k];
+ return{lojas:lojas.size,ag,real:re,nc,ea,sc,contr:c,exec:tm,pct:ag?re/ag*100:0,util:c?tm/c*100:null,avg:re?tm/re:0,min:mn,nota:nn?ns/nn:0}}
+function group(rows,key){const m=new Map();for(const r of rows){const k=typeof key==='function'?key(r):r[key];if(!m.has(k))m.set(k,[]);m.get(k).push(r)}return[...m].map(([k,v])=>({name:k,...agg(v),rows:v}))}
+const dkey=d=>dataOrdenavel(d);
+function render(){
+ const sel=curInd,all=sel==='__all__';cur=all?ALL:ALL.filter(r=>r.forn===sel);const O=agg(cur);
+ $('ttl').innerHTML=all?'EXECUÇÃO GERAL <span>| Dashboard</span>':'INDÚSTRIA <span>| '+esc(sel.length>48?sel.slice(0,46)+'…':sel)+'</span>';
+ $('sub').textContent=all?'Panorama consolidado de todas as indústrias, lojas, horas, visitas e qualidade':sel+' • visão detalhada por loja, promotor e visita';
+ const k=[];
+ if(all){k.push(['Indústrias',suppliers.length,'na base']);k.push(['Lojas',O.lojas,'com registros'])}
+ k.push(['Visitas agendadas',fI(O.ag),'programadas'],['Visitas realizadas',fI(O.real),fP(O.pct)+' de execução'],['Horas contratadas',fH(O.contr),'base registrada',1],['Horas executadas',fH(O.exec),O.util==null?'sem horas contratadas':fP(O.util)+' das contratadas',1],['Tempo médio',fH(O.avg),'por visita realizada'],['Nota média',fN(O.nota),'escala máxima 5,0']);
+ $('kpis').className='grid-kpi'+(k.length===6?' k6':'');
+ $('kpis').innerHTML=k.map(x=>`<div class="kpi ${x[3]?'dark':''}"><div class="label">${x[0]}</div><div class="value">${x[1]}</div><div class="note">${x[2]}</div></div>`).join('');
+ $('vp').textContent=fP(O.pct);$('hp').textContent=O.util==null?'—':fP(O.util);$('vb').style.width=Math.min(O.pct,100)+'%';$('hb').style.width=Math.min(O.util||0,100)+'%';
+ $('vg').textContent=fI(O.real-O.ag)+' visitas';$('hg').textContent=fH(O.exec-O.contr);$('nc').textContent=fI(O.nc);$('ea').textContent=fI(O.ea);$('sc').textContent=fI(O.sc);
+ $('at').textContent=fH(O.avg);$('mt').textContent=O.min??'—';$('as').textContent=fN(O.nota);
+ let cg,title,sub;
+ if(all){cg=group(cur,'forn').sort((a,b)=>b.real-a.real).slice(0,12);title='Visitas por indústria';sub='Top 12 por visitas realizadas • agendadas x realizadas'}
+ else{cg=group(cur,'date').filter(g=>g.name).sort((a,b)=>dkey(a.name)-dkey(b.name));title='Visitas por dia';sub='Agendadas x realizadas ao longo do período'}
+ $('chTitle').textContent=title;$('chSub').textContent=sub;
+ const mx=Math.max(1,...cg.map(x=>Math.max(x.ag,x.real))),sn=s=>s.replace(/ - .*/,'').replace(/\s+(LTDA|S\.A\.?)$/,'');
+ $('chart').className='bar-chart'+(all?' industry-chart':'');$('chart').innerHTML=cg.map(x=>`<div class="bar-group" style="min-width:${all?120:22}px;flex:${all?'0 0 120px':'1'}"><div class="bars"><div class="bar navy" style="height:${x.ag/mx*220}px"><span>${x.ag}</span></div><div class="bar red" style="height:${x.real/mx*220}px"><span>${x.real}</span></div></div><div class="bar-label" title="${esc(x.name)}">${esc(all?x.name:x.name.slice(0,5))}</div></div>`).join('');
+ const sg=group(cur,'loja').sort((a,b)=>b.real-a.real||b.ag-a.ag).slice(0,20);
+ const smx=Math.max(1,...sg.map(x=>Math.max(x.ag,x.real)));
+ $('storeChTitle').textContent='Visitas por loja';
+ $('storeChSub').textContent=all?'Top 20 lojas por visitas realizadas • agendadas x realizadas':'Agendadas x realizadas por loja';
+ $('storeChart').innerHTML=sg.map(x=>`<div class="bar-group" style="min-width:42px"><div class="bars"><div class="bar navy" style="height:${x.ag/smx*245}px"><span>${x.ag}</span></div><div class="bar red" style="height:${x.real/smx*245}px"><span>${x.real}</span></div></div><div class="bar-label" title="${esc(x.name)}">${esc(x.name)}</div></div>`).join('');
+ const rankMode=window.rankMode||'more';
+ const rg=rankMode==='none'?group(cur,'loja'):(all?group(cur,'forn'):group(cur,'loja'));
+ $('rkTitle').textContent=all?'Concentração de execução':'Visão de horas e visitas';
+ $('rkSub').textContent=all?'Indústrias com maior volume de horas executadas':'Indicadores das lojas selecionadas';
+ $('rankSwitch').querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.rank===rankMode));
+ let list=[],rankLabel='';
+ if(rankMode==='more'){list=[...rg].sort((a,b)=>b.exec-a.exec).slice(0,6);rankLabel=all?'Top 6 indústrias por horas executadas':'Top 6 lojas por horas executadas'}
+ else if(rankMode==='less'){list=[...rg].filter(x=>x.exec>0).sort((a,b)=>a.exec-b.exec).slice(0,6);rankLabel=all?'Indústrias com menos horas executadas':'Lojas com menos horas executadas'}
+ else{list=[...rg].filter(x=>x.real===0).sort((a,b)=>a.name.localeCompare(b.name));rankLabel=all?'Indústrias sem visitas realizadas':'Lojas sem visitas realizadas'}
+ $('rankCount').textContent=rankMode==='none'?`${fI(rg.filter(x=>x.real===0).length)} lojas sem visitas realizadas`:rankLabel;
+ const mh=rankMode==='less'?(list[list.length-1]?.exec||1):(list[0]?.exec||1);
+ $('rank').className='rank-list'+(rankMode==='none'?' all-none':'');
+ $('rank').innerHTML=list.length?list.map((x,i)=>{const width=rankMode==='none'?100:x.exec/mh*100;return `<div class="rank-item"><div class="rank-num">${i+1}</div><div><div class="rank-name" title="${esc(x.name)}">${esc(x.name)}</div><div class="rank-bar"><div style="width:${Math.max(width,2)}%"></div></div></div><div class="rank-val">${rankMode==='none'?'0 visitas':fH(x.exec)}</div></div>`}).join(''):`<div class="rank-empty">${rankMode==='none'?'Nenhuma loja sem visitas realizadas.':'Nenhum registro disponível.'}`;
+ $('rankSwitch').querySelectorAll('button').forEach(b=>b.onclick=()=>{window.rankMode=b.dataset.rank;render()});
+ const tabs=all?[['forn','Indústrias'],['lojas','Lojas'],['prom','Promotores']]:[['lojas','Lojas'],['prom','Promotores'],['visitas','Visitas']];
+ if(!tabs.find(t=>t[0]===tab))tab=tabs[0][0];
+ $('tabs').innerHTML=tabs.map(t=>`<button class="tab ${t[0]===tab?'active':''}" data-t="${t[0]}">${t[1]}</button>`).join('');
+ $('tabs').querySelectorAll('.tab').forEach(b=>b.onclick=()=>{tab=b.dataset.t;sortS={key:'real',dir:-1};if(tab==='visitas')sortS={key:'date',dir:-1};render()});
+ renderTable();
+}
+function renderTable(){
+ const q=$('q').value.toLowerCase();let cols,data,title,sub;
+ const std=[['ag','Agendadas',x=>fI(x.ag)],['real','Realizadas',x=>fI(x.real)],['pct','Execução',x=>badge(x.pct)],['nc','Não comp.',x=>fI(x.nc)],['ea','Em andamento',x=>fI(x.ea)],['sc','Agendado',x=>fI(x.sc)],['contr','H. contratadas',x=>fH(x.contr)],['exec','H. executadas',x=>fH(x.exec)],['util','Util. horas',x=>badge(x.util)],['avg','Tempo médio',x=>fH(x.avg)],['min','Menor min.',x=>fMin(x.min)],['nota','Nota / 5',x=>fN(x.nota)]];
+ if(tab==='visitas'){
+  title='Todas as visitas';data=cur.map(r=>({...r}));
+  cols=[['date','Data',x=>esc(x.date)],['loja','Loja',x=>esc(x.loja)],['prom','Promotor',x=>esc(x.prom)],['comp','Comprador',x=>esc(x.comp||'—')],['status','Status',x=>`<span class="badge ${x.status==='Concluido'?'ok':x.status==='Não Compareceu'?'bad':x.status==='Agendado'?'':'warn'}">${esc(x.status)}</span>`],['tempo','Tempo',x=>fH(x.tempo)],['nota','Nota',x=>x.nota?x.nota:'—']];
+  data=data.filter(x=>(x.loja+x.prom+x.comp+x.status).toLowerCase().includes(q));sub=fI(data.length)+' visitas';
+ }else{
+  const key=tab==='forn'?'forn':tab==='lojas'?'loja':'prom';const lab=tab==='forn'?'Indústria':tab==='lojas'?'Loja':'Promotor';
+  data=group(cur,key).filter(x=>x.name.toLowerCase().includes(q));cols=[['name',lab,x=>esc(x.name)],['lojas','Lojas',x=>x.lojas],...std];
+  title='Todas as '+(tab==='forn'?'indústrias':tab==='lojas'?'lojas':'promotores');sub=fI(data.length)+' registros • busca e ordenação';
+ }
+ const s=sortS;data.sort((a,b)=>{let A=a[s.key],B=b[s.key];if(key_isStr(A))return String(A).localeCompare(String(B))*s.dir;return((A??-Infinity)-(B??-Infinity))*s.dir});
+ $('tbTitle').textContent=title;$('tbSub').textContent=sub;
+ $('tb').querySelector('thead').innerHTML='<tr>'+cols.map(c=>`<th data-k="${c[0]}">${c[1]}</th>`).join('');$('tb').querySelectorAll('th').forEach(th=>th.onclick=()=>{sortS.dir=sortS.key===th.dataset.k?-sortS.dir:-1;sortS.key=th.dataset.k;renderTable()});
+ $('tb').querySelector('tbody').innerHTML=data.slice(0,3000).map(x=>'<tr>'+cols.map(c=>`<td>${c[2](x)}</td>`).join('')+'</tr>').join('');
+}
+const key_isStr=v=>typeof v==='string';
+let curInd='__all__';const ALLTXT='TODAS AS INDÚSTRIAS (visão geral)';
+function showList(f){
+ const q=(f||'').toLowerCase(),L=$('indList');const items=suppliers.filter(s=>s.toLowerCase().includes(q));
+ L.innerHTML=(!q?'<div class="all" data-v="__all__">'+ALLTXT+'</div>':'')+items.slice(0,400).map(s=>`<div data-v="${esc(s)}">${esc(s)}</div>`).join('')+(items.length?'':'<div class="none">Nenhuma indústria encontrada</div>');
+ L.classList.remove('hidden');const f1=L.querySelector('div[data-v]:not(.all)');if(q&&f1)f1.classList.add('act');}
+function closeIndustryList(){const L=$('indList');L.classList.add('hidden');$('indIn').value=curInd==='__all__'?ALLTXT:curInd;}
+function setInd(v){curInd=v;$('indIn').value=v==='__all__'?ALLTXT:v;closeIndustryList();tab='lojas';sortS={key:'real',dir:-1};render()}
+$('indIn').addEventListener('focus',e=>{e.target.select();showList('')});
+$('indIn').addEventListener('input',e=>showList(e.target.value));
+$('indIn').addEventListener('keydown',e=>{const L=$('indList');if(e.key==='Enter'){const a=L.querySelector('.act')||L.querySelector('div[data-v]');if(a){setInd(a.dataset.v);e.preventDefault();return}}else if(e.key==='Escape'){closeIndustryList();$('indIn').blur();e.preventDefault();return}else if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();const it=[...L.querySelectorAll('div[data-v]')];if(!it.length)return;let i=it.findIndex(x=>x.classList.contains('act'));it.forEach(x=>x.classList.remove('act'));i=e.key==='ArrowDown'?Math.min(it.length-1,i+1):Math.max(0,i-1);it[i].classList.add('act');it[i].scrollIntoView({block:'nearest'})}});
+$('indList').addEventListener('click',e=>{const d=e.target.closest('div[data-v]');if(d)setInd(d.dataset.v)});
+document.addEventListener('click',e=>{if(!e.target.closest('.combo'))closeIndustryList()});
+function buildPdfTable(id,data,cols){const tb=$(id);tb.querySelector('thead').innerHTML='<tr>'+cols.map(c=>`<th>${c[1]}</th>`).join('')+'</tr>';tb.querySelector('tbody').innerHTML=data.map(x=>'<tr>'+cols.map(c=>`<td>${c[2](x)}</td>`).join('')+'</tr>').join('')}
+function buildPdfRank(id,data,cols){
+ const tb=$(id),n=data.length,G=n<=6?1:n<=14?2:3;if(!n){tb.querySelector('thead').innerHTML='';tb.querySelector('tbody').innerHTML='<tr><td style="text-align:center">Nenhum registro.</td></tr>';return}
+ const per=Math.ceil(n/G);let th='<tr>',body='';for(let g=0;g<G;g++)th+=`<th class="${g?'gs':''}">#</th>`+cols.map(c=>`<th>${c[1]}</th>`).join('');
+ for(let r=0;r<per;r++){body+='<tr>';for(let g=0;g<G;g++){const i=g*per+r,x=data[i],cl=g?' class="gs"':'';body+=x?`<td${cl}>${i+1}</td>`+cols.map(c=>`<td>${c[2](x)}</td>`).join(''):`<td${cl}></td>`+cols.map(()=>'<td></td>').join('')}body+='</tr>'}
+ tb.querySelector('thead').innerHTML=th+'</tr>';tb.querySelector('tbody').innerHTML=body;
+}
+function buildPdfDetail(){
+ const selectedIndustry=curInd,rows=selectedIndustry==='__all__'?ALL.slice():ALL.filter(r=>r.forn===selectedIndustry),O=agg(rows),all=selectedIndustry==='__all__';
+ const std=[['ag','Agendadas',x=>fI(x.ag)],['real','Realizadas',x=>fI(x.real)],['pct','Execução',x=>fP(x.pct)],['nc','Não compareceu',x=>fI(x.nc)],['ea','Em andamento',x=>fI(x.ea)],['sc','Agendado (a realizar)',x=>fI(x.sc)],['contr','Horas contratadas',x=>fH(x.contr)],['exec','Horas executadas',x=>fH(x.exec)],['util','Utilização das horas',x=>x.util==null?'—':fP(x.util)],['avg','Tempo médio',x=>fH(x.avg)],['min','Menor atendimento',x=>fMin(x.min)],['nota','Nota / 5',x=>fN(x.nota)]];
+ $('pdfTitle').textContent=all?'Execução geral — relatório completo':'Indústria — '+selectedIndustry;$('pdfContext').textContent=(all?'Todas as indústrias — banco completo':'Indústria selecionada: '+selectedIndustry)+' • '+fI(rows.length)+' visitas';
+ const summary=[['Visitas agendadas',fI(O.ag),'programadas'],['Visitas realizadas',fI(O.real),fP(O.pct)+' de execução'],['Horas contratadas',fH(O.contr),'base registrada'],['Horas executadas',fH(O.exec),O.util==null?'sem horas contratadas':fP(O.util)+' das contratadas'],['Tempo médio',fH(O.avg),'por visita realizada'],['Nota média',fN(O.nota),'escala máxima 5,0'],['Não compareceu',fI(O.nc),'visitas'],['Em andamento',fI(O.ea),'visitas'],['Agendado (a realizar)',fI(O.sc),'visitas'],['Gap de visitas',fI(O.real-O.ag),'realizadas − agendadas'],['Gap de horas',fH(O.exec-O.contr),'executadas − contratadas'],['Menor atendimento',fMin(O.min),'entre realizadas']];
+ $('pdfSummary').innerHTML=summary.map(x=>`<div class="pdf-summary-item"><div class="label">${x[0]}</div><div class="value">${x[1]}</div><div class="note">${x[2]}</div></div>`).join('');
+ const byName=(a,b)=>a.name.localeCompare(b.name),rankBase=all?group(rows,'forn'):group(rows,'loja'),noneBase=all?group(rows,r=>r.loja+' — '+r.forn):rankBase;
+ const moreL=[...rankBase].sort((a,b)=>b.exec-a.exec||byName(a,b)),lessL=rankBase.filter(x=>x.real>0).sort((a,b)=>a.exec-b.exec||byName(a,b)),noneL=noneBase.filter(x=>x.real===0).sort(byName),nm=all?'Indústria':'Loja';
+ const rankCols=[['name',nm,x=>esc(x.name)],['ag','Agend.',x=>fI(x.ag)],['real','Realiz.',x=>fI(x.real)],['contr','H. contrat.',x=>fH(x.contr)],['exec','H. exec.',x=>fH(x.exec)],['util','Util. horas',x=>x.util==null?'—':fP(x.util)]],rankNoneCols=[['name',all?'Loja — Indústria':'Loja',x=>esc(x.name)],['ag','Agend.',x=>fI(x.ag)],['nc','Não comp.',x=>fI(x.nc)],['ea','Em and.',x=>fI(x.ea)],['sc','A realizar',x=>fI(x.sc)]];
+ buildPdfRank('pdfRankMore',moreL,rankCols);buildPdfRank('pdfRankLess',lessL,rankCols);buildPdfRank('pdfRankNone',noneL,rankNoneCols);
+ const pl=all?'Indústrias':'Lojas';$('pdfMoreTitle').textContent=pl+' — mais horas executadas ('+fI(moreL.length)+')';$('pdfLessTitle').textContent=pl+' — menos horas executadas ('+fI(lessL.length)+')';$('pdfNoneTitle').textContent='Lojas — sem visitas realizadas ('+fI(noneL.length)+')';
+ const mxOf=a=>Math.max(1,...a.map(x=>Math.max(x.ag,x.real))),barCol=mx=>['bar','Agend. × Realiz.',x=>`<div style="min-width:48px"><div class="hb n" style="width:${Math.max(x.ag/mx*100,1)}%"></div><div class="hb r" style="width:${Math.max(x.real/mx*100,1)}%"></div></div>`];
+ const days=group(rows,'date').filter(g=>g.name).sort((a,b)=>dkey(a.name)-dkey(b.name)),dmx=mxOf(days),showV=days.length<=31;
+ $('pdfDayChart').innerHTML=days.map(x=>`<div class="g"><div class="bs"><div class="b n" style="height:${x.ag/dmx*84}px">${showV?`<i>${x.ag}</i>`:''}</div><div class="b r" style="height:${x.real/dmx*84}px">${showV?`<i>${x.real}</i>`:''}</div></div><div class="lb">${esc(x.name.slice(0,5))}</div></div>`).join('');
+ const prog=(l,p,c)=>`<div class="pdf-prog"><div class="t"><span>${l}</span><span>${p==null?'—':fP(p)}</span></div><div class="pb"><div style="width:${Math.min(p||0,100)}%;background:${c}"></div></div></div>`,mrow=(l,v)=>`<div class="pdf-m"><span>${l}</span><b>${v}</b></div>`;
+ $('pdfOpSide').innerHTML='<div class="pdf-chart-title">Aproveitamento da operação</div>'+prog('Visitas realizadas',O.pct,'#e30613')+prog('Horas executadas',O.util,'#0b2742')+mrow('Gap de visitas',fI(O.real-O.ag)+' visitas')+mrow('Gap de horas',fH(O.exec-O.contr))+mrow('Não compareceu',fI(O.nc))+mrow('Em andamento',fI(O.ea))+mrow('Agendado (a realizar)',fI(O.sc))+mrow('Tempo médio por visita',fH(O.avg))+mrow('Menor atendimento',fMin(O.min))+mrow('Nota média do repositor',fN(O.nota)+' / 5');
+ const sg=group(rows,'loja').sort((a,b)=>b.real-a.real||b.ag-a.ag||byName(a,b));$('pdfStoreTitle').textContent='Visitas por loja — todas ('+fI(sg.length)+')';buildPdfRank('pdfStoreChart',sg,[['name','Loja',x=>esc(x.name)],barCol(mxOf(sg)),['ag','Ag.',x=>fI(x.ag)],['real','Real.',x=>fI(x.real)]]);
+ ['pdfIndChartTitle','pdfIndChartWrap','pdfIndTitle','pdfIndWrap'].forEach(i=>$(i).style.display=all?'':'none');
+ if(all){const ig=group(rows,'forn').sort((a,b)=>b.real-a.real||b.ag-a.ag||byName(a,b));$('pdfIndChartTitle').textContent='Visitas por indústria — todas ('+fI(ig.length)+')';buildPdfRank('pdfIndChart',ig,[['name','Indústria',x=>esc(x.name)],barCol(mxOf(ig)),['ag','Ag.',x=>fI(x.ag)],['real','Real.',x=>fI(x.real)]]);buildPdfTable('pdfInd',ig,[['name','Indústria',x=>esc(x.name)],['lojas','Qtd. lojas',x=>x.lojas],...std])}
+ const lojaData=group(rows,'loja').sort((a,b)=>b.real-a.real||a.name.localeCompare(b.name)),promData=group(rows,'prom').sort((a,b)=>b.real-a.real||a.name.localeCompare(b.name));
+ buildPdfTable('pdfLojas',lojaData,[['name','Loja',x=>esc(x.name)],['lojas','Qtd. lojas',x=>x.lojas],...std]);buildPdfTable('pdfProm',promData,[['name','Promotor',x=>esc(x.name)],['lojas','Qtd. lojas',x=>x.lojas],...std]);
+ const visitData=rows.slice().sort((a,b)=>dkey(a.date)-dkey(b.date)||a.loja.localeCompare(b.loja)||a.prom.localeCompare(b.prom));
+ buildPdfTable('pdfVisitas',visitData,[['date','Data',x=>esc(x.date)],['loja','Loja',x=>esc(x.loja)],['prom','Promotor',x=>esc(x.prom)],['comp','Comprador',x=>esc(x.comp||'—')],['status','Status',x=>esc(x.status)],['tempo','Tempo',x=>fH(x.tempo)],['nota','Nota',x=>x.nota?x.nota:'—']]);
+ $('pdfDetail').dataset.industry=selectedIndustry;
+}
+function exportPDF(){closeIndustryList();buildPdfDetail();const old=document.title,nm=curInd==='__all__'?'Geral':curInd.split(' - ')[0].trim();document.title='ColetorPRO - '+nm+' - '+$('period').textContent;window.onafterprint=()=>{document.title=old;window.onafterprint=null};requestAnimationFrame(()=>requestAnimationFrame(()=>window.print()))}
+async function loadPublishedData(){
+ try{
+  $('empty').innerHTML='Carregando dados publicados...';
+  if(window.__COLETOR_EXPORTED_DATA__){
+   ALL=Array.isArray(window.__COLETOR_EXPORTED_DATA__)?window.__COLETOR_EXPORTED_DATA__.slice():[];
+   suppliers=[...new Set(ALL.map(r=>r.forn))].filter(Boolean).sort((a,b)=>a.localeCompare(b));
+   const ds=ALL.map(r=>r.date).filter(Boolean).sort((a,b)=>dkey(a)-dkey(b));
+   $('period').textContent=ds.length?ds[0]+' A '+ds[ds.length-1]:'SEM PERÍODO';$('upd').textContent='HTML da indústria • dados incorporados no arquivo';
+   curInd=window.__COLETOR_EXPORTED_INDUSTRY__ || (suppliers[0]||'__all__');$('indIn').disabled=true;$('pdfBtn').disabled=false;$('htmlBtn').disabled=true;$('indIn').value=curInd==='__all__'?ALLTXT:curInd;document.body.classList.add('exported-view');document.title=curInd==='__all__'?'ColetorPRO | Geral':'ColetorPRO | '+curInd;
+  }else{
+   const res=await fetch('dados.json?v='+Date.now(),{cache:'no-store'});if(!res.ok)throw new Error('dados.json não encontrado');ALL=await res.json();if(!Array.isArray(ALL))throw new Error('dados.json inválido');
+   /* Dados publicados também são normalizados, caso o JSON antigo contenha datas em formatos diferentes. */
+   ALL=ALL.map(r=>({...r,date:normalizarData(r.date)}));
+   suppliers=[...new Set(ALL.map(r=>r.forn))].filter(Boolean).sort((a,b)=>a.localeCompare(b));
+   const ds=ALL.map(r=>r.date).filter(Boolean).sort((a,b)=>dkey(a)-dkey(b));$('period').textContent=ds.length?ds[0]+' A '+ds[ds.length-1]:'SEM PERÍODO';$('upd').textContent='Dados publicados em '+new Date().toLocaleDateString('pt-BR');$('indIn').disabled=false;$('pdfBtn').disabled=false;$('htmlBtn').disabled=false;curInd='__all__';$('indIn').value=ALLTXT;
+  }
+  /* Segurança extra para HTMLs exportados: normaliza também os registros já incorporados. */
+  ALL=ALL.map(r=>({...r,date:normalizarData(r.date)}));
+  $('empty').classList.add('hidden');$('app').classList.remove('hidden');render();
+ }catch(err){console.error(err);$('empty').innerHTML='Nenhum dado publicado ainda.'}
+}
+function exportHTML(){closeIndustryList();const selected=curInd;if(!selected||selected==='__all__'){alert('Selecione uma indústria antes de baixar o HTML.');return}const rows=ALL.filter(r=>r.forn===selected);if(!rows.length){alert('A indústria selecionada não possui dados.');return}const snapshot=document.documentElement.outerHTML;const payload=JSON.stringify(rows).replace(/</g,'\\u003c');const boot=`<script>window.__COLETOR_EXPORTED_DATA__=${payload};window.__COLETOR_EXPORTED_INDUSTRY__=${JSON.stringify(selected)};<\/script>`;let out=snapshot.replace(/<script>/i,boot+'<script>');out=out.replace(/<body>/i,'<body class="exported-view">');out=out.replace(/<button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML\(\)">Baixar HTML<\/button>/,'<button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML()">Baixar HTML</button>');const safe=selected.replace(/[\\/:*?"<>|]+/g,' - ').replace(/\s+/g,' ').trim().slice(0,140);const blob=new Blob([out],{type:'text/html;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ColetorPRO - '+safe+'.html';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
+loadPublishedData();$('q').addEventListener('input',renderTable);
+</script></body></html>
