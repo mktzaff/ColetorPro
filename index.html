@@ -426,7 +426,7 @@ async function adm(body){const{data,error}=await sb.functions.invoke('admin-user
 async function loadUsers(){
  const tb=$('usrTb').querySelector('tbody');tb.innerHTML='<tr><td colspan="4">Carregando…</td></tr>';
  try{USERS=(await adm({action:'list'})).users.sort((a,b)=>a.email.localeCompare(b.email));
-  tb.innerHTML=USERS.map(u=>{const me=u.email===ME.email,id=esc(u.id);return `<tr><td>${esc(u.email)}${me?' (você)':''}${u.must_change_password?' <span class="pill">senha provisória</span>':''}</td><td><select data-role="${id}"${me?' disabled':''}><option value="user"${u.role==='user'?' selected':''}>Usuário</option><option value="admin"${u.role==='admin'?' selected':''}>Administrador</option></select></td><td>${u.last_sign_in_at?new Date(u.last_sign_in_at).toLocaleString('pt-BR'):'nunca'}</td><td><button class="tab" data-pw="${id}">Nova senha</button>${me?'':`<button class="tab" data-del="${id}">Remover</button>`}</td></tr>`}).join('')||'<tr><td colspan="4">Nenhum usuário.</td></tr>';
+  tb.innerHTML=USERS.map(u=>{const me=u.email===ME.email,id=esc(u.id);return `<tr><td>${esc(u.email)}${me?' (você)':''}${u.must_change_password?' <span class="pill">senha provisória</span>':''}</td><td><select data-role="${id}"${me?' disabled':''}><option value="user"${u.role==='user'?' selected':''}>Usuário</option><option value="admin"${u.role==='admin'?' selected':''}>Administrador</option></select></td><td>${u.last_sign_in_at?new Date(u.last_sign_in_at).toLocaleString('pt-BR'):'nunca'}</td><td>${me?'—':`<button class="tab" data-pw="${id}">Nova senha</button><button class="tab" data-del="${id}">Remover</button>`}</td></tr>`}).join('')||'<tr><td colspan="4">Nenhum usuário.</td></tr>';
  }catch(err){tb.innerHTML='';accMsg(err.message,1)}
 }
 $('accBtn').onclick=()=>{$('acc').classList.remove('hidden');accMsg('');if(ME&&ME.role==='admin')loadUsers()};
@@ -463,6 +463,7 @@ $('forceForm').addEventListener('submit',async e=>{
  if(a.length<10){er.textContent='A senha precisa ter pelo menos 10 caracteres.';return}
  if(a!==$('fpB').value){er.textContent='As senhas não conferem.';return}
  $('fpBtn').disabled=true;const{error}=await sb.auth.updateUser({password:a});$('fpBtn').disabled=false;
+ if(error&&/session|jwt|expired/i.test(error.message)){await sb.auth.signOut({scope:'local'}).catch(()=>{});$('force').classList.add('hidden');showLogin('Sua sessão expirou. Entre de novo com a senha provisória.');return}
  if(error){er.textContent=/different/i.test(error.message)?'Escolha uma senha diferente da provisória.':'Não foi possível salvar: '+error.message;return}
  $('fpA').value=$('fpB').value='';const{data:{session}}=await sb.auth.getSession();startSession(session);
 });
