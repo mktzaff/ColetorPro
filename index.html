@@ -159,11 +159,11 @@ html:not(.is-admin) .admin-only{display:none!important}
 <form id="loginForm" onsubmit="return false"><label for="lgEmail">E-mail</label><input id="lgEmail" type="email" autocomplete="username" required><label for="lgPass">Senha</label><input id="lgPass" type="password" autocomplete="current-password" required><button class="btn" id="loginBtn" type="submit">Entrar</button><div id="loginErr" role="alert"></div></form></div></div>
 <div id="force" class="hidden"><div class="box"><h2>Crie a sua senha</h2><p>Este é o seu primeiro acesso, ou a sua senha foi redefinida pelo administrador. Escolha uma senha pessoal para continuar.</p>
 <form id="forceForm" onsubmit="return false"><label for="fpA">Nova senha (mín. 10 caracteres)</label><input id="fpA" type="password" autocomplete="new-password" required><label for="fpB">Repita a nova senha</label><input id="fpB" type="password" autocomplete="new-password" required><button class="btn" id="fpBtn" type="submit">Salvar e entrar</button><div id="forceErr" role="alert"></div><button class="btn btn-out" id="fpOut" type="button" style="width:100%;margin-top:6px">Sair</button></form></div></div>
-<div id="acc" class="hidden"><div class="mbox"><div class="mhead"><h3>Minha conta</h3><button class="btn btn-out" id="accClose" type="button">Fechar</button></div>
+<div id="acc" class="hidden"><div class="mbox"><div class="mhead"><h3>Minha conta</h3><button class="btn btn-out" id="accClose" type="button">Fechar</button></div><div id="accMsg" role="status"></div>
 <div class="msec"><b>Trocar minha senha</b><div class="mrow"><input id="myPass" type="password" autocomplete="new-password" placeholder="Nova senha (mín. 10 caracteres)"><button class="btn" id="myPassBtn" type="button">Salvar senha</button></div></div>
 <div class="admin-only"><div class="msec"><b>Adicionar usuário</b><div class="mrow"><input id="nuEmail" type="email" placeholder="E-mail"><input id="nuPass" type="text" autocomplete="off" placeholder="Senha provisória (mín. 10)"><select id="nuRole"><option value="user">Usuário</option><option value="admin">Administrador</option></select><button class="btn" id="nuBtn" type="button">Criar usuário</button></div></div>
 <div class="msec"><b>Usuários cadastrados</b><div class="table-wrap"><table id="usrTb"><thead><tr><th>E-mail</th><th>Perfil</th><th>Último acesso</th><th>Ações</th></tr></thead><tbody></tbody></table></div></div></div>
-<div id="accMsg" role="status"></div></div></div>
+</div></div>
 <header class="header"><div class="brand"><div class="eyebrow">Resultados em campo • ColetorPRO</div><h1 id="ttl">EXECUÇÃO POR INDÚSTRIA <span>| Dashboard</span></h1><div class="subtitle" id="sub">Acesso restrito • dados carregados após o login</div></div><div class="period" id="period">CARREGANDO DADOS</div><div class="upd-mini" id="updMini"></div></header>
 <main class="wrap">
 <div class="topbar"><div class="combo"><label>Indústria (fornecedor)</label><input id="indIn" placeholder="Carregando dados publicados..." autocomplete="off" disabled><div class="combo-list hidden" id="indList"></div></div>
@@ -421,8 +421,8 @@ $('upFile').onchange=async e=>{
 };
 /* ===== Conta e gestão de usuários ===== */
 let USERS=[];
-const accMsg=(t,bad)=>{const m=$('accMsg');m.textContent=t||'';m.style.color=bad?'var(--danger)':'var(--green)'};
-async function adm(body){const{data,error}=await sb.functions.invoke('admin-users',{body});if(error){let m=error.message;try{m=(await error.context.json()).error||m}catch(e){}throw new Error(m)}return data}
+const accMsg=(t,bad)=>{const m=$('accMsg');m.textContent=t||'';m.style.color=bad?'var(--danger)':'var(--green)';if(t)m.scrollIntoView({block:'nearest'})};
+async function adm(body){const{data,error}=await sb.functions.invoke('admin-users',{body});if(error){let m=error.message;try{const j=await error.context.json();m=j.error||j.message||m}catch(e){}throw new Error(m)}return data}
 async function loadUsers(){
  const tb=$('usrTb').querySelector('tbody');tb.innerHTML='<tr><td colspan="4">Carregando…</td></tr>';
  try{USERS=(await adm({action:'list'})).users.sort((a,b)=>a.email.localeCompare(b.email));
@@ -432,7 +432,13 @@ async function loadUsers(){
 $('accBtn').onclick=()=>{$('acc').classList.remove('hidden');accMsg('');if(ME&&ME.role==='admin')loadUsers()};
 $('accClose').onclick=()=>$('acc').classList.add('hidden');
 $('myPassBtn').onclick=async()=>{const p=$('myPass').value;if(p.length<10)return accMsg('A senha precisa ter pelo menos 10 caracteres.',1);const{error}=await sb.auth.updateUser({password:p});if(error)return accMsg(error.message,1);$('myPass').value='';accMsg('Senha alterada.')};
-$('nuBtn').onclick=async()=>{const em=$('nuEmail').value.trim();try{await adm({action:'create',email:em,password:$('nuPass').value,role:$('nuRole').value});accMsg('Usuário criado: '+em);$('nuEmail').value=$('nuPass').value='';loadUsers()}catch(err){accMsg(err.message,1)}};
+$('nuBtn').onclick=async()=>{const b=$('nuBtn'),em=$('nuEmail').value.trim(),pw=$('nuPass').value;
+ if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em))return accMsg('Digite um e-mail válido.',1);
+ if(pw.length<10)return accMsg('A senha provisória precisa ter pelo menos 10 caracteres.',1);
+ b.disabled=true;b.textContent='Criando…';accMsg('');
+ try{await adm({action:'create',email:em,password:pw,role:$('nuRole').value});accMsg('Usuário criado: '+em+'. Ele vai criar a própria senha no primeiro acesso.');$('nuEmail').value=$('nuPass').value='';loadUsers()}
+ catch(err){console.error('admin-users:',err);accMsg('Erro ao criar: '+(err.message||err),1)}
+ b.disabled=false;b.textContent='Criar usuário'};
 $('usrTb').addEventListener('click',async e=>{
  const b=e.target.closest('button');if(!b)return;const id=b.dataset.pw||b.dataset.del,u=USERS.find(x=>x.id===id);if(!u)return;
  try{
