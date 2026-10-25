@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>ColetorPRO | Dashboard por Indústria</title><style>
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'unsafe-inline'; img-src data:; font-src data:; connect-src https://*.supabase.co; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>ColetorPRO | Dashboard por Indústria</title><style>
 :root{--navy:#0b2742;--navy2:#123b5f;--red:#e30613;--bg:#f4f6f8;--card:#fff;--muted:#6c7783;--line:#e5e9ee;--green:#20a36a;--amber:#f0a51a;--danger:#d92935;--shadow:0 8px 24px rgba(11,39,66,.08)}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--navy);font-family:Arial,Helvetica,sans-serif}.header{min-height:150px;background:#fff;position:relative;overflow:hidden;border-bottom:1px solid #e8ebef;padding:28px 44px 24px}.header:after{content:"";position:absolute;right:-30px;top:-100px;width:270px;height:310px;background:var(--red);transform:rotate(16deg);border-radius:24px}.header:before{content:"";position:absolute;right:105px;top:-95px;width:85px;height:300px;border:2px solid var(--red);transform:rotate(16deg);border-radius:20px}.brand{position:relative;z-index:2}.eyebrow{font-size:12px;letter-spacing:3px;font-weight:800;color:var(--red);text-transform:uppercase}h1{margin:4px 0 3px;font-size:38px;letter-spacing:-1.4px;font-weight:900}h1 span{color:var(--red)}.subtitle{font-size:14px;color:var(--muted);font-weight:600}.period{position:absolute;z-index:3;right:45px;bottom:24px;background:var(--navy);color:#fff;padding:9px 15px;border-radius:8px;font-size:12px;font-weight:800}.wrap{padding:24px 44px 44px;max-width:1700px;margin:auto}.grid-kpi{display:grid;grid-template-columns:repeat(8,1fr);gap:12px;margin-bottom:20px}.kpi{background:var(--card);border-radius:12px;padding:16px;box-shadow:var(--shadow);border-top:4px solid var(--red);min-height:112px}.kpi.dark{background:var(--navy);color:#fff}.kpi .label{font-size:10px;color:var(--muted);text-transform:uppercase;font-weight:800;letter-spacing:.7px}.kpi.dark .label{color:#d8e1e9}.kpi .value{font-size:27px;font-weight:900;margin-top:7px;letter-spacing:-1px}.kpi .note{font-size:10px;color:var(--muted);margin-top:5px}.kpi.dark .note{color:#d8e1e9}.section-title{display:flex;align-items:center;gap:10px;margin:25px 0 12px;font-size:18px;font-weight:900;text-transform:uppercase}.section-title:before{content:"";width:7px;height:24px;background:var(--red);border-radius:3px}.grid2{display:grid;grid-template-columns:1fr;gap:18px}.visits-day-card{min-height:0}.operation-card{min-height:0}.grid3{display:grid;grid-template-columns:.82fr .82fr 1.36fr;gap:18px}.card{background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:20px}.card-title{font-size:14px;font-weight:900;text-transform:uppercase;margin-bottom:4px}.card-sub{font-size:11px;color:var(--muted);margin-bottom:14px}.bar-chart{height:350px;display:flex;align-items:flex-end;gap:9px;padding:18px 8px 70px;border-bottom:1px solid var(--line);overflow:visible!important}.bar-group{height:100%;flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;position:relative;min-width:35px}.bars{height:245px;width:100%;display:flex;align-items:flex-end;justify-content:center;gap:4px}.bar{width:24px;border-radius:5px 5px 0 0;position:relative;min-height:2px}.bar.red{background:var(--red)}.bar.navy{background:var(--navy)}.bar span{position:absolute;top:-17px;left:50%;transform:translateX(-50%);font-size:8px;font-weight:800;white-space:nowrap}.bar-label{font-size:8px;color:var(--muted);font-weight:800;position:absolute;bottom:-48px;width:88px;white-space:normal;line-height:1.15;text-align:center;overflow:visible;word-break:break-word;transform:translateX(-50%);left:50%;transform-origin:center top}.legend{display:flex;gap:15px;font-size:10px;color:var(--muted);margin-top:12px}.legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px}.legend .r{background:var(--red)}.legend .n{background:var(--navy)}.progress-wrap{margin:15px 0}.progress-top{display:flex;justify-content:space-between;font-size:11px;font-weight:800}.progress{height:13px;background:#e9edf1;border-radius:8px;overflow:hidden;margin-top:6px}.progress>div{height:100%;border-radius:8px}.exec{background:var(--red)}.hours{background:var(--navy)}.grid3>.card:nth-child(1),.grid3>.card:nth-child(2){padding:16px}.grid3>.card:nth-child(1) .score,.grid3>.card:nth-child(2) .score{gap:12px}.grid3>.card:nth-child(1) .score-num,.grid3>.card:nth-child(2) .score-num{font-size:44px}.grid3>.card:nth-child(1) .score-num[style],.grid3>.card:nth-child(2) .score-num[style]{font-size:28px!important}.score{display:flex;align-items:center;gap:20px}.score-num{font-size:52px;font-weight:900;color:var(--red);line-height:1}.score-max{font-size:13px;color:var(--muted);font-weight:800}.stars{font-size:22px;letter-spacing:2px;color:#f0a51a}.metric-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);font-size:12px}.metric-row:last-child{border-bottom:0}.metric-row b{font-size:13px}.callout{background:#f8fafb;border-left:5px solid var(--red);border-radius:8px;padding:12px 13px;margin-top:15px;font-size:12px;line-height:1.45}.tabs{display:flex;gap:8px;margin-bottom:12px}.tab{border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 12px;font-size:11px;font-weight:900;cursor:pointer}.tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}.table-tools{display:flex;justify-content:space-between;gap:10px;margin-bottom:10px;align-items:center}.search{border:1px solid var(--line);border-radius:8px;padding:9px 11px;width:300px;font-size:12px}select{border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-size:12px;background:#fff;color:var(--navy)}.table-wrap{overflow:auto;max-height:650px}table{width:100%;border-collapse:collapse;font-size:10px}th{position:sticky;top:0;background:var(--navy);color:#fff;text-align:left;padding:10px 8px;font-size:9px;text-transform:uppercase;letter-spacing:.3px;cursor:pointer;z-index:1}td{padding:8px;border-bottom:1px solid var(--line);font-weight:600;white-space:nowrap}tr:hover td{background:#fafbfc}.badge{padding:4px 7px;border-radius:5px;font-size:9px;font-weight:900}.ok{background:#e4f6ee;color:#13724b}.warn{background:#fff1d8;color:#95650b}.bad{background:#ffe5e7;color:#b51d28}.footer{margin-top:18px;color:#8a949e;font-size:10px;display:flex;justify-content:space-between}.small-note{font-size:10px;color:var(--muted);line-height:1.4}.rank-list{display:flex;flex-direction:column;gap:9px}.rank-item{display:grid;grid-template-columns:30px 1fr 70px;gap:8px;align-items:center;font-size:10px}.rank-num{font-weight:900;color:var(--red)}.rank-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rank-bar{height:7px;background:#e9edf1;border-radius:5px;overflow:hidden;margin-top:4px}.rank-bar>div{height:100%;background:var(--navy)}.rank-val{text-align:right;font-weight:900}
 .rank-switch{display:flex;gap:5px;margin:10px 0 12px}
@@ -113,11 +113,52 @@ body{background:#fff!important}
 
 .top-actions{display:flex;gap:8px;align-items:center;margin-top:15px}.top-actions .btn{margin-top:0}.btn-html{background:#123b5f}.exported-view .top-actions #htmlBtn{display:none}.exported-view .combo input{cursor:default}.exported-view .topbar{position:relative}
 </style>
+<style id="auth-css">
+#login{position:fixed;inset:0;z-index:1000;background:var(--navy);display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto}
+#login.hidden{display:none}
+#login:before{content:"";position:absolute;right:-60px;top:-120px;width:300px;height:430px;background:var(--red);transform:rotate(16deg);border-radius:28px}
+#login .box{position:relative;background:#fff;border-radius:14px;width:100%;max-width:380px;padding:30px 28px;box-shadow:0 20px 50px rgba(0,0,0,.35);border-top:5px solid var(--red)}
+#login h2{margin:0 0 4px;font-size:24px;font-weight:900;letter-spacing:-.8px}
+#login p{margin:0 0 18px;font-size:12px;color:var(--muted)}
+#login label{display:block;font-size:11px;font-weight:800;color:var(--muted);margin:12px 0 4px}
+#login input{width:100%;border:1px solid var(--line);border-radius:8px;padding:11px 12px;font-size:14px;color:var(--navy)}
+#login input:focus-visible,.btn:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
+#login .btn{width:100%;margin-top:18px;padding:12px}
+#login .btn:disabled{opacity:.5;cursor:default}
+#loginErr{min-height:16px;margin-top:10px;font-size:12px;font-weight:700;color:var(--danger)}
+.btn-out{background:#fff;color:var(--navy);border:1px solid var(--line)}
+.btn-up{background:var(--green)}
+.who{font-size:11px;font-weight:700;color:var(--muted)}
+.up-status{font-size:11px;font-weight:700;color:var(--navy)}
+.top-actions{flex-wrap:wrap}
+html:not(.is-admin) .admin-only{display:none!important}
+.exported-view .admin-only,.exported-view .who,.exported-view #logoutBtn{display:none!important}
+@media print{#login{display:none!important}}
+#acc{position:fixed;inset:0;z-index:900;background:rgba(11,39,66,.55);display:flex;align-items:flex-start;justify-content:center;padding:40px 16px;overflow:auto}
+#acc.hidden{display:none}
+#acc .mbox{background:#fff;border-radius:14px;width:100%;max-width:760px;padding:22px 24px;box-shadow:0 20px 50px rgba(0,0,0,.35);border-top:5px solid var(--red)}
+#acc .mhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}#acc h3{margin:0;font-size:20px;font-weight:900}
+#acc .msec{padding:14px 0;border-bottom:1px solid var(--line);font-size:12px}#acc .msec b{display:block;margin-bottom:8px}
+#acc .mrow{display:flex;gap:8px;flex-wrap:wrap}#acc input{border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-size:12px;flex:1;min-width:140px}
+#acc .table-wrap{max-height:320px}#acc td,#acc th{font-size:11px}#acc .tab{margin-right:4px}
+#accMsg{min-height:18px;margin-top:12px;font-size:12px;font-weight:700}
+.exported-view #accBtn{display:none!important}
+.upd-mini{position:absolute;z-index:3;right:45px;bottom:7px;font-size:10px;font-weight:600;color:var(--muted)}
+@media(max-width:700px){.upd-mini{right:24px}}@media print{.upd-mini{display:none}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 </head><body>
-<header class="header"><div class="brand"><div class="eyebrow">Resultados em campo • ColetorPRO</div><h1 id="ttl">EXECUÇÃO POR INDÚSTRIA <span>| Dashboard</span></h1><div class="subtitle" id="sub">Dashboard público • dados carregados automaticamente</div></div><div class="period" id="period">CARREGANDO DADOS</div></header>
+<div id="login"><div class="box"><h2>ColetorPRO</h2><p>Acesso restrito. Entre com o e-mail e a senha cadastrados pelo administrador.</p>
+<form id="loginForm" onsubmit="return false"><label for="lgEmail">E-mail</label><input id="lgEmail" type="email" autocomplete="username" required><label for="lgPass">Senha</label><input id="lgPass" type="password" autocomplete="current-password" required><button class="btn" id="loginBtn" type="submit">Entrar</button><div id="loginErr" role="alert"></div></form></div></div>
+<div id="acc" class="hidden"><div class="mbox"><div class="mhead"><h3>Minha conta</h3><button class="btn btn-out" id="accClose" type="button">Fechar</button></div>
+<div class="msec"><b>Trocar minha senha</b><div class="mrow"><input id="myPass" type="password" autocomplete="new-password" placeholder="Nova senha (mín. 8 caracteres)"><button class="btn" id="myPassBtn" type="button">Salvar senha</button></div></div>
+<div class="admin-only"><div class="msec"><b>Adicionar usuário</b><div class="mrow"><input id="nuEmail" type="email" placeholder="E-mail"><input id="nuPass" type="text" autocomplete="off" placeholder="Senha inicial (mín. 8)"><select id="nuRole"><option value="user">Usuário</option><option value="admin">Administrador</option></select><button class="btn" id="nuBtn" type="button">Criar usuário</button></div></div>
+<div class="msec"><b>Usuários cadastrados</b><div class="table-wrap"><table id="usrTb"><thead><tr><th>E-mail</th><th>Perfil</th><th>Último acesso</th><th>Ações</th></tr></thead><tbody></tbody></table></div></div></div>
+<div id="accMsg" role="status"></div></div></div>
+<header class="header"><div class="brand"><div class="eyebrow">Resultados em campo • ColetorPRO</div><h1 id="ttl">EXECUÇÃO POR INDÚSTRIA <span>| Dashboard</span></h1><div class="subtitle" id="sub">Acesso restrito • dados carregados após o login</div></div><div class="period" id="period">CARREGANDO DADOS</div><div class="upd-mini" id="updMini"></div></header>
 <main class="wrap">
 <div class="topbar"><div class="combo"><label>Indústria (fornecedor)</label><input id="indIn" placeholder="Carregando dados publicados..." autocomplete="off" disabled><div class="combo-list hidden" id="indList"></div></div>
-<div class="top-actions"><button class="btn btn-pdf" id="pdfBtn" disabled onclick="exportPDF()">Exportar PDF</button><button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML()">Baixar HTML</button></div>
+<div class="top-actions"><button class="btn btn-pdf" id="pdfBtn" disabled onclick="exportPDF()">Exportar PDF</button><button class="btn btn-html admin-only" id="htmlBtn" disabled onclick="exportHTML()">Baixar HTML</button><button class="btn btn-up admin-only" id="upBtn" type="button">Atualizar base (.json)</button><input type="file" id="upFile" accept=".json,application/json" hidden><span class="up-status admin-only" id="upStatus" role="status"></span><span class="who" id="who"></span><button class="btn btn-out" id="accBtn" type="button">Conta</button><button class="btn btn-out" id="logoutBtn" type="button">Sair</button></div>
 </div>
 <div id="empty">Carregando dados publicados...</div>
 <div id="app" class="hidden">
@@ -151,6 +192,7 @@ body{background:#fff!important}
 </div>
 <div class="footer"><span>Fonte: Relatório “Horas Contratadas x Executadas – Completo” • ColetorPRO</span><span id="upd"></span></div></main>
 <script>
+if(window.top!==window.self){document.documentElement.innerHTML=''}
 const $=id=>document.getElementById(id);
 const fI=n=>new Intl.NumberFormat('pt-BR').format(Math.round(n)),fP=n=>(Number(n)||0).toFixed(1).replace('.',',')+'%',fH=m=>{m=Math.round(Number(m)||0);const s=m<0?'-':'';m=Math.abs(m);return s+String(Math.floor(m/60)).padStart(2,'0')+'h'+String(m%60).padStart(2,'0')},fMin=m=>m==null?'—':Math.round(m)+' min',fN=n=>n?n.toFixed(2).replace('.',','):'—';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -238,7 +280,7 @@ function renderTable(){
  const std=[['ag','Agendadas',x=>fI(x.ag)],['real','Realizadas',x=>fI(x.real)],['pct','Execução',x=>badge(x.pct)],['nc','Não comp.',x=>fI(x.nc)],['ea','Em andamento',x=>fI(x.ea)],['sc','Agendado',x=>fI(x.sc)],['contr','H. contratadas',x=>fH(x.contr)],['exec','H. executadas',x=>fH(x.exec)],['util','Util. horas',x=>badge(x.util)],['avg','Tempo médio',x=>fH(x.avg)],['min','Menor min.',x=>fMin(x.min)],['nota','Nota / 5',x=>fN(x.nota)]];
  if(tab==='visitas'){
   title='Todas as visitas';data=cur.map(r=>({...r}));
-  cols=[['date','Data',x=>esc(x.date)],['loja','Loja',x=>esc(x.loja)],['prom','Promotor',x=>esc(x.prom)],['comp','Comprador',x=>esc(x.comp||'—')],['status','Status',x=>`<span class="badge ${x.status==='Concluido'?'ok':x.status==='Não Compareceu'?'bad':x.status==='Agendado'?'':'warn'}">${esc(x.status)}</span>`],['tempo','Tempo',x=>fH(x.tempo)],['nota','Nota',x=>x.nota?x.nota:'—']];
+  cols=[['date','Data',x=>esc(x.date)],['loja','Loja',x=>esc(x.loja)],['prom','Promotor',x=>esc(x.prom)],['comp','Comprador',x=>esc(x.comp||'—')],['status','Status',x=>`<span class="badge ${x.status==='Concluido'?'ok':x.status==='Não Compareceu'?'bad':x.status==='Agendado'?'':'warn'}">${esc(x.status)}</span>`],['tempo','Tempo',x=>fH(x.tempo)],['nota','Nota',x=>x.nota?esc(x.nota):'—']];
   data=data.filter(x=>(x.loja+x.prom+x.comp+x.status).toLowerCase().includes(q));sub=fI(data.length)+' visitas';
  }else{
   const key=tab==='forn'?'forn':tab==='lojas'?'loja':'prom';const lab=tab==='forn'?'Indústria':tab==='lojas'?'Loja':'Promotor';
@@ -292,7 +334,7 @@ function buildPdfDetail(){
  const lojaData=group(rows,'loja').sort((a,b)=>b.real-a.real||a.name.localeCompare(b.name)),promData=group(rows,'prom').sort((a,b)=>b.real-a.real||a.name.localeCompare(b.name));
  buildPdfTable('pdfLojas',lojaData,[['name','Loja',x=>esc(x.name)],['lojas','Qtd. lojas',x=>x.lojas],...std]);buildPdfTable('pdfProm',promData,[['name','Promotor',x=>esc(x.name)],['lojas','Qtd. lojas',x=>x.lojas],...std]);
  const visitData=rows.slice().sort((a,b)=>dkey(a.date)-dkey(b.date)||a.loja.localeCompare(b.loja)||a.prom.localeCompare(b.prom));
- buildPdfTable('pdfVisitas',visitData,[['date','Data',x=>esc(x.date)],['loja','Loja',x=>esc(x.loja)],['prom','Promotor',x=>esc(x.prom)],['comp','Comprador',x=>esc(x.comp||'—')],['status','Status',x=>esc(x.status)],['tempo','Tempo',x=>fH(x.tempo)],['nota','Nota',x=>x.nota?x.nota:'—']]);
+ buildPdfTable('pdfVisitas',visitData,[['date','Data',x=>esc(x.date)],['loja','Loja',x=>esc(x.loja)],['prom','Promotor',x=>esc(x.prom)],['comp','Comprador',x=>esc(x.comp||'—')],['status','Status',x=>esc(x.status)],['tempo','Tempo',x=>fH(x.tempo)],['nota','Nota',x=>x.nota?esc(x.nota):'—']]);
  $('pdfDetail').dataset.industry=selectedIndustry;
 }
 function exportPDF(){closeIndustryList();buildPdfDetail();const old=document.title,nm=curInd==='__all__'?'Geral':curInd.split(' - ')[0].trim();document.title='ColetorPRO - '+nm+' - '+$('period').textContent;window.onafterprint=()=>{document.title=old;window.onafterprint=null};requestAnimationFrame(()=>requestAnimationFrame(()=>window.print()))}
@@ -306,17 +348,88 @@ async function loadPublishedData(){
    $('period').textContent=ds.length?ds[0]+' A '+ds[ds.length-1]:'SEM PERÍODO';$('upd').textContent='HTML da indústria • dados incorporados no arquivo';
    curInd=window.__COLETOR_EXPORTED_INDUSTRY__ || (suppliers[0]||'__all__');$('indIn').disabled=true;$('pdfBtn').disabled=false;$('htmlBtn').disabled=true;$('indIn').value=curInd==='__all__'?ALLTXT:curInd;document.body.classList.add('exported-view');document.title=curInd==='__all__'?'ColetorPRO | Geral':'ColetorPRO | '+curInd;
   }else{
-   const res=await fetch('dados.json?v='+Date.now(),{cache:'no-store'});if(!res.ok)throw new Error('dados.json não encontrado');ALL=await res.json();if(!Array.isArray(ALL))throw new Error('dados.json inválido');
+   const {data:su,error:se}=await sb.storage.from(BUCKET).createSignedUrl(FILE,60);if(se||!su)throw new Error('sem acesso à base');const res=await fetch(su.signedUrl,{cache:'no-store'});if(!res.ok)throw new Error('dados.json não encontrado');ALL=await res.json();if(!Array.isArray(ALL))throw new Error('dados.json inválido');
    /* Dados publicados também são normalizados, caso o JSON antigo contenha datas em formatos diferentes. */
-   ALL=ALL.map(r=>({...r,date:normalizarData(r.date)}));
+   ALL=ALL.map(r=>({...r,date:normalizarData(r.date),tempo:+r.tempo||0,nota:+r.nota||0,contr:+r.contr||0}));
    suppliers=[...new Set(ALL.map(r=>r.forn))].filter(Boolean).sort((a,b)=>a.localeCompare(b));
    const ds=ALL.map(r=>r.date).filter(Boolean).sort((a,b)=>dkey(a)-dkey(b));$('period').textContent=ds.length?ds[0]+' A '+ds[ds.length-1]:'SEM PERÍODO';$('upd').textContent='Dados publicados em '+new Date().toLocaleDateString('pt-BR');$('indIn').disabled=false;$('pdfBtn').disabled=false;$('htmlBtn').disabled=false;curInd='__all__';$('indIn').value=ALLTXT;
   }
   /* Segurança extra para HTMLs exportados: normaliza também os registros já incorporados. */
-  ALL=ALL.map(r=>({...r,date:normalizarData(r.date)}));
+  ALL=ALL.map(r=>({...r,date:normalizarData(r.date),tempo:+r.tempo||0,nota:+r.nota||0,contr:+r.contr||0}));
   $('empty').classList.add('hidden');$('app').classList.remove('hidden');render();
  }catch(err){console.error(err);$('empty').innerHTML='Nenhum dado publicado ainda.'}
 }
-function exportHTML(){closeIndustryList();const selected=curInd;if(!selected||selected==='__all__'){alert('Selecione uma indústria antes de baixar o HTML.');return}const rows=ALL.filter(r=>r.forn===selected);if(!rows.length){alert('A indústria selecionada não possui dados.');return}const snapshot=document.documentElement.outerHTML;const payload=JSON.stringify(rows).replace(/</g,'\\u003c');const boot=`<script>window.__COLETOR_EXPORTED_DATA__=${payload};window.__COLETOR_EXPORTED_INDUSTRY__=${JSON.stringify(selected)};<\/script>`;let out=snapshot.replace(/<script>/i,boot+'<script>');out=out.replace(/<body>/i,'<body class="exported-view">');out=out.replace(/<button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML\(\)">Baixar HTML<\/button>/,'<button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML()">Baixar HTML</button>');const safe=selected.replace(/[\\/:*?"<>|]+/g,' - ').replace(/\s+/g,' ').trim().slice(0,140);const blob=new Blob([out],{type:'text/html;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ColetorPRO - '+safe+'.html';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
-loadPublishedData();$('q').addEventListener('input',renderTable);
+function exportHTML(){if(!ME||ME.role!=='admin')return;closeIndustryList();const selected=curInd;if(!selected||selected==='__all__'){alert('Selecione uma indústria antes de baixar o HTML.');return}const rows=ALL.filter(r=>r.forn===selected);if(!rows.length){alert('A indústria selecionada não possui dados.');return}const snapshot=document.documentElement.outerHTML.replace(/(SUPABASE_URL=)'[^']*'/,"$1''").replace(/(SUPABASE_ANON_KEY=)'[^']*'/,"$1''").replace(/<script src="https:\/\/cdn\.jsdelivr[^>]*><\/script>/,'');const payload=JSON.stringify(rows).replace(/</g,'\\u003c');const boot=`<script>window.__COLETOR_EXPORTED_DATA__=${payload};window.__COLETOR_EXPORTED_INDUSTRY__=${JSON.stringify(selected)};<\/script>`;let out=snapshot.replace(/<script>/i,boot+'<script>');out=out.replace(/<body>/i,'<body class="exported-view">');out=out.replace(/<button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML\(\)">Baixar HTML<\/button>/,'<button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML()">Baixar HTML</button>');const safe=selected.replace(/[\\/:*?"<>|]+/g,' - ').replace(/\s+/g,' ').trim().slice(0,140);const blob=new Blob([out],{type:'text/html;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ColetorPRO - '+safe+'.html';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
+$('q').addEventListener('input',renderTable);
+/* ===== Supabase: login, perfis e upload (somente admin) ===== */
+const SUPABASE_URL='https://nduabnxombkgwmlzzsjg.supabase.co',SUPABASE_ANON_KEY='sb_publishable_UgW5UpjaJNqtTm8aUoHakA_KdMz7bQ9',BUCKET='dashboard-data',FILE='dados.json';
+let sb=null,ME=null,idleT,fails=0;const IDLE=30*60e3;
+function idleReset(){clearTimeout(idleT);if(ME)idleT=setTimeout(()=>sb.auth.signOut(),IDLE)}
+['click','keydown','mousemove','touchstart','scroll'].forEach(ev=>addEventListener(ev,idleReset,{passive:true}));
+const showLogin=m=>{$('login').classList.remove('hidden');$('loginErr').textContent=m||''};
+async function setUpdated(){try{const{data}=await sb.storage.from(BUCKET).list('',{search:FILE});const o=(data||[]).find(x=>x.name===FILE);if(!o)return;const d=new Date(o.updated_at),t=d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});$('updMini').textContent='Atualizado em '+t;$('upd').textContent='Base atualizada em '+t}catch(e){}}
+async function startSession(session){
+ const{data:p,error}=await sb.from('profiles').select('role').eq('id',session.user.id).single();
+ if(error||!p){await sb.auth.signOut();showLogin('Conta sem perfil de acesso. Fale com o administrador.');return}
+ ME={email:session.user.email,role:p.role};
+ document.documentElement.classList.toggle('is-admin',p.role==='admin');
+ $('who').textContent=ME.email+' • '+(p.role==='admin'?'Administrador':'Usuário');
+ $('login').classList.add('hidden');idleReset();
+ await loadPublishedData();setUpdated();
+}
+async function boot(){
+ if(window.__COLETOR_EXPORTED_DATA__){$('login').classList.add('hidden');return loadPublishedData()}
+ if(!window.supabase||SUPABASE_URL.includes('SEU-PROJETO')){showLogin('Configure SUPABASE_URL e SUPABASE_ANON_KEY no index.html.');return}
+ sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+ const{data:{session}}=await sb.auth.getSession();
+ session?startSession(session):showLogin();
+ sb.auth.onAuthStateChange(ev=>{if(ev==='SIGNED_OUT')location.reload()});
+}
+$('loginForm').addEventListener('submit',async e=>{
+ e.preventDefault();if(!sb)return;const b=$('loginBtn');b.disabled=true;$('loginErr').textContent='';
+ const{data,error}=await sb.auth.signInWithPassword({email:$('lgEmail').value.trim(),password:$('lgPass').value});
+ b.disabled=false;
+ if(error||!data.session){$('loginErr').textContent='E-mail ou senha inválidos.';if(++fails>=5){fails=0;b.disabled=true;let s=30;const t=setInterval(()=>{$('loginErr').textContent='Muitas tentativas. Aguarde '+s+'s.';if(--s<0){clearInterval(t);b.disabled=false;$('loginErr').textContent=''}},1000)}return}
+ $('lgPass').value='';startSession(data.session);
+});
+$('logoutBtn').onclick=()=>sb?sb.auth.signOut():location.reload();
+$('upBtn').onclick=()=>$('upFile').click();
+$('upFile').onchange=async e=>{
+ const f=e.target.files[0];e.target.value='';if(!f||!ME||ME.role!=='admin')return;const st=$('upStatus');
+ try{
+  st.textContent='Validando arquivo…';if(f.size>50*1048576)throw new Error('arquivo acima de 50 MB');
+  const rows=JSON.parse(await f.text()),S=['loja','forn','comp','prom','status','date'],N=['tempo','nota','contr'];
+  if(!Array.isArray(rows)||!rows.length)throw new Error('o arquivo precisa ser uma lista de visitas');
+  const bad=rows.findIndex(r=>!r||typeof r!=='object'||S.some(k=>typeof r[k]!=='string')||N.some(k=>typeof r[k]!=='number'||!isFinite(r[k])));
+  if(bad>=0)throw new Error('registro '+(bad+1)+' fora do padrão (campos: '+S.concat(N).join(', ')+')');
+  if(!confirm('Substituir a base atual por '+fI(rows.length)+' registros?')){st.textContent='';return}
+  st.textContent='Enviando '+(f.size/1048576).toFixed(1)+' MB…';
+  const{error}=await sb.storage.from(BUCKET).upload(FILE,f,{upsert:true,contentType:'application/json',cacheControl:'0'});
+  if(error)throw error;
+  await loadPublishedData();await setUpdated();st.textContent='Base atualizada: '+fI(rows.length)+' registros.';
+ }catch(err){st.textContent='Erro: '+(err.message||err)}
+};
+/* ===== Conta e gestão de usuários ===== */
+let USERS=[];
+const accMsg=(t,bad)=>{const m=$('accMsg');m.textContent=t||'';m.style.color=bad?'var(--danger)':'var(--green)'};
+async function adm(body){const{data,error}=await sb.functions.invoke('admin-users',{body});if(error){let m=error.message;try{m=(await error.context.json()).error||m}catch(e){}throw new Error(m)}return data}
+async function loadUsers(){
+ const tb=$('usrTb').querySelector('tbody');tb.innerHTML='<tr><td colspan="4">Carregando…</td></tr>';
+ try{USERS=(await adm({action:'list'})).users.sort((a,b)=>a.email.localeCompare(b.email));
+  tb.innerHTML=USERS.map(u=>{const me=u.email===ME.email,id=esc(u.id);return `<tr><td>${esc(u.email)}${me?' (você)':''}</td><td><select data-role="${id}"${me?' disabled':''}><option value="user"${u.role==='user'?' selected':''}>Usuário</option><option value="admin"${u.role==='admin'?' selected':''}>Administrador</option></select></td><td>${u.last_sign_in_at?new Date(u.last_sign_in_at).toLocaleString('pt-BR'):'nunca'}</td><td><button class="tab" data-pw="${id}">Nova senha</button>${me?'':`<button class="tab" data-del="${id}">Remover</button>`}</td></tr>`}).join('')||'<tr><td colspan="4">Nenhum usuário.</td></tr>';
+ }catch(err){tb.innerHTML='';accMsg(err.message,1)}
+}
+$('accBtn').onclick=()=>{$('acc').classList.remove('hidden');accMsg('');if(ME&&ME.role==='admin')loadUsers()};
+$('accClose').onclick=()=>$('acc').classList.add('hidden');
+$('myPassBtn').onclick=async()=>{const p=$('myPass').value;if(p.length<8)return accMsg('A senha precisa ter pelo menos 8 caracteres.',1);const{error}=await sb.auth.updateUser({password:p});if(error)return accMsg(error.message,1);$('myPass').value='';accMsg('Senha alterada.')};
+$('nuBtn').onclick=async()=>{const em=$('nuEmail').value.trim();try{await adm({action:'create',email:em,password:$('nuPass').value,role:$('nuRole').value});accMsg('Usuário criado: '+em);$('nuEmail').value=$('nuPass').value='';loadUsers()}catch(err){accMsg(err.message,1)}};
+$('usrTb').addEventListener('click',async e=>{
+ const b=e.target.closest('button');if(!b)return;const id=b.dataset.pw||b.dataset.del,u=USERS.find(x=>x.id===id);if(!u)return;
+ try{
+  if(b.dataset.pw){const p=prompt('Nova senha para '+u.email+' (mín. 8 caracteres):');if(!p)return;await adm({action:'set_password',id,password:p});accMsg('Senha de '+u.email+' alterada.')}
+  else if(confirm('Remover '+u.email+'? Essa ação não pode ser desfeita.')){await adm({action:'delete',id});accMsg(u.email+' removido.');loadUsers()}
+ }catch(err){accMsg(err.message,1)}
+});
+$('usrTb').addEventListener('change',async e=>{const s=e.target.closest('select[data-role]');if(!s)return;try{await adm({action:'set_role',id:s.dataset.role,role:s.value});accMsg('Perfil atualizado.')}catch(err){accMsg(err.message,1);loadUsers()}});
+boot();
 </script></body></html>
