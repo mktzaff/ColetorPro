@@ -113,7 +113,8 @@ body{background:#fff!important}
 .pdf-detail thead{display:table-header-group!important}
 }
 
-.top-actions{display:flex;gap:8px;align-items:center;margin-top:15px}.top-actions .btn{margin-top:0}.btn-html{background:#123b5f}.exported-view .top-actions #htmlBtn{display:none}.exported-view .combo input{cursor:default}.exported-view .topbar{position:relative}
+.top-actions{display:flex;gap:8px;align-items:center;margin-top:15px}.top-actions .btn{margin-top:0}.btn-html{background:#123b5f}.exported-view .top-actions #htmlBtn,.exported-view .top-actions #upBtn,.exported-view .top-actions #ctrBtn,.exported-view .top-actions #upStatus,.exported-view .top-actions #accBtn,.exported-view .top-actions #logoutBtn,.exported-view .top-actions .who{display:none!important}.exported-view .upd-mini{display:none!important}.exported-view #ctr,.exported-view #ctrMsg{display:none!important}.exported-view .combo input{cursor:default}.exported-view .topbar{position:relative}
+@media print{.confidential-footer:not(.pdf-confidential-footer){display:none!important}.pdf-confidential-footer{display:flex!important}}
 </style>
 <style id="auth-css">
 #login,#force{position:fixed;inset:0;z-index:1000;background:var(--navy);display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto}
@@ -145,8 +146,8 @@ html:not(.is-admin) .admin-only{display:none!important}
 #acc .table-wrap{max-height:320px;border:1px solid var(--line);border-radius:10px}#acc td,#acc th{font-size:11px}#acc .tab{margin:2px 4px 2px 0}#acc input:focus-visible,#acc select:focus-visible,#acc button:focus-visible{outline:2px solid #2879b8;outline-offset:2px}#acc .mrow input{min-width:180px}#acc .perm-item{background:#fbfcfe;transition:transform .16s,border-color .16s,background .16s}#acc .perm-item:hover{transform:translateY(-1px);border-color:#b8cbdc;background:#f1f6fa}#acc .perm-state{font-weight:800;color:#64768a}#acc .perm-item:has(input:checked){border-color:#b7e5d0;background:#f1fbf6}#acc .perm-item:has(input:not(:checked)){border-color:#f0d2d4}#acc .perm-item input{cursor:pointer;transform:scale(1.1)}#acc .admin-only .btn{min-height:36px}#accMsg{padding:0 2px}#accMsg:not(:empty){animation:rise .2s ease-out}
 #accMsg{min-height:18px;margin-top:12px;font-size:12px;font-weight:700}
 .exported-view #accBtn{display:none!important}
-.upd-mini{position:absolute;z-index:3;right:45px;bottom:7px;font-size:11px;font-weight:800;color:#17324b;background:#edf4fa;border:1px solid #cbd9e6;border-radius:999px;padding:6px 10px;box-shadow:0 3px 10px rgba(11,39,66,.08);max-width:calc(100% - 48px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-@media(max-width:700px){.upd-mini{right:18px;bottom:5px;font-size:9px;padding:4px 7px}.header{padding-bottom:38px}#acc{padding:10px}#acc .mbox{padding:16px;border-radius:14px}#acc h3{font-size:21px}#acc .admin-guide{grid-template-columns:1fr;gap:7px}#acc .msec{padding:13px}#acc .mrow input{min-width:100%;width:100%}#acc .perm-checks{grid-template-columns:1fr}#acc .table-wrap{max-height:260px}}@media print{.upd-mini{display:none}}
+.upd-mini{position:relative;z-index:3;display:inline-block;margin-top:8px;font-size:9px;font-weight:700;color:#17324b;background:#edf4fa;border:1px solid #cbd9e6;border-radius:7px;padding:3px 7px;box-shadow:0 2px 6px rgba(11,39,66,.06);max-width:min(100%,420px);white-space:normal;overflow-wrap:anywhere;line-height:1.25}
+@media(max-width:700px){.upd-mini{font-size:8px;padding:3px 6px;max-width:100%}.header{padding-bottom:24px}#acc{padding:10px}#acc .mbox{padding:16px;border-radius:14px}#acc h3{font-size:21px}#acc .admin-guide{grid-template-columns:1fr;gap:7px}#acc .msec{padding:13px}#acc .mrow input{min-width:100%;width:100%}#acc .perm-checks{grid-template-columns:1fr}#acc .table-wrap{max-height:260px}}@media print{.upd-mini{display:none}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes modalUp{from{opacity:0;transform:translateY(12px) scale(.99)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes growY{from{transform:scaleY(0)}}@keyframes fillX{from{transform:scaleX(0)}}@keyframes rise{from{opacity:0;transform:translateY(10px)}}@keyframes sweep{from{opacity:0;transform:translateX(90px) rotate(16deg)}}
 .header:before,.header:after{animation:sweep .9s cubic-bezier(.2,.8,.2,1) backwards}
 .fx .bar{transform-origin:bottom;animation:growY .75s cubic-bezier(.2,.8,.2,1) backwards}.fx .progress>div{transform-origin:left;animation:fillX .9s cubic-bezier(.2,.8,.2,1) .15s backwards}.fx .kpi{animation:rise .5s cubic-bezier(.2,.8,.2,1) backwards}.fx .kpi:nth-child(2){animation-delay:0.05s}.fx .kpi:nth-child(3){animation-delay:0.10s}.fx .kpi:nth-child(4){animation-delay:0.15s}.fx .kpi:nth-child(5){animation-delay:0.20s}.fx .kpi:nth-child(6){animation-delay:0.25s}.fx .kpi:nth-child(7){animation-delay:0.30s}.fx .kpi:nth-child(8){animation-delay:0.35s}
@@ -398,7 +399,7 @@ function buildPdfDetail(){
  buildPdfTable('pdfVisitas',visitData,[['date','Data',x=>esc(x.date)],['loja','Loja',x=>esc(x.loja)],['prom','Promotor',x=>esc(x.prom)],['comp','Comprador',x=>esc(x.comp||'—')],['status','Status',x=>esc(x.status)],['tempo','Tempo',x=>fH(x.tempo)],['nota','Nota',x=>x.nota?esc(x.nota):'—']]);
  $('pdfDetail').dataset.industry=selectedIndustry;
 }
-async function exportPDF(){if(!await requireServerPerm('export_pdf'))return;closeIndustryList();buildPdfDetail();const old=document.title,nm=curInd==='__all__'?'Geral':curInd.split(' - ')[0].trim();document.title='ColetorPRO - '+nm+' - '+$('period').textContent;window.onafterprint=()=>{document.title=old;window.onafterprint=null};requestAnimationFrame(()=>requestAnimationFrame(()=>window.print()))}
+async function exportPDF(){if(!window.__COLETOR_EXPORTED_DATA__&&!await requireServerPerm('export_pdf'))return;closeIndustryList();buildPdfDetail();const old=document.title,nm=curInd==='__all__'?'Geral':curInd.split(' - ')[0].trim();document.title='ColetorPRO - '+nm+' - '+$('period').textContent;window.onafterprint=()=>{document.title=old;window.onafterprint=null};requestAnimationFrame(()=>requestAnimationFrame(()=>window.print()))}
 async function loadPublishedData(){
  try{
   $('empty').innerHTML='Carregando dados publicados...';
@@ -417,8 +418,8 @@ async function loadPublishedData(){
   }
   /* Segurança extra para HTMLs exportados: normaliza também os registros já incorporados. */
   ALL=ALL.map(r=>({...r,date:normalizarData(r.date),tempo:+r.tempo||0,nota:+r.nota||0,contr:+r.contr||0}));
-  $('empty').classList.add('hidden');render();if(ME)applyPermissionUI();else $('app').classList.remove('hidden');
- }catch(err){console.error(err);$('empty').innerHTML='Nenhum dado publicado ainda.'}
+  $('empty').classList.add('hidden');render();if(ME)applyPermissionUI();else $('app').classList.remove('hidden');return true;
+ }catch(err){console.error(err);$('empty').classList.remove('hidden');$('empty').innerHTML='<strong>Não foi possível carregar o dashboard.</strong><br><span style="font-size:12px">'+esc(err?.message||'Confira a base publicada e as permissões de acesso.')+'</span>';if(ME&&!(canPerm('dashboard')||canPerm('consult_industries')||canPerm('visit_details'))) $('app').classList.add('hidden');return false}
 }
 async function exportHTML(){if(!await requireServerPerm('download_html'))return;if(!ME)return;closeIndustryList();const selected=curInd;if(!selected||selected==='__all__'){alert('Selecione uma indústria antes de baixar o HTML.');return}const rows=ALL.filter(r=>r.forn===selected);if(!rows.length){alert('A indústria selecionada não possui dados.');return}const snapshot=document.documentElement.outerHTML.replace(/(SUPABASE_URL=)'[^']*'/,"$1''").replace(/(SUPABASE_ANON_KEY=)'[^']*'/,"$1''").replace(/<script src="https:\/\/cdn\.jsdelivr[^>]*><\/script>/,'');const payload=JSON.stringify(rows).replace(/</g,'\\u003c');const boot=`<script>window.__COLETOR_EXPORTED_DATA__=${payload};window.__COLETOR_EXPORTED_INDUSTRY__=${JSON.stringify(selected)};window.__COLETOR_EXPORTED_CONTRATO__=${JSON.stringify((()=>{const k=nk(selected),c=CTR.find(x=>nk(x.fornecedor)===k);return c?{recebido:c.recebido,atualizado:c.atualizado}:null})()).replace(/</g,'\\u003c')};<\/script>`;let out=snapshot.replace(/<script>/i,boot+'<script>');out=out.replace(/<body>/i,'<body class="exported-view">');out=out.replace(/<button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML\(\)">Baixar HTML<\/button>/,'<button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML()">Baixar HTML</button>');const safe=selected.replace(/[\\/:*?"<>|]+/g,' - ').replace(/\s+/g,' ').trim().slice(0,140);// O HTML exportado contém uma cópia dos dados e deixa de ser protegido pelo login/Supabase após o download.
 const blob=new Blob([out],{type:'text/html;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ColetorPRO - '+safe+'.html';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
@@ -549,7 +550,7 @@ $('upFile').onchange=async e=>{
   st.textContent='Enviando '+(body.size/1048576).toFixed(1)+' MB…';
   const{error}=await sb.storage.from(BUCKET).upload(FILE,body,{upsert:true,contentType:'application/json',cacheControl:'0'});
   if(error)throw error;
-  await loadPublishedData();await setUpdated();st.textContent='Base atualizada: '+fI(rows.length)+' registros.';
+  const loaded=await loadPublishedData();if(!loaded)throw new Error('O arquivo foi enviado, mas o dashboard não conseguiu carregar a base. Confira o formato dos registros e o acesso ao arquivo dados.json.');await setUpdated();st.textContent='Base atualizada: '+fI(rows.length)+' registros.';
  }catch(err){st.textContent='Erro: '+(err.message||err)}
 };
 /* ===== Conta e gestão de usuários ===== */
