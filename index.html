@@ -179,6 +179,8 @@ html:not(.is-admin) .admin-only{display:none!important}
 .ctr-msg span{color:var(--muted);font-weight:700;margin:0 6px}
 @media(max-width:700px){#ctr{padding:16px}}
 @media print{#ctr,.ctr-msg{display:none!important}}
+
+.perm-checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.perm-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:#f8fafc;font-size:12px}.perm-item label{font-weight:700;color:var(--navy)}.perm-item input{flex:0 0 auto;min-width:0;width:18px;height:18px;accent-color:var(--green)}.perm-state{font-size:10px;color:var(--muted);display:block;margin-top:3px}@media(max-width:600px){.perm-checks{grid-template-columns:1fr}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
@@ -190,22 +192,22 @@ html:not(.is-admin) .admin-only{display:none!important}
 <div id="acc" class="hidden"><div class="mbox"><div class="mhead"><h3>Minha conta</h3><button class="btn btn-out" id="accClose" type="button">Fechar</button></div><div id="accMsg" role="status"></div>
 <div class="msec"><b>Trocar minha senha</b><div class="mrow"><input id="myPass" type="password" autocomplete="new-password" placeholder="Nova senha (mín. 10 caracteres)"><button class="btn" id="myPassBtn" type="button">Salvar senha</button></div></div>
 <div class="admin-only"><div class="msec"><b>Adicionar usuário</b><div class="mrow"><input id="nuEmail" type="email" placeholder="E-mail"><input id="nuPass" type="text" autocomplete="off" placeholder="Senha provisória (mín. 10)"><select id="nuRole"><option value="user">Usuário</option><option value="admin">Administrador</option></select><button class="btn" id="nuBtn" type="button">Criar usuário</button></div></div>
-<div class="msec"><b>Usuários cadastrados</b><div class="table-wrap"><table id="usrTb"><thead><tr><th>E-mail</th><th>Perfil</th><th>Último acesso</th><th>Ações</th></tr></thead><tbody></tbody></table></div></div></div>
+<div class="msec"><b>Perfis e permissões</b><p style="color:var(--muted);margin:0 0 10px">Escolha um perfil, ajuste o que ele pode acessar e salve. As permissões são aplicadas ao entrar e também validadas pelo Supabase.</p><div class="mrow" style="margin-bottom:10px"><select id="permProfileSelect" aria-label="Perfil de permissões" style="min-width:180px;border:1px solid var(--line);border-radius:8px;padding:9px 11px"><option value="consulta">consulta</option></select><input id="permNewProfile" placeholder="Nome do novo perfil"><button class="btn btn-out" id="permNewBtn" type="button">Criar perfil</button></div><div id="permChecks" class="perm-checks"></div><div class="mrow" style="margin-top:10px"><button class="btn" id="permSaveBtn" type="button">Salvar permissões</button><span id="permStatus" role="status" style="font-size:12px;align-self:center"></span></div></div><div class="msec"><b>Usuários cadastrados</b><div class="table-wrap"><table id="usrTb"><thead><tr><th>E-mail</th><th>Tipo de conta</th><th>Perfil de permissões</th><th>Último acesso</th><th>Ações</th></tr></thead><tbody></tbody></table></div></div></div>
 </div></div>
-<div id="ctr" class="hidden admin-only"><div class="chead"><h2>CONTRATOS <span>REALIZADOS</span></h2><button class="btn btn-out" id="ctrClose" type="button">Voltar ao dashboard</button></div>
+<div id="ctr" class="hidden"><div class="chead"><h2>CONTRATOS <span>REALIZADOS</span></h2><button class="btn btn-out" id="ctrClose" type="button">Voltar ao dashboard</button></div>
 <div class="grid-kpi k6" id="ctrKpis" style="grid-template-columns:repeat(5,1fr)"></div>
 <div class="section-title">Dashboard por agência</div>
 <div class="grid3" style="grid-template-columns:1.2fr 1fr"><section class="card"><div class="card-title">Fornecedores por agência</div><div class="card-sub">Total x recebidos x atualizados</div><div class="bar-chart industry-chart" id="ctrChart"></div><div class="legend"><span><i class="n"></i>Fornecedores</span><span><i class="r"></i>Recebidos</span><span><i style="background:var(--green)"></i>Atualizados</span></div></section>
 <section class="card"><div class="card-title">Resumo por agência</div><div class="card-sub">Pendências de recebimento e atualização</div><div class="table-wrap" style="max-height:340px"><table id="ctrAgTb"><thead><tr><th>Agência</th><th>Forn.</th><th>Receb.</th><th>Pend. receb.</th><th>Atual.</th><th>Pend. atual.</th></tr></thead><tbody></tbody></table></div></section></div>
-<div class="section-title">Editor</div>
-<div class="ctr-add"><input id="ctrNewAg" placeholder="Agência (ex.: GOLD)"><input id="ctrNewForn" placeholder="Fornecedor (nome igual ao do ColetorPRO)"><button class="btn" id="ctrAddBtn" type="button">Adicionar fornecedor</button></div>
+<div class="section-title admin-only">Editor</div>
+<div class="ctr-add admin-only"><input id="ctrNewAg" placeholder="Agência (ex.: GOLD)"><input id="ctrNewForn" placeholder="Fornecedor (nome igual ao do ColetorPRO)"><button class="btn" id="ctrAddBtn" type="button">Adicionar fornecedor</button></div>
 <div class="ctr-tools"><input class="search" id="ctrQ" placeholder="Buscar fornecedor..."><select id="ctrFAg"></select><select id="ctrFSt"><option value="">Todos os status</option><option value="pr">Pendente de recebimento</option><option value="pa">Pendente de atualização</option><option value="ok">Recebido e atualizado</option></select><span id="ctrStatus" role="status"></span></div>
 <div class="ctr-grid"><table id="ctrTb"><thead><tr><th>#</th><th>Agência</th><th>Fornecedor</th><th>Recebido</th><th>Atualizado</th><th>Observação</th><th></th></tr></thead><tbody></tbody></table></div>
-<div class="small-note" style="margin-top:8px">Edite direto na tabela: ao mudar uma célula ela é salva na hora. Para limpar uma data, apague o campo.</div></div>
+<div class="small-note admin-only" style="margin-top:8px">Edite direto na tabela: ao mudar uma célula ela é salva na hora. Para limpar uma data, apague o campo.</div></div>
 <header class="header"><div class="brand"><div class="eyebrow">Resultados em campo • ColetorPRO</div><h1 id="ttl">EXECUÇÃO POR INDÚSTRIA <span>| Dashboard</span></h1><div class="subtitle" id="sub">Acesso restrito • dados carregados após o login</div></div><div class="period" id="period">CARREGANDO DADOS</div><div class="upd-mini" id="updMini"></div></header>
 <main class="wrap">
 <div class="topbar"><div class="combo"><label>Indústria (fornecedor)</label><input id="indIn" placeholder="Carregando dados publicados..." autocomplete="off" disabled><div class="combo-list hidden" id="indList"></div></div>
-<div class="top-actions"><button class="btn btn-pdf" id="pdfBtn" disabled onclick="exportPDF()">Exportar PDF</button><button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML()">Baixar HTML</button><button class="btn btn-up admin-only" id="upBtn" type="button">Atualizar base (.xlsx)</button><button class="btn admin-only" id="ctrBtn" type="button" style="background:var(--navy2)">Contratos realizados</button><input type="file" id="upFile" accept=".xlsx,.xls,.json,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden><span class="up-status admin-only" id="upStatus" role="status"></span><span class="who" id="who"></span><button class="btn btn-out" id="accBtn" type="button">Conta</button><button class="btn btn-out" id="logoutBtn" type="button">Sair</button></div>
+<div class="top-actions"><button class="btn btn-pdf" id="pdfBtn" disabled onclick="exportPDF()">Exportar PDF</button><button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML()">Baixar HTML</button><button class="btn btn-up admin-only" id="upBtn" type="button">Atualizar base (.xlsx)</button><button class="btn" id="ctrBtn" type="button" style="background:var(--navy2);display:none">Contratos realizados</button><input type="file" id="upFile" accept=".xlsx,.xls,.json,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden><span class="up-status admin-only" id="upStatus" role="status"></span><span class="who" id="who"></span><button class="btn btn-out" id="accBtn" type="button">Conta</button><button class="btn btn-out" id="logoutBtn" type="button">Sair</button></div>
 </div>
 <div id="empty">Carregando dados publicados...</div>
 <div id="app" class="hidden">
@@ -386,7 +388,7 @@ function buildPdfDetail(){
  buildPdfTable('pdfVisitas',visitData,[['date','Data',x=>esc(x.date)],['loja','Loja',x=>esc(x.loja)],['prom','Promotor',x=>esc(x.prom)],['comp','Comprador',x=>esc(x.comp||'—')],['status','Status',x=>esc(x.status)],['tempo','Tempo',x=>fH(x.tempo)],['nota','Nota',x=>x.nota?esc(x.nota):'—']]);
  $('pdfDetail').dataset.industry=selectedIndustry;
 }
-function exportPDF(){closeIndustryList();buildPdfDetail();const old=document.title,nm=curInd==='__all__'?'Geral':curInd.split(' - ')[0].trim();document.title='ColetorPRO - '+nm+' - '+$('period').textContent;window.onafterprint=()=>{document.title=old;window.onafterprint=null};requestAnimationFrame(()=>requestAnimationFrame(()=>window.print()))}
+async function exportPDF(){if(!await requireServerPerm('export_pdf'))return;closeIndustryList();buildPdfDetail();const old=document.title,nm=curInd==='__all__'?'Geral':curInd.split(' - ')[0].trim();document.title='ColetorPRO - '+nm+' - '+$('period').textContent;window.onafterprint=()=>{document.title=old;window.onafterprint=null};requestAnimationFrame(()=>requestAnimationFrame(()=>window.print()))}
 async function loadPublishedData(){
  try{
   $('empty').innerHTML='Carregando dados publicados...';
@@ -408,7 +410,7 @@ async function loadPublishedData(){
   $('empty').classList.add('hidden');$('app').classList.remove('hidden');render();
  }catch(err){console.error(err);$('empty').innerHTML='Nenhum dado publicado ainda.'}
 }
-function exportHTML(){if(!ME)return;closeIndustryList();const selected=curInd;if(!selected||selected==='__all__'){alert('Selecione uma indústria antes de baixar o HTML.');return}const rows=ALL.filter(r=>r.forn===selected);if(!rows.length){alert('A indústria selecionada não possui dados.');return}const snapshot=document.documentElement.outerHTML.replace(/(SUPABASE_URL=)'[^']*'/,"$1''").replace(/(SUPABASE_ANON_KEY=)'[^']*'/,"$1''").replace(/<script src="https:\/\/cdn\.jsdelivr[^>]*><\/script>/,'');const payload=JSON.stringify(rows).replace(/</g,'\\u003c');const boot=`<script>window.__COLETOR_EXPORTED_DATA__=${payload};window.__COLETOR_EXPORTED_INDUSTRY__=${JSON.stringify(selected)};window.__COLETOR_EXPORTED_CONTRATO__=${JSON.stringify((()=>{const k=nk(selected),c=CTR.find(x=>nk(x.fornecedor)===k);return c?{recebido:c.recebido,atualizado:c.atualizado}:null})()).replace(/</g,'\\u003c')};<\/script>`;let out=snapshot.replace(/<script>/i,boot+'<script>');out=out.replace(/<body>/i,'<body class="exported-view">');out=out.replace(/<button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML\(\)">Baixar HTML<\/button>/,'<button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML()">Baixar HTML</button>');const safe=selected.replace(/[\\/:*?"<>|]+/g,' - ').replace(/\s+/g,' ').trim().slice(0,140);const blob=new Blob([out],{type:'text/html;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ColetorPRO - '+safe+'.html';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
+async function exportHTML(){if(!await requireServerPerm('download_html'))return;if(!ME)return;closeIndustryList();const selected=curInd;if(!selected||selected==='__all__'){alert('Selecione uma indústria antes de baixar o HTML.');return}const rows=ALL.filter(r=>r.forn===selected);if(!rows.length){alert('A indústria selecionada não possui dados.');return}const snapshot=document.documentElement.outerHTML.replace(/(SUPABASE_URL=)'[^']*'/,"$1''").replace(/(SUPABASE_ANON_KEY=)'[^']*'/,"$1''").replace(/<script src="https:\/\/cdn\.jsdelivr[^>]*><\/script>/,'');const payload=JSON.stringify(rows).replace(/</g,'\\u003c');const boot=`<script>window.__COLETOR_EXPORTED_DATA__=${payload};window.__COLETOR_EXPORTED_INDUSTRY__=${JSON.stringify(selected)};window.__COLETOR_EXPORTED_CONTRATO__=${JSON.stringify((()=>{const k=nk(selected),c=CTR.find(x=>nk(x.fornecedor)===k);return c?{recebido:c.recebido,atualizado:c.atualizado}:null})()).replace(/</g,'\\u003c')};<\/script>`;let out=snapshot.replace(/<script>/i,boot+'<script>');out=out.replace(/<body>/i,'<body class="exported-view">');out=out.replace(/<button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML\(\)">Baixar HTML<\/button>/,'<button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML()">Baixar HTML</button>');const safe=selected.replace(/[\\/:*?"<>|]+/g,' - ').replace(/\s+/g,' ').trim().slice(0,140);const blob=new Blob([out],{type:'text/html;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ColetorPRO - '+safe+'.html';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
 $('q').addEventListener('input',renderTable);
 /* ===== Supabase: login, perfis e upload (somente admin) ===== */
 const SUPABASE_URL='https://nduabnxombkgwmlzzsjg.supabase.co',SUPABASE_ANON_KEY='sb_publishable_UgW5UpjaJNqtTm8aUoHakA_KdMz7bQ9',BUCKET='dashboard-data',FILE='dados.json';
@@ -417,16 +419,56 @@ function idleReset(){clearTimeout(idleT);if(ME)idleT=setTimeout(()=>sb.auth.sign
 ['click','keydown','mousemove','touchstart','scroll'].forEach(ev=>addEventListener(ev,idleReset,{passive:true}));
 const showLogin=m=>{$('login').classList.remove('hidden');$('loginErr').textContent=m||''};
 async function setUpdated(){try{const{data}=await sb.storage.from(BUCKET).list('',{search:FILE});const o=(data||[]).find(x=>x.name===FILE);if(!o)return;const d=new Date(o.updated_at),t=d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});$('updMini').textContent='Atualizado em '+t;$('upd').textContent='Base atualizada em '+t}catch(e){}}
+const PERMISSION_DEFS=[
+ {key:'dashboard',label:'Dashboard e indicadores'},
+ {key:'consult_industries',label:'Consultar indústrias e lojas'},
+ {key:'visit_details',label:'Detalhamento das visitas'},
+ {key:'export_pdf',label:'Exportar PDF'},
+ {key:'download_html',label:'Baixar HTML'},
+ {key:'update_data',label:'Atualizar a base de dados'},
+ {key:'contracts_access',label:'Acessar contratos realizados'},
+ {key:'manage_users',label:'Gerenciar usuários e permissões'}
+];
+const CONSULTA_DEFAULT={dashboard:false,consult_industries:false,visit_details:false,export_pdf:false,download_html:false,update_data:false,contracts_access:true,manage_users:false};
+let USER_PERMISSIONS={},PERMISSION_PROFILES=[],USER_PROFILE_MAP={};
+function canPerm(k){return !!(ME&&(ME.role==='admin'||USER_PERMISSIONS[k]===true))}
+function requirePerm(k){if(canPerm(k))return true;alert('Seu perfil não tem permissão para realizar esta ação.');return false}
+async function requireServerPerm(k){if(!sb||!ME)return false;try{const {data,error}=await sb.rpc('coletor_can',{permission_key:k});if(error||data!==true){alert('O Supabase não autorizou esta ação para o seu perfil.');return false}return true}catch(e){alert('Não foi possível validar a permissão no Supabase. A ação foi bloqueada.');return false}}
+function applyPermissionUI(){
+ document.documentElement.classList.toggle('is-admin',!!(ME&&ME.role==='admin'));
+ $('upBtn').style.display=canPerm('update_data')?'':'none';$('upStatus').style.display=canPerm('update_data')?'':'none';
+ $('ctrBtn').style.display=canPerm('contracts_access')?'':'none';
+ $('accBtn').style.display='';
+ $('pdfBtn').style.display=canPerm('export_pdf')?'':'none';$('htmlBtn').style.display=canPerm('download_html')?'':'none';
+ const detailTitle=[...document.querySelectorAll('.section-title')].find(e=>e.textContent.trim()==='Detalhamento completo');
+ if(detailTitle)detailTitle.style.display=canPerm('visit_details')?'':'none';
+ const detailCard=$('tabs')?.closest('.card');if(detailCard)detailCard.style.display=canPerm('visit_details')?'':'none';
+ const search=$('indIn')?.closest('.combo');if(search)search.style.display=canPerm('consult_industries')?'':'none';
+ if(!canPerm('dashboard')){$('app').classList.add('hidden')}else{$('app').classList.remove('hidden')}
+}
+async function loadMyPermissions(userId){
+ USER_PERMISSIONS={...CONSULTA_DEFAULT};
+ if(ME&&ME.role==='admin'){USER_PERMISSIONS=Object.fromEntries(PERMISSION_DEFS.map(x=>[x.key,true]));return}
+ const {data:up,error:ue}=await sb.from('coletor_user_profiles').select('profile_name').eq('user_id',userId).maybeSingle();
+ if(ue)throw new Error('Não foi possível validar seu perfil de permissões no Supabase: '+ue.message);
+ const profileName=up?.profile_name||'consulta';USER_PROFILE_MAP[userId]=profileName;
+ const {data:pp,error:pe}=await sb.from('coletor_permission_profiles').select('permissions').eq('profile_name',profileName).maybeSingle();
+ if(pe)throw new Error('Não foi possível carregar as permissões do perfil: '+pe.message);
+ if(!pp)throw new Error('O perfil “'+profileName+'” não existe no Supabase. Peça ao administrador para configurar os perfis.');
+ USER_PERMISSIONS={...CONSULTA_DEFAULT,...(pp.permissions||{})};
+}
 async function startSession(session){
  const{data:p,error}=await sb.from('profiles').select('role,must_change_password').eq('id',session.user.id).single();
  if(error||!p){await sb.auth.signOut();showLogin('Conta sem perfil de acesso. Fale com o administrador.');return}
  if(p.must_change_password){$('login').classList.add('hidden');$('force').classList.remove('hidden');return}
- $('force').classList.add('hidden');ME={email:session.user.email,role:p.role};
- document.documentElement.classList.toggle('is-admin',p.role==='admin');
- $('who').textContent=ME.email+' • '+(p.role==='admin'?'Administrador':'Usuário');
- $('login').classList.add('hidden');idleReset();
- await loadContratos();await loadPublishedData();setUpdated();
+ ME={id:session.user.id,email:session.user.email,role:p.role};
+ try{await loadMyPermissions(session.user.id)}catch(err){ME=null;await sb.auth.signOut();showLogin(err.message);return}
+ $('force').classList.add('hidden');$('who').textContent=ME.email+' • '+(p.role==='admin'?'Administrador':(USER_PROFILE_MAP[ME.id]||'Usuário'));
+ $('login').classList.add('hidden');idleReset();applyPermissionUI();
+ if(canPerm('dashboard')||canPerm('consult_industries')||canPerm('visit_details')){await loadPublishedData();setUpdated()}
+ if(canPerm('contracts_access')){await loadContratos();$('ctr').classList.remove('hidden');ctrRender();$('app').classList.add('hidden')}
 }
+
 async function boot(){
  if(window.__COLETOR_EXPORTED_DATA__){$('login').classList.add('hidden');return loadPublishedData()}
  if(!window.supabase||SUPABASE_URL.includes('SEU-PROJETO')){showLogin('Configure SUPABASE_URL e SUPABASE_ANON_KEY no index.html.');return}
@@ -456,9 +498,9 @@ function xlsxToCsv(ws){
    row.push(v.replace(/[;\r\n]+/g,' '));}
   out.push(row.join(';'));}
  return out.join('\n')}
-$('upBtn').onclick=()=>$('upFile').click();
+$('upBtn').onclick=async()=>{if(await requireServerPerm('update_data'))$('upFile').click()};
 $('upFile').onchange=async e=>{
- const f=e.target.files[0];e.target.value='';if(!f||!ME||ME.role!=='admin')return;const st=$('upStatus');
+ const f=e.target.files[0];e.target.value='';if(!f||!await requireServerPerm('update_data'))return;const st=$('upStatus');
  try{
   st.textContent='Validando arquivo…';if(f.size>50*1048576)throw new Error('arquivo acima de 50 MB');
   let rows,body=f;
@@ -483,15 +525,34 @@ $('upFile').onchange=async e=>{
 };
 /* ===== Conta e gestão de usuários ===== */
 let USERS=[];
+const PERMISSION_PROFILE_DEFAULTS={consulta:CONSULTA_DEFAULT,completo:{dashboard:true,consult_industries:true,visit_details:true,export_pdf:true,download_html:true,update_data:false,contracts_access:true,manage_users:false}};
+function renderPermissionChecks(perms={}){$('permChecks').innerHTML=PERMISSION_DEFS.map(p=>`<div class="perm-item"><div><label for="perm-${p.key}">${p.label}</label><span class="perm-state" id="perm-state-${p.key}">${perms[p.key]?'Permitido':'Bloqueado'}</span></div><input id="perm-${p.key}" type="checkbox" data-permission="${p.key}" ${perms[p.key]?'checked':''} aria-label="${p.label}"></div>`).join('');$('permChecks').querySelectorAll('[data-permission]').forEach(c=>c.addEventListener('change',()=>{$('perm-state-'+c.dataset.permission).textContent=c.checked?'Permitido':'Bloqueado'}))}
+async function loadPermissionProfiles(){
+ const {data,error}=await sb.from('coletor_permission_profiles').select('profile_name,permissions').order('profile_name');
+ if(error){$('permStatus').textContent='Execute a migração SQL de permissões no Supabase.';return}
+ PERMISSION_PROFILES=data||[];const sel=$('permProfileSelect'),current=sel.value||'consulta';
+ sel.innerHTML=PERMISSION_PROFILES.map(p=>`<option value="${esc(p.profile_name)}">${esc(p.profile_name)}</option>`).join('');
+ if(!PERMISSION_PROFILES.some(p=>p.profile_name===current))sel.value=PERMISSION_PROFILES.some(p=>p.profile_name==='consulta')?'consulta':(PERMISSION_PROFILES[0]?.profile_name||'');else sel.value=current;
+ showProfilePermissions();
+}
+function showProfilePermissions(){const p=PERMISSION_PROFILES.find(x=>x.profile_name===$('permProfileSelect').value);renderPermissionChecks(p?.permissions||CONSULTA_DEFAULT)}
+$('permProfileSelect').addEventListener('change',showProfilePermissions);
+$('permNewBtn').onclick=async()=>{const name=$('permNewProfile').value.trim().toLowerCase().replace(/[^a-z0-9_-]/g,'_');if(!name)return accMsg('Informe um nome de perfil.',1);if(PERMISSION_PROFILES.some(p=>p.profile_name===name))return accMsg('Esse perfil já existe.',1);try{const {error}=await sb.from('coletor_permission_profiles').insert({profile_name:name,permissions:{...CONSULTA_DEFAULT}});if(error)throw error;$('permNewProfile').value='';await loadPermissionProfiles();$('permProfileSelect').value=name;showProfilePermissions();accMsg('Perfil criado. Configure as permissões e salve.')}catch(e){accMsg('Não foi possível criar o perfil: '+e.message,1)}};
+$('permSaveBtn').onclick=async()=>{if(!requirePerm('manage_users'))return;const name=$('permProfileSelect').value;if(!name)return;const permissions=Object.fromEntries(PERMISSION_DEFS.map(p=>[p.key,!!$('perm-'+p.key)?.checked]));const b=$('permSaveBtn');b.disabled=true;try{const {error}=await sb.from('coletor_permission_profiles').upsert({profile_name:name,permissions,updated_at:new Date().toISOString()},{onConflict:'profile_name'});if(error)throw error;PERMISSION_PROFILES=PERMISSION_PROFILES.map(p=>p.profile_name===name?{...p,permissions}:p);$('permStatus').textContent='Permissões salvas no Supabase.';accMsg('Permissões do perfil “'+name+'” atualizadas. Usuários precisam entrar novamente para aplicar.')}catch(e){$('permStatus').textContent='';accMsg('Erro ao salvar permissões: '+e.message,1)}finally{b.disabled=false}};
 const accMsg=(t,bad)=>{const m=$('accMsg');m.textContent=t||'';m.style.color=bad?'var(--danger)':'var(--green)';if(t)m.scrollIntoView({block:'nearest'})};
 async function adm(body){const{data,error}=await sb.functions.invoke('admin-users',{body});if(error){let m=error.message;try{const j=await error.context.json();m=j.error||j.message||m}catch(e){}throw new Error(m)}return data}
 async function loadUsers(){
- const tb=$('usrTb').querySelector('tbody');tb.innerHTML='<tr><td colspan="4">Carregando…</td></tr>';
- try{USERS=(await adm({action:'list'})).users.sort((a,b)=>a.email.localeCompare(b.email));
-  tb.innerHTML=USERS.map(u=>{const me=u.email===ME.email,id=esc(u.id);return `<tr><td>${esc(u.email)}${me?' (você)':''}${u.must_change_password?' <span class="pill">senha provisória</span>':''}</td><td><select data-role="${id}"${me?' disabled':''}><option value="user"${u.role==='user'?' selected':''}>Usuário</option><option value="admin"${u.role==='admin'?' selected':''}>Administrador</option></select></td><td>${u.last_sign_in_at?new Date(u.last_sign_in_at).toLocaleString('pt-BR'):'nunca'}</td><td>${me?'—':`<button class="tab" data-pw="${id}">Nova senha</button><button class="tab" data-del="${id}">Remover</button>`}</td></tr>`}).join('')||'<tr><td colspan="4">Nenhum usuário.</td></tr>';
- }catch(err){tb.innerHTML='';accMsg(err.message,1)}
+ const tb=$('usrTb').querySelector('tbody');tb.innerHTML='<tr><td colspan="5">Carregando…</td></tr>';
+ try{
+  USERS=(await adm({action:'list'})).users.sort((a,b)=>a.email.localeCompare(b.email));
+  const {data:ups,error:upe}=await sb.from('coletor_user_profiles').select('user_id,profile_name');if(upe)throw upe;
+  USER_PROFILE_MAP=Object.fromEntries((ups||[]).map(x=>[x.user_id,x.profile_name]));
+  const profileOptions=PERMISSION_PROFILES.map(p=>`<option value="${esc(p.profile_name)}">${esc(p.profile_name)}</option>`).join('');
+  tb.innerHTML=USERS.map(u=>{const me=u.email===ME.email,id=esc(u.id),prof=USER_PROFILE_MAP[u.id]||'consulta';return `<tr><td>${esc(u.email)}${me?' (você)':''}${u.must_change_password?' <span class="pill">senha provisória</span>':''}</td><td><select data-role="${id}"${me?' disabled':''}><option value="user"${u.role==='user'?' selected':''}>Usuário</option><option value="admin"${u.role==='admin'?' selected':''}>Administrador</option></select></td><td><select data-user-profile="${id}"${u.role==='admin'?' disabled':''}>${profileOptions}</select></td><td>${u.last_sign_in_at?new Date(u.last_sign_in_at).toLocaleString('pt-BR'):'nunca'}</td><td>${me?'—':`<button class="tab" data-pw="${id}">Nova senha</button><button class="tab" data-del="${id}">Remover</button>`}</td></tr>`}).join('')||'<tr><td colspan="5">Nenhum usuário.</td></tr>';
+  tb.querySelectorAll('select[data-user-profile]').forEach(sel=>{sel.value=USER_PROFILE_MAP[sel.dataset.userProfile]||'consulta'});
+ }catch(err){tb.innerHTML='';accMsg('Falha ao carregar usuários/perfis: '+err.message,1)}
 }
-$('accBtn').onclick=()=>{$('acc').classList.remove('hidden');accMsg('');if(ME&&ME.role==='admin')loadUsers()};
+$('accBtn').onclick=async()=>{$('acc').classList.remove('hidden');accMsg('');if(ME&&ME.role==='admin'){await loadPermissionProfiles();await loadUsers()}};
 $('accClose').onclick=()=>$('acc').classList.add('hidden');
 $('myPassBtn').onclick=async()=>{const p=$('myPass').value;if(p.length<10)return accMsg('A senha precisa ter pelo menos 10 caracteres.',1);const{error}=await sb.auth.updateUser({password:p});if(error)return accMsg(error.message,1);$('myPass').value='';accMsg('Senha alterada.')};
 $('nuBtn').onclick=async()=>{const b=$('nuBtn'),em=$('nuEmail').value.trim(),pw=$('nuPass').value;
@@ -508,7 +569,7 @@ $('usrTb').addEventListener('click',async e=>{
   else if(confirm('Remover '+u.email+'? Essa ação não pode ser desfeita.')){await adm({action:'delete',id});accMsg(u.email+' removido.');loadUsers()}
  }catch(err){accMsg(err.message,1)}
 });
-$('usrTb').addEventListener('change',async e=>{const s=e.target.closest('select[data-role]');if(!s)return;try{await adm({action:'set_role',id:s.dataset.role,role:s.value});accMsg('Perfil atualizado.')}catch(err){accMsg(err.message,1);loadUsers()}});
+$('usrTb').addEventListener('change',async e=>{const ps=e.target.closest('select[data-user-profile]');if(ps){try{const {error}=await sb.from('coletor_user_profiles').upsert({user_id:ps.dataset.userProfile,profile_name:ps.value,updated_at:new Date().toISOString()},{onConflict:'user_id'});if(error)throw error;USER_PROFILE_MAP[ps.dataset.userProfile]=ps.value;accMsg('Perfil de permissões atualizado. O usuário deve entrar novamente para aplicar.')}catch(err){accMsg(err.message,1);loadUsers()}return}const s=e.target.closest('select[data-role]');if(!s)return;try{await adm({action:'set_role',id:s.dataset.role,role:s.value});accMsg('Tipo de conta atualizado.');loadUsers()}catch(err){accMsg(err.message,1);loadUsers()}});
 /* ===== Animações discretas ===== */
 function countUp(el){
  const fin=el.textContent;if(!/\d/.test(fin)||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
@@ -535,6 +596,7 @@ let CTR=[];
 const nk=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/\s+/g,' ').trim();
 const fD=s=>s?s.split('-').reverse().join('/'):'';
 async function loadContratos(){
+ if(!canPerm('contracts_access')){CTR=[];return}
  try{const{data,error}=await sb.from('contratos').select('*').order('fornecedor').range(0,4999);if(error)throw error;CTR=data||[]}
  catch(e){console.error('contratos:',e);CTR=[]}
 }
@@ -560,12 +622,13 @@ function ctrDash(){
  $('ctrFAg').innerHTML='<option value="">Todas as agências</option>'+ags.map(a=>`<option value="${esc(a)}">${esc(a||'SEM AGÊNCIA DEFINIDA')}</option>`).join('');$('ctrFAg').value=cur;
 }
 function ctrGrid(){
+ const canEdit=!!(ME&&ME.role==='admin');
  const q=nk($('ctrQ').value),ag=$('ctrFAg').value,st=$('ctrFSt').value;
  const L=CTR.filter(c=>(!q||nk(c.fornecedor).includes(q))&&(!ag||(c.agencia||'')===ag)&&(!st||(st==='pr'&&!c.recebido)||(st==='pa'&&!c.atualizado)||(st==='ok'&&c.recebido&&c.atualizado)));
- $('ctrTb').querySelector('tbody').innerHTML=L.map((c,i)=>`<tr><td class="num">${i+1}</td><td><input data-id="${c.id}" data-f="agencia" value="${esc(c.agencia)}" style="min-width:110px"></td><td class="f"><input data-id="${c.id}" data-f="fornecedor" value="${esc(c.fornecedor)}"></td><td><input type="date" data-id="${c.id}" data-f="recebido" value="${c.recebido||''}"></td><td><input type="date" data-id="${c.id}" data-f="atualizado" value="${c.atualizado||''}"></td><td><input data-id="${c.id}" data-f="obs" value="${esc(c.obs)}" style="min-width:150px"></td><td><button class="xdel" data-del="${c.id}" title="Remover">✕</button></td></tr>`).join('')||'<tr><td colspan="7">Nenhum fornecedor.</td></tr>';
+ $('ctrTb').querySelector('tbody').innerHTML=L.map((c,i)=>`<tr><td class="num">${i+1}</td><td>${canEdit?`<input data-id="${c.id}" data-f="agencia" value="${esc(c.agencia)}" style="min-width:110px">`:esc(c.agencia)}</td><td class="f">${canEdit?`<input data-id="${c.id}" data-f="fornecedor" value="${esc(c.fornecedor)}">`:esc(c.fornecedor)}</td><td>${canEdit?`<input type="date" data-id="${c.id}" data-f="recebido" value="${c.recebido||''}">`:esc(fD(c.recebido))}</td><td>${canEdit?`<input type="date" data-id="${c.id}" data-f="atualizado" value="${c.atualizado||''}">`:esc(fD(c.atualizado))}</td><td>${canEdit?`<input data-id="${c.id}" data-f="obs" value="${esc(c.obs)}" style="min-width:150px">`:esc(c.obs||'')}</td><td>${canEdit?`<button class="xdel" data-del="${c.id}" title="Remover">✕</button>`:''}</td></tr>`).join('')||'<tr><td colspan="7">Nenhum fornecedor.</td></tr>';
 }
 function ctrRender(){ctrDash();ctrGrid()}
-$('ctrBtn').onclick=async()=>{if(!ME||ME.role!=='admin')return;$('ctr').classList.remove('hidden');ctrSt('Carregando…');await loadContratos();ctrSt('');ctrRender()};
+$('ctrBtn').onclick=async()=>{if(!await requireServerPerm('contracts_access'))return;$('ctr').classList.remove('hidden');ctrSt('Carregando…');await loadContratos();ctrSt('');ctrRender()};
 $('ctrClose').onclick=()=>{$('ctr').classList.add('hidden');render()};
 ['ctrQ','ctrFAg','ctrFSt'].forEach(i=>$(i).addEventListener('input',ctrGrid));
 $('ctrTb').addEventListener('change',async e=>{
