@@ -59,6 +59,8 @@
  .pdf-detail tr{page-break-inside:avoid}
 }
 .pdf-detail{display:none}
+.pdf-confidential-footer{display:none}
+@media print{.pdf-confidential-footer{display:flex!important;margin-top:8px;padding:6px 10px;font-size:8px;break-inside:avoid}}
 .pdf-detail table{width:100%;border-collapse:collapse}
 .pdf-detail th{background:var(--navy);color:#fff;text-align:left}
 .pdf-detail td,.pdf-detail th{border-bottom:1px solid var(--line)}
@@ -129,23 +131,23 @@ body{background:#fff!important}
 .btn-out{background:#fff;color:var(--navy);border:1px solid var(--line)}
 .btn-up{background:var(--green)}
 .who{font-size:11px;font-weight:700;color:var(--muted)}
-.up-status{font-size:11px;font-weight:700;color:var(--navy)}
+.up-status{font-size:11px;font-weight:800;color:#17324b;background:#eaf2f8;border-radius:8px;padding:7px 9px}.up-status:empty{display:none}
 .top-actions{flex-wrap:wrap}
 html:not(.is-admin) .admin-only{display:none!important}
 .exported-view .admin-only,.exported-view .who,.exported-view #logoutBtn{display:none!important}
 @media print{#login,#force{display:none!important}}
-#acc{position:fixed;inset:0;z-index:900;background:rgba(11,39,66,.55);display:flex;align-items:flex-start;justify-content:center;padding:40px 16px;overflow:auto}
+#acc{position:fixed;inset:0;z-index:900;background:rgba(8,24,40,.68);backdrop-filter:blur(5px);display:flex;align-items:flex-start;justify-content:center;padding:28px 16px;overflow:auto;animation:fadeIn .22s ease-out}
 #acc.hidden{display:none}
-#acc .mbox{background:#fff;border-radius:14px;width:100%;max-width:760px;padding:22px 24px;box-shadow:0 20px 50px rgba(0,0,0,.35);border-top:5px solid var(--red)}
-#acc .mhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}#acc h3{margin:0;font-size:20px;font-weight:900}
-#acc .msec{padding:14px 0;border-bottom:1px solid var(--line);font-size:12px}#acc .msec b{display:block;margin-bottom:8px}
+#acc .mbox{background:#f7f9fc;border-radius:18px;width:100%;max-width:1000px;padding:24px;box-shadow:0 24px 70px rgba(0,0,0,.32);border-top:5px solid var(--red);animation:modalUp .32s cubic-bezier(.2,.8,.2,1)}
+#acc .mhead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:6px}#acc h3{margin:0;font-size:25px;font-weight:900;letter-spacing:-.6px}#acc .account-intro{color:var(--muted);font-size:13px;line-height:1.5;margin:5px 0 18px}#acc .admin-guide{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0 18px}#acc .guide-step{background:#edf4fa;border:1px solid #d9e5ef;border-radius:12px;padding:12px;display:flex;gap:10px;align-items:flex-start;font-size:12px;line-height:1.4;color:#31475b}#acc .guide-num{flex:0 0 25px;height:25px;border-radius:8px;display:grid;place-items:center;background:var(--navy);color:white;font-weight:900}#acc .admin-section-title{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:900;color:var(--navy);margin-bottom:8px}#acc .admin-section-title .section-num{display:grid;place-items:center;width:25px;height:25px;border-radius:8px;background:#ffe8e9;color:var(--red);font-size:12px}
+#acc .msec{padding:18px;background:#fff;border:1px solid #e4eaf0;border-radius:14px;margin-top:12px;font-size:12px;box-shadow:0 4px 14px rgba(11,39,66,.035);transition:transform .2s,box-shadow .2s}#acc .msec:hover{box-shadow:0 8px 22px rgba(11,39,66,.07)}#acc .msec b{display:block;margin-bottom:8px}#acc .msec-desc{color:var(--muted);font-size:12px;line-height:1.45;margin:0 0 12px}
 #acc .mrow{display:flex;gap:8px;flex-wrap:wrap}#acc input{border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-size:12px;flex:1;min-width:140px}
-#acc .table-wrap{max-height:320px}#acc td,#acc th{font-size:11px}#acc .tab{margin-right:4px}
+#acc .table-wrap{max-height:320px;border:1px solid var(--line);border-radius:10px}#acc td,#acc th{font-size:11px}#acc .tab{margin:2px 4px 2px 0}#acc input:focus-visible,#acc select:focus-visible,#acc button:focus-visible{outline:2px solid #2879b8;outline-offset:2px}#acc .mrow input{min-width:180px}#acc .perm-item{background:#fbfcfe;transition:transform .16s,border-color .16s,background .16s}#acc .perm-item:hover{transform:translateY(-1px);border-color:#b8cbdc;background:#f1f6fa}#acc .perm-state{font-weight:800;color:#64768a}#acc .perm-item:has(input:checked){border-color:#b7e5d0;background:#f1fbf6}#acc .perm-item:has(input:not(:checked)){border-color:#f0d2d4}#acc .perm-item input{cursor:pointer;transform:scale(1.1)}#acc .admin-only .btn{min-height:36px}#accMsg{padding:0 2px}#accMsg:not(:empty){animation:rise .2s ease-out}
 #accMsg{min-height:18px;margin-top:12px;font-size:12px;font-weight:700}
 .exported-view #accBtn{display:none!important}
-.upd-mini{position:absolute;z-index:3;right:45px;bottom:7px;font-size:10px;font-weight:600;color:var(--muted)}
-@media(max-width:700px){.upd-mini{right:24px}}@media print{.upd-mini{display:none}}
-@keyframes growY{from{transform:scaleY(0)}}@keyframes fillX{from{transform:scaleX(0)}}@keyframes rise{from{opacity:0;transform:translateY(10px)}}@keyframes sweep{from{opacity:0;transform:translateX(90px) rotate(16deg)}}
+.upd-mini{position:absolute;z-index:3;right:45px;bottom:7px;font-size:11px;font-weight:800;color:#17324b;background:#edf4fa;border:1px solid #cbd9e6;border-radius:999px;padding:6px 10px;box-shadow:0 3px 10px rgba(11,39,66,.08);max-width:calc(100% - 48px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:700px){.upd-mini{right:18px;bottom:5px;font-size:9px;padding:4px 7px}.header{padding-bottom:38px}#acc{padding:10px}#acc .mbox{padding:16px;border-radius:14px}#acc h3{font-size:21px}#acc .admin-guide{grid-template-columns:1fr;gap:7px}#acc .msec{padding:13px}#acc .mrow input{min-width:100%;width:100%}#acc .perm-checks{grid-template-columns:1fr}#acc .table-wrap{max-height:260px}}@media print{.upd-mini{display:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes modalUp{from{opacity:0;transform:translateY(12px) scale(.99)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes growY{from{transform:scaleY(0)}}@keyframes fillX{from{transform:scaleX(0)}}@keyframes rise{from{opacity:0;transform:translateY(10px)}}@keyframes sweep{from{opacity:0;transform:translateX(90px) rotate(16deg)}}
 .header:before,.header:after{animation:sweep .9s cubic-bezier(.2,.8,.2,1) backwards}
 .fx .bar{transform-origin:bottom;animation:growY .75s cubic-bezier(.2,.8,.2,1) backwards}.fx .progress>div{transform-origin:left;animation:fillX .9s cubic-bezier(.2,.8,.2,1) .15s backwards}.fx .kpi{animation:rise .5s cubic-bezier(.2,.8,.2,1) backwards}.fx .kpi:nth-child(2){animation-delay:0.05s}.fx .kpi:nth-child(3){animation-delay:0.10s}.fx .kpi:nth-child(4){animation-delay:0.15s}.fx .kpi:nth-child(5){animation-delay:0.20s}.fx .kpi:nth-child(6){animation-delay:0.25s}.fx .kpi:nth-child(7){animation-delay:0.30s}.fx .kpi:nth-child(8){animation-delay:0.35s}
 #login .box,#force .box{animation:rise .5s cubic-bezier(.2,.8,.2,1) backwards}
@@ -181,6 +183,11 @@ html:not(.is-admin) .admin-only{display:none!important}
 @media print{#ctr,.ctr-msg{display:none!important}}
 
 .perm-checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.perm-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:#f8fafc;font-size:12px}.perm-item label{font-weight:700;color:var(--navy)}.perm-item input{flex:0 0 auto;min-width:0;width:18px;height:18px;accent-color:var(--green)}.perm-state{font-size:10px;color:var(--muted);display:block;margin-top:3px}@media(max-width:600px){.perm-checks{grid-template-columns:1fr}}
+
+.confidential-footer{display:flex;align-items:center;justify-content:center;gap:9px;margin:14px 0 0;padding:12px 16px;border:1px solid #f0c8cc;border-left:5px solid var(--red);border-radius:10px;background:#fff4f4;color:#8f1d2a;font-size:11px;font-weight:900;letter-spacing:.15px;text-align:center;line-height:1.4}
+.confidential-footer .conf-icon{display:inline-grid;place-items:center;flex:0 0 20px;width:20px;height:20px;border-radius:50%;background:#fbe0e3;color:#8f1d2a;font-size:12px}
+#ctr .confidential-footer{margin-top:18px}
+@media(max-width:700px){.confidential-footer{font-size:10px;padding:10px;align-items:flex-start}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
@@ -189,10 +196,12 @@ html:not(.is-admin) .admin-only{display:none!important}
 <form id="loginForm" onsubmit="return false"><label for="lgEmail">E-mail</label><input id="lgEmail" type="email" autocomplete="username" required><label for="lgPass">Senha</label><input id="lgPass" type="password" autocomplete="current-password" required><button class="btn" id="loginBtn" type="submit">Entrar</button><div id="loginErr" role="alert"></div></form></div></div>
 <div id="force" class="hidden"><div class="box"><h2>Crie a sua senha</h2><p>Este é o seu primeiro acesso, ou a sua senha foi redefinida pelo administrador. Escolha uma senha pessoal para continuar.</p>
 <form id="forceForm" onsubmit="return false"><label for="fpA">Nova senha (mín. 10 caracteres)</label><input id="fpA" type="password" autocomplete="new-password" required><label for="fpB">Repita a nova senha</label><input id="fpB" type="password" autocomplete="new-password" required><button class="btn" id="fpBtn" type="submit">Salvar e entrar</button><div id="forceErr" role="alert"></div><button class="btn btn-out" id="fpOut" type="button" style="width:100%;margin-top:6px">Sair</button></form></div></div>
-<div id="acc" class="hidden"><div class="mbox"><div class="mhead"><h3>Minha conta</h3><button class="btn btn-out" id="accClose" type="button">Fechar</button></div><div id="accMsg" role="status"></div>
-<div class="msec"><b>Trocar minha senha</b><div class="mrow"><input id="myPass" type="password" autocomplete="new-password" placeholder="Nova senha (mín. 10 caracteres)"><button class="btn" id="myPassBtn" type="button">Salvar senha</button></div></div>
-<div class="admin-only"><div class="msec"><b>Adicionar usuário</b><div class="mrow"><input id="nuEmail" type="email" placeholder="E-mail"><input id="nuPass" type="text" autocomplete="off" placeholder="Senha provisória (mín. 10)"><select id="nuRole"><option value="user">Usuário</option><option value="admin">Administrador</option></select><button class="btn" id="nuBtn" type="button">Criar usuário</button></div></div>
-<div class="msec"><b>Perfis e permissões</b><p style="color:var(--muted);margin:0 0 10px">Escolha um perfil, ajuste o que ele pode acessar e salve. As permissões são aplicadas ao entrar e também validadas pelo Supabase.</p><div class="mrow" style="margin-bottom:10px"><select id="permProfileSelect" aria-label="Perfil de permissões" style="min-width:180px;border:1px solid var(--line);border-radius:8px;padding:9px 11px"><option value="consulta">consulta</option></select><input id="permNewProfile" placeholder="Nome do novo perfil"><button class="btn btn-out" id="permNewBtn" type="button">Criar perfil</button></div><div id="permChecks" class="perm-checks"></div><div class="mrow" style="margin-top:10px"><button class="btn" id="permSaveBtn" type="button">Salvar permissões</button><span id="permStatus" role="status" style="font-size:12px;align-self:center"></span></div></div><div class="msec"><b>Usuários cadastrados</b><div class="table-wrap"><table id="usrTb"><thead><tr><th>E-mail</th><th>Tipo de conta</th><th>Perfil de permissões</th><th>Último acesso</th><th>Ações</th></tr></thead><tbody></tbody></table></div></div></div>
+<div id="acc" class="hidden"><div class="mbox"><div class="mhead"><div><h3>Conta e administração</h3><div class="account-intro">Gerencie sua senha, os acessos da equipe e o que cada perfil pode visualizar ou executar.</div></div><button class="btn btn-out" id="accClose" type="button">Fechar</button></div><div id="accMsg" role="status"></div>
+<div class="msec"><div class="admin-section-title"><span class="section-num">↗</span>Minha conta</div><p class="msec-desc">Altere sua senha de acesso. Use uma senha pessoal com pelo menos 10 caracteres.</p><div class="mrow"><input id="myPass" type="password" autocomplete="new-password" placeholder="Nova senha (mín. 10 caracteres)"><button class="btn" id="myPassBtn" type="button">Salvar senha</button></div></div>
+<div class="admin-only"><div class="admin-guide"><div class="guide-step"><span class="guide-num">1</span><div><b>Crie o usuário</b><br>Cadastre o e-mail e uma senha provisória.</div></div><div class="guide-step"><span class="guide-num">2</span><div><b>Configure o perfil</b><br>Marque o que pode ver ou fazer e salve.</div></div><div class="guide-step"><span class="guide-num">3</span><div><b>Vincule o perfil</b><br>Escolha o perfil na linha do usuário. Ele deve entrar novamente.</div></div></div>
+<div class="msec"><div class="admin-section-title"><span class="section-num">1</span>Adicionar usuário</div><p class="msec-desc">Crie uma conta para alguém da equipe. A senha provisória deve ter no mínimo 10 caracteres; no primeiro acesso, a pessoa precisará criar a própria senha.</p><div class="mrow"><input id="nuEmail" type="email" placeholder="E-mail do usuário"><input id="nuPass" type="text" autocomplete="off" placeholder="Senha provisória (mín. 10)"><select id="nuRole" aria-label="Tipo de conta"><option value="user">Usuário</option><option value="admin">Administrador</option></select><button class="btn" id="nuBtn" type="button">Criar usuário</button></div></div>
+<div class="msec"><div class="admin-section-title"><span class="section-num">2</span>Perfis e permissões</div><p class="msec-desc">Um perfil é um conjunto de permissões reutilizável. Selecione um perfil existente ou crie outro; marque cada opção e clique em <b>Salvar permissões</b>. Administradores têm acesso total.</p><div class="mrow" style="margin-bottom:12px"><select id="permProfileSelect" aria-label="Perfil de permissões" style="min-width:180px"><option value="consulta">consulta</option></select><input id="permNewProfile" placeholder="Nome do novo perfil"><button class="btn btn-out" id="permNewBtn" type="button">+ Criar perfil</button></div><div id="permChecks" class="perm-checks"></div><div class="mrow" style="margin-top:14px;align-items:center"><button class="btn" id="permSaveBtn" type="button">Salvar permissões</button><span id="permStatus" role="status" style="font-size:12px;align-self:center;font-weight:700"></span></div></div>
+<div class="msec"><div class="admin-section-title"><span class="section-num">3</span>Usuários cadastrados</div><p class="msec-desc">Defina o tipo de conta e o perfil de cada usuário. A opção Administrador libera todas as funções administrativas; Usuário respeita as permissões do perfil. O acesso ao dashboard é necessário para exibir indicadores; permissões de consulta podem liberar apenas a tabela.</p><div class="table-wrap"><table id="usrTb"><thead><tr><th>E-mail</th><th>Tipo de conta</th><th>Perfil de permissões</th><th>Último acesso</th><th>Ações</th></tr></thead><tbody></tbody></table></div></div></div>
 </div></div>
 <div id="ctr" class="hidden"><div class="chead"><h2>CONTRATOS <span>REALIZADOS</span></h2><button class="btn btn-out" id="ctrClose" type="button">Voltar ao dashboard</button></div>
 <div class="grid-kpi k6" id="ctrKpis" style="grid-template-columns:repeat(5,1fr)"></div>
@@ -203,11 +212,11 @@ html:not(.is-admin) .admin-only{display:none!important}
 <div class="ctr-add admin-only"><input id="ctrNewAg" placeholder="Agência (ex.: GOLD)"><input id="ctrNewForn" placeholder="Fornecedor (nome igual ao do ColetorPRO)"><button class="btn" id="ctrAddBtn" type="button">Adicionar fornecedor</button></div>
 <div class="ctr-tools"><input class="search" id="ctrQ" placeholder="Buscar fornecedor..."><select id="ctrFAg"></select><select id="ctrFSt"><option value="">Todos os status</option><option value="pr">Pendente de recebimento</option><option value="pa">Pendente de atualização</option><option value="ok">Recebido e atualizado</option></select><span id="ctrStatus" role="status"></span></div>
 <div class="ctr-grid"><table id="ctrTb"><thead><tr><th>#</th><th>Agência</th><th>Fornecedor</th><th>Recebido</th><th>Atualizado</th><th>Observação</th><th></th></tr></thead><tbody></tbody></table></div>
-<div class="small-note admin-only" style="margin-top:8px">Edite direto na tabela: ao mudar uma célula ela é salva na hora. Para limpar uma data, apague o campo.</div></div>
+<div class="small-note admin-only" style="margin-top:8px">Edite direto na tabela: ao mudar uma célula ela é salva na hora. Para limpar uma data, apague o campo.</div><div class="confidential-footer"><span class="conf-icon" aria-hidden="true">!</span><span>* Informações de consulta interna, proibido compartilhar</span></div></div>
 <header class="header"><div class="brand"><div class="eyebrow">Resultados em campo • ColetorPRO</div><h1 id="ttl">EXECUÇÃO POR INDÚSTRIA <span>| Dashboard</span></h1><div class="subtitle" id="sub">Acesso restrito • dados carregados após o login</div></div><div class="period" id="period">CARREGANDO DADOS</div><div class="upd-mini" id="updMini"></div></header>
 <main class="wrap">
 <div class="topbar"><div class="combo"><label>Indústria (fornecedor)</label><input id="indIn" placeholder="Carregando dados publicados..." autocomplete="off" disabled><div class="combo-list hidden" id="indList"></div></div>
-<div class="top-actions"><button class="btn btn-pdf" id="pdfBtn" disabled onclick="exportPDF()">Exportar PDF</button><button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML()">Baixar HTML</button><button class="btn btn-up admin-only" id="upBtn" type="button">Atualizar base (.xlsx)</button><button class="btn" id="ctrBtn" type="button" style="background:var(--navy2);display:none">Contratos realizados</button><input type="file" id="upFile" accept=".xlsx,.xls,.json,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden><span class="up-status admin-only" id="upStatus" role="status"></span><span class="who" id="who"></span><button class="btn btn-out" id="accBtn" type="button">Conta</button><button class="btn btn-out" id="logoutBtn" type="button">Sair</button></div>
+<div class="top-actions"><button class="btn btn-pdf" id="pdfBtn" disabled onclick="exportPDF()">Exportar PDF</button><button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML()">Baixar HTML</button><button class="btn btn-up" id="upBtn" type="button">Atualizar base (.csv, .xlsx)</button><button class="btn" id="ctrBtn" type="button" style="background:var(--navy2);display:none">Contratos realizados</button><input type="file" id="upFile" accept=".csv,.xlsx,.xls,.json,text/csv,application/csv,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden><span class="up-status" id="upStatus" role="status"></span><span class="who" id="who"></span><button class="btn btn-out" id="accBtn" type="button">Conta</button><button class="btn btn-out" id="logoutBtn" type="button">Sair</button></div>
 </div>
 <div id="empty">Carregando dados publicados...</div>
 <div id="app" class="hidden">
@@ -239,8 +248,9 @@ html:not(.is-admin) .admin-only{display:none!important}
 <div class="section-title">Detalhamento completo — Promotores</div><div class="pdf-table-wrap"><table id="pdfProm"><thead></thead><tbody></tbody></table></div>
 <div class="section-title">Detalhamento completo — Visitas</div><div class="pdf-table-wrap"><table id="pdfVisitas"><thead></thead><tbody></tbody></table></div>
 </div>
+<div class="confidential-footer pdf-confidential-footer"><span class="conf-icon" aria-hidden="true">!</span><span>* Informações de consulta interna, proibido compartilhar</span></div>
 </div>
-<div class="footer"><span>Fonte: Relatório “Horas Contratadas x Executadas – Completo” • ColetorPRO</span><span id="upd"></span></div></main>
+<div class="footer"><span>Fonte: Relatório “Horas Contratadas x Executadas – Completo” • ColetorPRO</span><span id="upd"></span></div><div class="confidential-footer"><span class="conf-icon" aria-hidden="true">!</span><span>* Informações de consulta interna, proibido compartilhar</span></div></main>
 <script>
 if(window.top!==window.self){document.documentElement.innerHTML=''}
 const $=id=>document.getElementById(id);
@@ -407,10 +417,11 @@ async function loadPublishedData(){
   }
   /* Segurança extra para HTMLs exportados: normaliza também os registros já incorporados. */
   ALL=ALL.map(r=>({...r,date:normalizarData(r.date),tempo:+r.tempo||0,nota:+r.nota||0,contr:+r.contr||0}));
-  $('empty').classList.add('hidden');$('app').classList.remove('hidden');render();
+  $('empty').classList.add('hidden');render();if(ME)applyPermissionUI();else $('app').classList.remove('hidden');
  }catch(err){console.error(err);$('empty').innerHTML='Nenhum dado publicado ainda.'}
 }
-async function exportHTML(){if(!await requireServerPerm('download_html'))return;if(!ME)return;closeIndustryList();const selected=curInd;if(!selected||selected==='__all__'){alert('Selecione uma indústria antes de baixar o HTML.');return}const rows=ALL.filter(r=>r.forn===selected);if(!rows.length){alert('A indústria selecionada não possui dados.');return}const snapshot=document.documentElement.outerHTML.replace(/(SUPABASE_URL=)'[^']*'/,"$1''").replace(/(SUPABASE_ANON_KEY=)'[^']*'/,"$1''").replace(/<script src="https:\/\/cdn\.jsdelivr[^>]*><\/script>/,'');const payload=JSON.stringify(rows).replace(/</g,'\\u003c');const boot=`<script>window.__COLETOR_EXPORTED_DATA__=${payload};window.__COLETOR_EXPORTED_INDUSTRY__=${JSON.stringify(selected)};window.__COLETOR_EXPORTED_CONTRATO__=${JSON.stringify((()=>{const k=nk(selected),c=CTR.find(x=>nk(x.fornecedor)===k);return c?{recebido:c.recebido,atualizado:c.atualizado}:null})()).replace(/</g,'\\u003c')};<\/script>`;let out=snapshot.replace(/<script>/i,boot+'<script>');out=out.replace(/<body>/i,'<body class="exported-view">');out=out.replace(/<button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML\(\)">Baixar HTML<\/button>/,'<button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML()">Baixar HTML</button>');const safe=selected.replace(/[\\/:*?"<>|]+/g,' - ').replace(/\s+/g,' ').trim().slice(0,140);const blob=new Blob([out],{type:'text/html;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ColetorPRO - '+safe+'.html';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
+async function exportHTML(){if(!await requireServerPerm('download_html'))return;if(!ME)return;closeIndustryList();const selected=curInd;if(!selected||selected==='__all__'){alert('Selecione uma indústria antes de baixar o HTML.');return}const rows=ALL.filter(r=>r.forn===selected);if(!rows.length){alert('A indústria selecionada não possui dados.');return}const snapshot=document.documentElement.outerHTML.replace(/(SUPABASE_URL=)'[^']*'/,"$1''").replace(/(SUPABASE_ANON_KEY=)'[^']*'/,"$1''").replace(/<script src="https:\/\/cdn\.jsdelivr[^>]*><\/script>/,'');const payload=JSON.stringify(rows).replace(/</g,'\\u003c');const boot=`<script>window.__COLETOR_EXPORTED_DATA__=${payload};window.__COLETOR_EXPORTED_INDUSTRY__=${JSON.stringify(selected)};window.__COLETOR_EXPORTED_CONTRATO__=${JSON.stringify((()=>{const k=nk(selected),c=CTR.find(x=>nk(x.fornecedor)===k);return c?{recebido:c.recebido,atualizado:c.atualizado}:null})()).replace(/</g,'\\u003c')};<\/script>`;let out=snapshot.replace(/<script>/i,boot+'<script>');out=out.replace(/<body>/i,'<body class="exported-view">');out=out.replace(/<button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML\(\)">Baixar HTML<\/button>/,'<button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML()">Baixar HTML</button>');const safe=selected.replace(/[\\/:*?"<>|]+/g,' - ').replace(/\s+/g,' ').trim().slice(0,140);// O HTML exportado contém uma cópia dos dados e deixa de ser protegido pelo login/Supabase após o download.
+const blob=new Blob([out],{type:'text/html;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ColetorPRO - '+safe+'.html';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
 $('q').addEventListener('input',renderTable);
 /* ===== Supabase: login, perfis e upload (somente admin) ===== */
 const SUPABASE_URL='https://nduabnxombkgwmlzzsjg.supabase.co',SUPABASE_ANON_KEY='sb_publishable_UgW5UpjaJNqtTm8aUoHakA_KdMz7bQ9',BUCKET='dashboard-data',FILE='dados.json';
@@ -418,7 +429,7 @@ let sb=null,ME=null,idleT,fails=0;const IDLE=30*60e3;
 function idleReset(){clearTimeout(idleT);if(ME)idleT=setTimeout(()=>sb.auth.signOut(),IDLE)}
 ['click','keydown','mousemove','touchstart','scroll'].forEach(ev=>addEventListener(ev,idleReset,{passive:true}));
 const showLogin=m=>{$('login').classList.remove('hidden');$('loginErr').textContent=m||''};
-async function setUpdated(){try{const{data}=await sb.storage.from(BUCKET).list('',{search:FILE});const o=(data||[]).find(x=>x.name===FILE);if(!o)return;const d=new Date(o.updated_at),t=d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});$('updMini').textContent='Atualizado em '+t;$('upd').textContent='Base atualizada em '+t}catch(e){}}
+async function setUpdated(){try{const{data}=await sb.storage.from(BUCKET).list('',{search:FILE});const o=(data||[]).find(x=>x.name===FILE);if(!o)return;const d=new Date(o.updated_at),t=d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});$('updMini').textContent='● Base atualizada em '+t;$('upd').textContent='Base atualizada em '+t}catch(e){}}
 const PERMISSION_DEFS=[
  {key:'dashboard',label:'Dashboard e indicadores'},
  {key:'consult_industries',label:'Consultar indústrias e lojas'},
@@ -435,16 +446,26 @@ function canPerm(k){return !!(ME&&(ME.role==='admin'||USER_PERMISSIONS[k]===true
 function requirePerm(k){if(canPerm(k))return true;alert('Seu perfil não tem permissão para realizar esta ação.');return false}
 async function requireServerPerm(k){if(!sb||!ME)return false;try{const {data,error}=await sb.rpc('coletor_can',{permission_key:k});if(error||data!==true){alert('O Supabase não autorizou esta ação para o seu perfil.');return false}return true}catch(e){alert('Não foi possível validar a permissão no Supabase. A ação foi bloqueada.');return false}}
 function applyPermissionUI(){
- document.documentElement.classList.toggle('is-admin',!!(ME&&ME.role==='admin'));
+ const isAdmin=!!(ME&&ME.role==='admin'),hasMain=canPerm('dashboard')||canPerm('consult_industries')||canPerm('visit_details');
+ document.documentElement.classList.toggle('is-admin',isAdmin);
  $('upBtn').style.display=canPerm('update_data')?'':'none';$('upStatus').style.display=canPerm('update_data')?'':'none';
  $('ctrBtn').style.display=canPerm('contracts_access')?'':'none';
  $('accBtn').style.display='';
  $('pdfBtn').style.display=canPerm('export_pdf')?'':'none';$('htmlBtn').style.display=canPerm('download_html')?'':'none';
+ const showDetails=canPerm('visit_details');
+ const canBrowse=canPerm('dashboard')||canPerm('consult_industries');
  const detailTitle=[...document.querySelectorAll('.section-title')].find(e=>e.textContent.trim()==='Detalhamento completo');
- if(detailTitle)detailTitle.style.display=canPerm('visit_details')?'':'none';
- const detailCard=$('tabs')?.closest('.card');if(detailCard)detailCard.style.display=canPerm('visit_details')?'':'none';
+ if(detailTitle)detailTitle.style.display=showDetails?'':'none';
+ const detailCard=$('tabs')?.closest('.card');if(detailCard)detailCard.style.display=showDetails?'':'none';
  const search=$('indIn')?.closest('.combo');if(search)search.style.display=canPerm('consult_industries')?'':'none';
- if(!canPerm('dashboard')){$('app').classList.add('hidden')}else{$('app').classList.remove('hidden')}
+ // Each permission controls its own view: indicators, industry/store charts, and visit-level details.
+ $('#kpis').style.display=canPerm('dashboard')?'':'none';
+ const grid=$('chart')?.closest('.grid2');if(grid){grid.style.display=canBrowse?'':'none';grid.style.gridTemplateColumns=(!canPerm('dashboard')&&canPerm('consult_industries'))?'1fr':'';}
+ const op=$('chart')?.closest('.grid2')?.querySelector('.operation-card');if(op)op.style.display=canPerm('dashboard')?'':'none';
+ const store=$('storeChart')?.closest('.visits-store-card');if(store)store.style.display=canPerm('consult_industries')?'':'none';
+ const quality=$('at')?.closest('.grid3');if(quality)quality.style.display=canPerm('dashboard')?'':'none';
+ document.querySelectorAll('#app>.section-title').forEach(el=>{const t=el.textContent.trim();if(t==='Detalhamento completo')el.style.display=showDetails?'':'none';else if(t==='Visão operacional')el.style.display=canBrowse?'':'none';else el.style.display=canPerm('dashboard')?'':'none'});
+ $('app').classList.toggle('hidden',!hasMain);
 }
 async function loadMyPermissions(userId){
  USER_PERMISSIONS={...CONSULTA_DEFAULT};
@@ -466,7 +487,7 @@ async function startSession(session){
  $('force').classList.add('hidden');$('who').textContent=ME.email+' • '+(p.role==='admin'?'Administrador':(USER_PROFILE_MAP[ME.id]||'Usuário'));
  $('login').classList.add('hidden');idleReset();applyPermissionUI();
  if(canPerm('dashboard')||canPerm('consult_industries')||canPerm('visit_details')){await loadPublishedData();setUpdated()}
- if(canPerm('contracts_access')){await loadContratos();$('ctr').classList.remove('hidden');ctrRender();$('app').classList.add('hidden')}
+ if(canPerm('contracts_access')){await loadContratos();ctrRender();const hasMain=canPerm('dashboard')||canPerm('consult_industries')||canPerm('visit_details');if(!hasMain){$('ctr').classList.remove('hidden');$('app').classList.add('hidden')}else{$('ctr').classList.add('hidden')}}
 }
 
 async function boot(){
@@ -506,10 +527,18 @@ $('upFile').onchange=async e=>{
   let rows,body=f;
   if(/\.json$/i.test(f.name))rows=JSON.parse(await f.text());
   else{
-   if(!window.XLSX)throw new Error('leitor de Excel não carregou; recarregue a página');
-   const wb=XLSX.read(await f.arrayBuffer(),{type:'array',cellNF:true});
+   if(!window.XLSX)throw new Error('leitor de planilhas não carregou; confira a conexão e recarregue a página');
+   let wb;
+   if(/\.csv$/i.test(f.name)||/csv/i.test(f.type)){
+    // Aceita CSV UTF-8, com separador vírgula ou ponto e vírgula; SheetJS detecta o delimitador.
+    const csvText=(await f.text()).replace(/^\uFEFF/,'');
+    wb=XLSX.read(csvText,{type:'string',cellNF:true,raw:false});
+   }else{
+    wb=XLSX.read(await f.arrayBuffer(),{type:'array',cellNF:true});
+   }
+   if(!wb.SheetNames||!wb.SheetNames.length)throw new Error('não foi possível ler a planilha/CSV');
    rows=parse(xlsxToCsv(wb.Sheets[wb.SheetNames[0]]));
-   if(!rows.length)throw new Error('nenhuma visita encontrada na 1ª aba (esperado: planilha exportada do ColetorPRO, cabeçalho na linha 1 e ao menos 15 colunas)');
+   if(!rows.length)throw new Error('nenhuma visita encontrada. Use o CSV ou Excel exportado do ColetorPRO, com cabeçalho na primeira linha e as colunas originais de visitas.');
    body=new Blob([JSON.stringify(rows)],{type:'application/json'});
   }
   const S=['loja','forn','comp','prom','status','date'],N=['tempo','nota','contr'];
@@ -628,8 +657,8 @@ function ctrGrid(){
  $('ctrTb').querySelector('tbody').innerHTML=L.map((c,i)=>`<tr><td class="num">${i+1}</td><td>${canEdit?`<input data-id="${c.id}" data-f="agencia" value="${esc(c.agencia)}" style="min-width:110px">`:esc(c.agencia)}</td><td class="f">${canEdit?`<input data-id="${c.id}" data-f="fornecedor" value="${esc(c.fornecedor)}">`:esc(c.fornecedor)}</td><td>${canEdit?`<input type="date" data-id="${c.id}" data-f="recebido" value="${c.recebido||''}">`:esc(fD(c.recebido))}</td><td>${canEdit?`<input type="date" data-id="${c.id}" data-f="atualizado" value="${c.atualizado||''}">`:esc(fD(c.atualizado))}</td><td>${canEdit?`<input data-id="${c.id}" data-f="obs" value="${esc(c.obs)}" style="min-width:150px">`:esc(c.obs||'')}</td><td>${canEdit?`<button class="xdel" data-del="${c.id}" title="Remover">✕</button>`:''}</td></tr>`).join('')||'<tr><td colspan="7">Nenhum fornecedor.</td></tr>';
 }
 function ctrRender(){ctrDash();ctrGrid()}
-$('ctrBtn').onclick=async()=>{if(!await requireServerPerm('contracts_access'))return;$('ctr').classList.remove('hidden');ctrSt('Carregando…');await loadContratos();ctrSt('');ctrRender()};
-$('ctrClose').onclick=()=>{$('ctr').classList.add('hidden');render()};
+$('ctrBtn').onclick=async()=>{if(!await requireServerPerm('contracts_access'))return;$('app').classList.add('hidden');$('ctr').classList.remove('hidden');ctrSt('Carregando…');await loadContratos();ctrSt('');ctrRender()};
+$('ctrClose').onclick=()=>{$('ctr').classList.add('hidden');if(canPerm('dashboard')||canPerm('consult_industries')||canPerm('visit_details')){applyPermissionUI();render()}else $('app').classList.add('hidden')};
 ['ctrQ','ctrFAg','ctrFSt'].forEach(i=>$(i).addEventListener('input',ctrGrid));
 $('ctrTb').addEventListener('change',async e=>{
  const i=e.target.closest('input[data-id]');if(!i||!ME||ME.role!=='admin')return;
