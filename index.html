@@ -8,7 +8,7 @@
 .rank-count{font-size:9px;color:var(--muted);font-weight:700;margin:-4px 0 9px}
 .visits-store-card{margin-top:18px;padding-bottom:28px}.store-chart{height:410px;overflow:visible!important;padding-bottom:110px}.store-chart .bars{height:285px}.store-chart .bar-label{bottom:-88px;width:105px;max-width:105px;overflow:visible;text-overflow:clip;font-size:8px;white-space:normal;word-break:break-word;transform:translateX(-50%);left:50%;}.operation-card{padding-top:18px;padding-bottom:18px}.operation-card .progress-wrap{margin:10px 0}.operation-card .metric-row{padding:7px 0}.rank-list{max-height:250px;overflow-y:auto;padding-right:4px}.rank-list.all-none{max-height:none;overflow:visible;display:grid;grid-template-columns:1fr 1fr;column-gap:18px;row-gap:6px}.rank-list.all-none .rank-item{grid-template-columns:24px 1fr 64px}.rank-list.all-none .rank-bar{display:none}
 @media(max-width:700px){.store-chart{height:380px;padding-bottom:95px}.store-chart .bars{height:255px}.store-chart .bar-label{bottom:-78px;width:90px;max-width:90px}.rank-list{max-height:300px}}
-.visits-store-card{margin-top:18px}.store-chart{height:410px;gap:10px;padding-bottom:110px;overflow-x:auto!important;overflow-y:visible!important;justify-content:flex-start}.store-chart .bar-group{flex:0 0 105px}.store-chart .bar-label{position:absolute;white-space:normal;word-break:normal;overflow-wrap:anywhere;width:100px;max-width:100px;bottom:-88px;left:50%;transform:translateX(-50%)}.store-chart .bars{height:285px}.store-chart .bar-label{bottom:-88px;width:105px;max-width:105px;overflow:visible;text-overflow:clip;font-size:8px;white-space:normal;word-break:break-word;transform:translateX(-50%);left:50%}.store-chart .bar{width:22px}.industry-chart{overflow-x:auto!important;overflow-y:visible!important;justify-content:flex-start;padding-bottom:95px}.industry-chart .bar-group{flex:0 0 120px}.industry-chart .bar-label{width:112px;max-width:112px;white-space:normal;word-break:normal;overflow-wrap:anywhere;line-height:1.15;bottom:-70px;transform:translateX(-50%);left:50%}.pdf-context{font-size:11px;font-weight:800;margin:0 0 8px}.hidden{display:none}@media(max-width:1200px){.grid-kpi{grid-template-columns:repeat(4,1fr)}.grid2,.grid3{grid-template-columns:1fr}}@media(max-width:700px){.header{padding:24px}.wrap{padding:18px}.grid-kpi{grid-template-columns:repeat(2,1fr)}h1{font-size:28px}.period{right:24px}.search{width:190px}}
+.visits-store-card{margin-top:18px}.store-chart{height:410px;gap:10px;padding-bottom:110px;overflow-x:auto!important;overflow-y:visible!important;justify-content:flex-start}.store-chart .bar-group{flex:0 0 105px}.store-chart .bar-label{position:absolute;white-space:normal;word-break:normal;overflow-wrap:anywhere;width:100px;max-width:100px;bottom:-88px;left:50%;transform:translateX(-50%)}.store-chart .bars{height:285px}.store-chart .bar-label{bottom:-88px;width:105px;max-width:105px;overflow:visible;text-overflow:clip;font-size:8px;white-space:normal;word-break:break-word;transform:translateX(-50%);left:50%}.store-chart .bar{width:22px}.industry-chart{display:flex;width:100%;max-width:100%;min-width:0;overflow-x:auto!important;overflow-y:hidden!important;overscroll-behavior-x:contain;justify-content:flex-start;padding-bottom:95px;scrollbar-gutter:stable}.industry-chart .bar-group{flex:0 0 120px;min-width:120px}.visits-day-card{min-width:0;overflow:hidden}.visits-day-card .card-sub{max-width:100%}.industry-chart .bar-group{flex:0 0 120px}.industry-chart .bar-label{width:112px;max-width:112px;white-space:normal;word-break:normal;overflow-wrap:anywhere;line-height:1.15;bottom:-70px;transform:translateX(-50%);left:50%}.pdf-context{font-size:11px;font-weight:800;margin:0 0 8px}.hidden{display:none}@media(max-width:1200px){.grid-kpi{grid-template-columns:repeat(4,1fr)}.grid2,.grid3{grid-template-columns:1fr}}@media(max-width:700px){.header{padding:24px}.wrap{padding:18px}.grid-kpi{grid-template-columns:repeat(2,1fr)}h1{font-size:28px}.period{right:24px}.search{width:190px}}
 
 .topbar{display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:14px 18px;margin-bottom:20px;position:sticky;top:8px;z-index:20}
 .topbar label{font-size:10px;font-weight:900;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px}
@@ -114,7 +114,7 @@ body{background:#fff!important}
 }
 
 .top-actions{display:flex;gap:8px;align-items:center;margin-top:15px}.top-actions .btn{margin-top:0}.btn-html{background:#123b5f}.exported-view .top-actions #htmlBtn,.exported-view .top-actions #upBtn,.exported-view .top-actions #ctrBtn,.exported-view .top-actions #upStatus,.exported-view .top-actions #accBtn,.exported-view .top-actions #logoutBtn,.exported-view .top-actions .who{display:none!important}.exported-view .upd-mini{display:none!important}.exported-view #ctr,.exported-view #ctrMsg{display:none!important}.exported-view .combo input{cursor:default}.exported-view .topbar{position:relative}
-@media print{.confidential-footer:not(.pdf-confidential-footer){display:none!important}.pdf-confidential-footer{display:flex!important}}
+@media print{.confidential-footer:not(.pdf-confidential-footer){display:none!important}.pdf-confidential-footer{display:flex!important}#ctr .confidential-footer{display:none!important}}
 </style>
 <style id="auth-css">
 #login,#force{position:fixed;inset:0;z-index:1000;background:var(--navy);display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto}
@@ -187,7 +187,7 @@ html:not(.is-admin) .admin-only{display:none!important}
 
 .confidential-footer{display:flex;align-items:center;justify-content:center;gap:9px;margin:14px 0 0;padding:12px 16px;border:1px solid #f0c8cc;border-left:5px solid var(--red);border-radius:10px;background:#fff4f4;color:#8f1d2a;font-size:11px;font-weight:900;letter-spacing:.15px;text-align:center;line-height:1.4}
 .confidential-footer .conf-icon{display:inline-grid;place-items:center;flex:0 0 20px;width:20px;height:20px;border-radius:50%;background:#fbe0e3;color:#8f1d2a;font-size:12px}
-#ctr .confidential-footer{margin-top:18px}
+#ctr .confidential-footer{display:none!important;margin-top:18px}
 @media(max-width:700px){.confidential-footer{font-size:10px;padding:10px;align-items:flex-start}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -263,11 +263,16 @@ const hm=s=>{s=(s||'').trim();if(!s.includes(':'))return 0;const[a,b]=s.split(':
 /* CORREÇÃO: normaliza datas com ano de 2 ou 4 dígitos para o mesmo padrão DD/MM/AAAA. */
 const normalizarData=s=>{
  s=String(s||'').trim();
- const m=s.match(/^(\d{2})\/(\d{2})\/(\d{4}|\d{2})/);
+ // O relatório de origem usa DD/MM/AA HH:mm - DD/MM/AA HH:mm.
+ // Considera sempre a primeira data do intervalo, sem deixar o navegador inverter dia e mês.
+ const m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})(?:\s|$)/);
  if(!m)return '';
- let ano=m[3];
- if(ano.length===2)ano='20'+ano;
- return `${m[1]}/${m[2]}/${ano}`;
+ const dia=Number(m[1]),mes=Number(m[2]);
+ let ano=Number(m[3]);
+ if(m[3].length===2)ano+=2000;
+ const dt=new Date(Date.UTC(ano,mes-1,dia));
+ if(dt.getUTCFullYear()!==ano||dt.getUTCMonth()!==mes-1||dt.getUTCDate()!==dia)return '';
+ return `${String(dia).padStart(2,'0')}/${String(mes).padStart(2,'0')}/${ano}`;
 };
 
 const dataOrdenavel=d=>{
@@ -278,10 +283,21 @@ const dataOrdenavel=d=>{
 const badge=p=>p==null?'—':`<span class="badge ${p>=90?'ok':p>=60?'warn':'bad'}">${fP(p)}</span>`;
 let ALL=[],cur=[],tab='lojas',sortS={key:'real',dir:-1},suppliers=[];
 function parse(txt){
- const lines=txt.replace(/^\uFEFF/,'').split(/\r?\n/);const out=[];
- for(let i=1;i<lines.length;i++){const l=lines[i];if(!l.trim())continue;const c=l.split(';');if(c.length<15)continue;
-  const st=normSt(c[5]),ent=(c[6]||'').split(' - '),d=normalizarData(ent[0]||c[4]||'');
-  out.push({loja:c[0].trim(),forn:c[1].trim(),comp:c[2].trim(),prom:c[3].trim(),status:st,date:d,tempo:hm(c[7]),nota:parseFloat(c[10])||0,contr:hm(c[13]),loja_ok:1,aval:c[9]});}
+ const lines=String(txt||'').replace(/^\uFEFF/,'').split(/\r?\n/);const out=[];
+ if(!lines.length)return out;
+ // Usa os títulos do relatório quando disponíveis, mas mantém fallback para o layout original.
+ const header=lines[0].split(';').map(v=>v.trim().toLocaleLowerCase('pt-BR'));
+ const findCol=(patterns,fallback)=>{const i=header.findIndex(h=>patterns.some(p=>h===p||h.includes(p)));return i>=0?i:fallback};
+ const ix={loja:findCol(['loja'],0),forn:findCol(['fornecedor'],1),comp:findCol(['comprador'],2),prom:findCol(['promotor'],3),status:findCol(['status'],5),periodo:findCol(['entrada e saída','entrada e saida'],6),tempo:findCol(['tempo'],7),aval:findCol(['avaliação','avaliacao'],9),nota:findCol(['nota'],10),contr:findCol(['total horas contratadas','horas contratadas'],13)};
+ for(let i=1;i<lines.length;i++){
+  const l=lines[i];if(!l.trim())continue;const c=l.split(';');
+  // O CSV recebido tem campos vazios extras no fim; eles são ignorados sem deslocar as colunas nomeadas.
+  if(c.length<Math.max(ix.loja,ix.forn,ix.status,ix.periodo,ix.tempo,ix.nota,ix.contr)+1)continue;
+  const val=k=>(c[ix[k]]??'').trim();
+  const periodo=val('periodo');const ent=periodo.split(/\s+-\s+/);const d=normalizarData(ent[0]||'');
+  const numeroNota=Number(String(val('nota')).replace(',','.'));
+  out.push({loja:val('loja'),forn:val('forn'),comp:val('comp'),prom:val('prom'),status:normSt(val('status')),date:d,tempo:hm(val('tempo')),nota:Number.isFinite(numeroNota)?numeroNota:0,contr:hm(val('contr')),loja_ok:1,aval:val('aval')});
+ }
  return out
 }
 function agg(rows){
