@@ -180,6 +180,7 @@ html:not(.is-admin) .admin-only{display:none!important}
 @media(max-width:700px){#ctr{padding:16px}}
 @media print{#ctr,.ctr-msg{display:none!important}}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 </head><body>
 <div id="login"><div class="box"><h2>ColetorPRO</h2><p>Acesso restrito. Entre com o e-mail e a senha cadastrados pelo administrador.</p>
@@ -204,7 +205,7 @@ html:not(.is-admin) .admin-only{display:none!important}
 <header class="header"><div class="brand"><div class="eyebrow">Resultados em campo • ColetorPRO</div><h1 id="ttl">EXECUÇÃO POR INDÚSTRIA <span>| Dashboard</span></h1><div class="subtitle" id="sub">Acesso restrito • dados carregados após o login</div></div><div class="period" id="period">CARREGANDO DADOS</div><div class="upd-mini" id="updMini"></div></header>
 <main class="wrap">
 <div class="topbar"><div class="combo"><label>Indústria (fornecedor)</label><input id="indIn" placeholder="Carregando dados publicados..." autocomplete="off" disabled><div class="combo-list hidden" id="indList"></div></div>
-<div class="top-actions"><button class="btn btn-pdf" id="pdfBtn" disabled onclick="exportPDF()">Exportar PDF</button><button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML()">Baixar HTML</button><button class="btn btn-up admin-only" id="upBtn" type="button">Atualizar base (.json)</button><button class="btn admin-only" id="ctrBtn" type="button" style="background:var(--navy2)">Contratos realizados</button><input type="file" id="upFile" accept=".json,application/json" hidden><span class="up-status admin-only" id="upStatus" role="status"></span><span class="who" id="who"></span><button class="btn btn-out" id="accBtn" type="button">Conta</button><button class="btn btn-out" id="logoutBtn" type="button">Sair</button></div>
+<div class="top-actions"><button class="btn btn-pdf" id="pdfBtn" disabled onclick="exportPDF()">Exportar PDF</button><button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML()">Baixar HTML</button><button class="btn btn-up admin-only" id="upBtn" type="button">Atualizar base (.xlsx)</button><button class="btn admin-only" id="ctrBtn" type="button" style="background:var(--navy2)">Contratos realizados</button><input type="file" id="upFile" accept=".xlsx,.xls,.json,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden><span class="up-status admin-only" id="upStatus" role="status"></span><span class="who" id="who"></span><button class="btn btn-out" id="accBtn" type="button">Conta</button><button class="btn btn-out" id="logoutBtn" type="button">Sair</button></div>
 </div>
 <div id="empty">Carregando dados publicados...</div>
 <div id="app" class="hidden">
@@ -249,7 +250,7 @@ const hm=s=>{s=(s||'').trim();if(!s.includes(':'))return 0;const[a,b]=s.split(':
 /* CORREÇÃO: normaliza datas com ano de 2 ou 4 dígitos para o mesmo padrão DD/MM/AAAA. */
 const normalizarData=s=>{
  s=String(s||'').trim();
- const m=s.match(/^(\d{2})\/(\d{2})\/(\d{2}|\d{4})/);
+ const m=s.match(/^(\d{2})\/(\d{2})\/(\d{4}|\d{2})/);
  if(!m)return '';
  let ano=m[3];
  if(ano.length===2)ano='20'+ano;
@@ -442,18 +443,40 @@ $('loginForm').addEventListener('submit',async e=>{
  $('lgPass').value='';startSession(data.session);
 });
 $('logoutBtn').onclick=()=>sb?sb.auth.signOut():location.reload();
+function xlsxToCsv(ws){
+ const rg=XLSX.utils.decode_range(ws['!ref']||'A1:A1'),out=[],W=Math.max(rg.e.c+1,15),p=x=>String(x).padStart(2,'0');
+ for(let r=rg.s.r;r<=rg.e.r;r++){const row=[];
+  for(let c=0;c<W;c++){const cell=ws[XLSX.utils.encode_cell({r,c:rg.s.c+c})];let v='';
+   if(cell&&cell.v!=null){
+    if(cell.t==='n'&&cell.z&&XLSX.SSF.is_date(cell.z)){
+     if(/[dy]/i.test(String(cell.z).replace(/"[^"]*"/g,''))){const d=XLSX.SSF.parse_date_code(cell.v);v=p(d.d)+'/'+p(d.m)+'/'+d.y+' '+p(d.H)+':'+p(d.M)}
+     else{const m=Math.round(cell.v*1440);v=p(Math.floor(m/60))+':'+p(m%60)}
+    }else v=String(cell.t==='n'?cell.v:(cell.w??cell.v));
+   }
+   row.push(v.replace(/[;\r\n]+/g,' '));}
+  out.push(row.join(';'));}
+ return out.join('\n')}
 $('upBtn').onclick=()=>$('upFile').click();
 $('upFile').onchange=async e=>{
  const f=e.target.files[0];e.target.value='';if(!f||!ME||ME.role!=='admin')return;const st=$('upStatus');
  try{
   st.textContent='Validando arquivo…';if(f.size>50*1048576)throw new Error('arquivo acima de 50 MB');
-  const rows=JSON.parse(await f.text()),S=['loja','forn','comp','prom','status','date'],N=['tempo','nota','contr'];
+  let rows,body=f;
+  if(/\.json$/i.test(f.name))rows=JSON.parse(await f.text());
+  else{
+   if(!window.XLSX)throw new Error('leitor de Excel não carregou; recarregue a página');
+   const wb=XLSX.read(await f.arrayBuffer(),{type:'array',cellNF:true});
+   rows=parse(xlsxToCsv(wb.Sheets[wb.SheetNames[0]]));
+   if(!rows.length)throw new Error('nenhuma visita encontrada na 1ª aba (esperado: planilha exportada do ColetorPRO, cabeçalho na linha 1 e ao menos 15 colunas)');
+   body=new Blob([JSON.stringify(rows)],{type:'application/json'});
+  }
+  const S=['loja','forn','comp','prom','status','date'],N=['tempo','nota','contr'];
   if(!Array.isArray(rows)||!rows.length)throw new Error('o arquivo precisa ser uma lista de visitas');
   const bad=rows.findIndex(r=>!r||typeof r!=='object'||S.some(k=>typeof r[k]!=='string')||N.some(k=>typeof r[k]!=='number'||!isFinite(r[k])));
   if(bad>=0)throw new Error('registro '+(bad+1)+' fora do padrão (campos: '+S.concat(N).join(', ')+')');
   if(!confirm('Substituir a base atual por '+fI(rows.length)+' registros?')){st.textContent='';return}
-  st.textContent='Enviando '+(f.size/1048576).toFixed(1)+' MB…';
-  const{error}=await sb.storage.from(BUCKET).upload(FILE,f,{upsert:true,contentType:'application/json',cacheControl:'0'});
+  st.textContent='Enviando '+(body.size/1048576).toFixed(1)+' MB…';
+  const{error}=await sb.storage.from(BUCKET).upload(FILE,body,{upsert:true,contentType:'application/json',cacheControl:'0'});
   if(error)throw error;
   await loadPublishedData();await setUpdated();st.textContent='Base atualizada: '+fI(rows.length)+' registros.';
  }catch(err){st.textContent='Erro: '+(err.message||err)}
