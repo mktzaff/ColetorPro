@@ -460,7 +460,7 @@ function applyPermissionUI(){
  const detailCard=$('tabs')?.closest('.card');if(detailCard)detailCard.style.display=showDetails?'':'none';
  const search=$('indIn')?.closest('.combo');if(search)search.style.display=canPerm('consult_industries')?'':'none';
  // Each permission controls its own view: indicators, industry/store charts, and visit-level details.
- $('#kpis').style.display=canPerm('dashboard')?'':'none';
+ $('kpis').style.display=canPerm('dashboard')?'':'none';
  const grid=$('chart')?.closest('.grid2');if(grid){grid.style.display=canBrowse?'':'none';grid.style.gridTemplateColumns=(!canPerm('dashboard')&&canPerm('consult_industries'))?'1fr':'';}
  const op=$('chart')?.closest('.grid2')?.querySelector('.operation-card');if(op)op.style.display=canPerm('dashboard')?'':'none';
  const store=$('storeChart')?.closest('.visits-store-card');if(store)store.style.display=canPerm('consult_industries')?'':'none';
