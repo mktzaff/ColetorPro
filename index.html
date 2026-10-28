@@ -8,7 +8,7 @@
 .rank-count{font-size:9px;color:var(--muted);font-weight:700;margin:-4px 0 9px}
 .visits-store-card{margin-top:18px;padding-bottom:28px}.store-chart{height:410px;overflow:visible!important;padding-bottom:110px}.store-chart .bars{height:285px}.store-chart .bar-label{bottom:-88px;width:105px;max-width:105px;overflow:visible;text-overflow:clip;font-size:8px;white-space:normal;word-break:break-word;transform:translateX(-50%);left:50%;}.operation-card{padding-top:18px;padding-bottom:18px}.operation-card .progress-wrap{margin:10px 0}.operation-card .metric-row{padding:7px 0}.rank-list{max-height:250px;overflow-y:auto;padding-right:4px}.rank-list.all-none{max-height:none;overflow:visible;display:grid;grid-template-columns:1fr 1fr;column-gap:18px;row-gap:6px}.rank-list.all-none .rank-item{grid-template-columns:24px 1fr 64px}.rank-list.all-none .rank-bar{display:none}
 @media(max-width:700px){.store-chart{height:380px;padding-bottom:95px}.store-chart .bars{height:255px}.store-chart .bar-label{bottom:-78px;width:90px;max-width:90px}.rank-list{max-height:300px}}
-.visits-store-card{margin-top:18px}.store-chart{height:410px;gap:10px;padding-bottom:110px;overflow-x:auto!important;overflow-y:visible!important;justify-content:flex-start}.store-chart .bar-group{flex:0 0 105px}.store-chart .bar-label{position:absolute;white-space:normal;word-break:normal;overflow-wrap:anywhere;width:100px;max-width:100px;bottom:-88px;left:50%;transform:translateX(-50%)}.store-chart .bars{height:285px}.store-chart .bar-label{bottom:-88px;width:105px;max-width:105px;overflow:visible;text-overflow:clip;font-size:8px;white-space:normal;word-break:break-word;transform:translateX(-50%);left:50%}.store-chart .bar{width:22px}.industry-chart{overflow-x:auto!important;overflow-y:visible!important;justify-content:flex-start;padding-bottom:95px}.industry-chart .bar-group{flex:0 0 120px}.industry-chart .bar-label{width:112px;max-width:112px;white-space:normal;word-break:normal;overflow-wrap:anywhere;line-height:1.15;bottom:-70px;transform:translateX(-50%);left:50%}.pdf-context{font-size:11px;font-weight:800;margin:0 0 8px}.hidden{display:none}@media(max-width:1200px){.grid-kpi{grid-template-columns:repeat(4,1fr)}.grid2,.grid3{grid-template-columns:1fr}}@media(max-width:700px){.header{padding:24px}.wrap{padding:18px}.grid-kpi{grid-template-columns:repeat(2,1fr)}h1{font-size:28px}.period{right:24px}.search{width:190px}}
+.visits-store-card{margin-top:18px}.store-chart{height:410px;gap:10px;padding-bottom:110px;overflow-x:auto!important;overflow-y:visible!important;justify-content:flex-start}.store-chart .bar-group{flex:0 0 105px}.store-chart .bar-label{position:absolute;white-space:normal;word-break:normal;overflow-wrap:anywhere;width:100px;max-width:100px;bottom:-88px;left:50%;transform:translateX(-50%)}.store-chart .bars{height:285px}.store-chart .bar-label{bottom:-88px;width:105px;max-width:105px;overflow:visible;text-overflow:clip;font-size:8px;white-space:normal;word-break:break-word;transform:translateX(-50%);left:50%}.store-chart .bar{width:22px}.industry-chart{display:flex;width:100%;max-width:100%;min-width:0;overflow-x:auto!important;overflow-y:hidden!important;overscroll-behavior-x:contain;justify-content:flex-start;padding-bottom:95px;scrollbar-gutter:stable}.industry-chart .bar-group{flex:0 0 120px;min-width:120px}.visits-day-card{min-width:0;overflow:hidden}.visits-day-card .card-sub{max-width:100%}.industry-chart .bar-group{flex:0 0 120px}.industry-chart .bar-label{width:112px;max-width:112px;white-space:normal;word-break:normal;overflow-wrap:anywhere;line-height:1.15;bottom:-70px;transform:translateX(-50%);left:50%}.pdf-context{font-size:11px;font-weight:800;margin:0 0 8px}.hidden{display:none}@media(max-width:1200px){.grid-kpi{grid-template-columns:repeat(4,1fr)}.grid2,.grid3{grid-template-columns:1fr}}@media(max-width:700px){.header{padding:24px}.wrap{padding:18px}.grid-kpi{grid-template-columns:repeat(2,1fr)}h1{font-size:28px}.period{right:24px}.search{width:190px}}
 
 .topbar{display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:14px 18px;margin-bottom:20px;position:sticky;top:8px;z-index:20}
 .topbar label{font-size:10px;font-weight:900;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px}
@@ -59,6 +59,8 @@
  .pdf-detail tr{page-break-inside:avoid}
 }
 .pdf-detail{display:none}
+.pdf-confidential-footer{display:none}
+@media print{.pdf-confidential-footer{display:flex!important;margin-top:8px;padding:6px 10px;font-size:8px;break-inside:avoid}}
 .pdf-detail table{width:100%;border-collapse:collapse}
 .pdf-detail th{background:var(--navy);color:#fff;text-align:left}
 .pdf-detail td,.pdf-detail th{border-bottom:1px solid var(--line)}
@@ -75,6 +77,8 @@ body{background:#fff!important}
 .pdf-report-head{border-bottom:2px solid var(--red);padding:0 0 7px;margin-bottom:8px}
 .pdf-report-kicker{font-size:8px;letter-spacing:1.5px;font-weight:900;color:var(--red);text-transform:uppercase}
 .pdf-report-title{font-size:18px;font-weight:900;color:var(--navy);margin-top:2px}
+ .pdf-contract-context{font-size:8px;font-weight:800;color:var(--navy);margin-top:5px;padding:5px 7px;border-left:3px solid var(--red);background:#f4f8fc}
+ .pdf-contract-context:empty{display:none}
 .pdf-detail .pdf-context{font-size:8px!important;margin:3px 0 0!important;color:var(--muted)}
 .pdf-detail .section-title{font-size:11px!important;margin:10px 0 5px!important;page-break-before:auto!important;break-after:avoid!important}
 .pdf-detail .section-title:before{width:4px!important;height:15px!important}
@@ -111,7 +115,23 @@ body{background:#fff!important}
 .pdf-detail thead{display:table-header-group!important}
 }
 
-.top-actions{display:flex;gap:8px;align-items:center;margin-top:15px}.top-actions .btn{margin-top:0}.btn-html{background:#123b5f}.exported-view .top-actions #htmlBtn{display:none}.exported-view .combo input{cursor:default}.exported-view .topbar{position:relative}
+.top-actions{display:flex;gap:8px;align-items:center;margin-top:15px}.top-actions .btn{margin-top:0}.btn-html{background:#123b5f}.exported-view .top-actions #htmlBtn,.exported-view .top-actions #upBtn,.exported-view .top-actions #ctrBtn,.exported-view .top-actions #upStatus,.exported-view .top-actions #accBtn,.exported-view .top-actions #logoutBtn,.exported-view .top-actions .who{display:none!important}.exported-view .upd-mini{display:none!important}.exported-view #ctr{display:none!important}.exported-view #ctrMsg{display:flex!important} .exported-view .combo input{cursor:default}.exported-view .topbar{position:relative}
+.ctr-msg{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;margin:0 0 16px;padding:12px 16px;border:1px solid #dbe5ef;border-left:4px solid var(--red);border-radius:12px;background:linear-gradient(110deg,#fff,#f4f8fc);color:var(--navy);font-size:12px;font-weight:800;box-shadow:0 5px 16px rgba(12,40,68,.06);animation:rise .42s cubic-bezier(.2,.8,.2,1) both}.ctr-msg span{color:#9aabba}.ctr-msg.hidden{display:none!important}
+/* Movimento mais suave e consistente, sem exagero */
+.card,.kpi,.section-title,.topbar,.tabs,.table-tools{animation:rise .48s cubic-bezier(.2,.8,.2,1) both}
+.card:nth-of-type(2n){animation-delay:.04s}.card:nth-of-type(3n){animation-delay:.08s}
+.card{transition:transform .24s cubic-bezier(.2,.8,.2,1),box-shadow .24s,border-color .24s}
+.card:hover{transform:translateY(-2px)}
+.kpi{transition:transform .22s cubic-bezier(.2,.8,.2,1),box-shadow .22s,border-color .22s}
+.btn{transition:transform .18s cubic-bezier(.2,.8,.2,1),box-shadow .18s,filter .18s,background-color .18s}
+.btn:active:not(:disabled),.tab:active{transform:scale(.98)}
+input,select{transition:border-color .18s,box-shadow .18s,background-color .18s}
+input:focus,select:focus{box-shadow:0 0 0 3px rgba(32,105,159,.12)}
+.bar-group{animation:rise .42s cubic-bezier(.2,.8,.2,1) both}
+.bar-group:nth-child(2n){animation-delay:.025s}.bar-group:nth-child(3n){animation-delay:.05s}
+.table-wrap{scrollbar-width:thin;scrollbar-color:#b8c7d6 transparent}
+
+@media print{.confidential-footer:not(.pdf-confidential-footer){display:none!important}.pdf-confidential-footer{display:flex!important}#ctr .confidential-footer{display:none!important}}
 </style>
 <style id="auth-css">
 #login,#force{position:fixed;inset:0;z-index:1000;background:var(--navy);display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto}
@@ -129,31 +149,33 @@ body{background:#fff!important}
 .btn-out{background:#fff;color:var(--navy);border:1px solid var(--line)}
 .btn-up{background:var(--green)}
 .who{font-size:11px;font-weight:700;color:var(--muted)}
-.up-status{font-size:11px;font-weight:700;color:var(--navy)}
+.up-status{font-size:11px;font-weight:800;color:#17324b;background:#eaf2f8;border-radius:8px;padding:7px 9px}.up-status:empty{display:none}
 .top-actions{flex-wrap:wrap}
 html:not(.is-admin) .admin-only{display:none!important}
 .exported-view .admin-only,.exported-view .who,.exported-view #logoutBtn{display:none!important}
 @media print{#login,#force{display:none!important}}
-#acc{position:fixed;inset:0;z-index:900;background:rgba(11,39,66,.55);display:flex;align-items:flex-start;justify-content:center;padding:40px 16px;overflow:auto}
+#acc{position:fixed;inset:0;z-index:900;background:rgba(8,24,40,.68);backdrop-filter:blur(5px);display:flex;align-items:flex-start;justify-content:center;padding:28px 16px;overflow:auto;animation:fadeIn .22s ease-out}
 #acc.hidden{display:none}
-#acc .mbox{background:#fff;border-radius:14px;width:100%;max-width:760px;padding:22px 24px;box-shadow:0 20px 50px rgba(0,0,0,.35);border-top:5px solid var(--red)}
-#acc .mhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}#acc h3{margin:0;font-size:20px;font-weight:900}
-#acc .msec{padding:14px 0;border-bottom:1px solid var(--line);font-size:12px}#acc .msec b{display:block;margin-bottom:8px}
+#acc .mbox{background:#f7f9fc;border-radius:18px;width:100%;max-width:1000px;padding:24px;box-shadow:0 24px 70px rgba(0,0,0,.32);border-top:5px solid var(--red);animation:modalUp .32s cubic-bezier(.2,.8,.2,1)}
+#acc .mhead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:6px}#acc h3{margin:0;font-size:25px;font-weight:900;letter-spacing:-.6px}#acc .account-intro{color:var(--muted);font-size:13px;line-height:1.5;margin:5px 0 18px}#acc .admin-guide{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0 18px}#acc .guide-step{background:#edf4fa;border:1px solid #d9e5ef;border-radius:12px;padding:12px;display:flex;gap:10px;align-items:flex-start;font-size:12px;line-height:1.4;color:#31475b}#acc .guide-num{flex:0 0 25px;height:25px;border-radius:8px;display:grid;place-items:center;background:var(--navy);color:white;font-weight:900}#acc .admin-section-title{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:900;color:var(--navy);margin-bottom:8px}#acc .admin-section-title .section-num{display:grid;place-items:center;width:25px;height:25px;border-radius:8px;background:#ffe8e9;color:var(--red);font-size:12px}
+#acc .msec{padding:18px;background:#fff;border:1px solid #e4eaf0;border-radius:14px;margin-top:12px;font-size:12px;box-shadow:0 4px 14px rgba(11,39,66,.035);transition:transform .2s,box-shadow .2s}#acc .msec:hover{box-shadow:0 8px 22px rgba(11,39,66,.07)}#acc .msec b{display:block;margin-bottom:8px}#acc .msec-desc{color:var(--muted);font-size:12px;line-height:1.45;margin:0 0 12px}
 #acc .mrow{display:flex;gap:8px;flex-wrap:wrap}#acc input{border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-size:12px;flex:1;min-width:140px}
-#acc .table-wrap{max-height:320px}#acc td,#acc th{font-size:11px}#acc .tab{margin-right:4px}
+#acc .table-wrap{max-height:320px;border:1px solid var(--line);border-radius:10px}#acc td,#acc th{font-size:11px}#acc .tab{margin:2px 4px 2px 0}#acc input:focus-visible,#acc select:focus-visible,#acc button:focus-visible{outline:2px solid #2879b8;outline-offset:2px}#acc .mrow input{min-width:180px}#acc .perm-item{background:#fbfcfe;transition:transform .16s,border-color .16s,background .16s}#acc .perm-item:hover{transform:translateY(-1px);border-color:#b8cbdc;background:#f1f6fa}#acc .perm-state{font-weight:800;color:#64768a}#acc .perm-item:has(input:checked){border-color:#b7e5d0;background:#f1fbf6}#acc .perm-item:has(input:not(:checked)){border-color:#f0d2d4}#acc .perm-item input{cursor:pointer;transform:scale(1.1)}#acc .admin-only .btn{min-height:36px}#accMsg{padding:0 2px}#accMsg:not(:empty){animation:rise .2s ease-out}
 #accMsg{min-height:18px;margin-top:12px;font-size:12px;font-weight:700}
 .exported-view #accBtn{display:none!important}
-.upd-mini{position:absolute;z-index:3;right:45px;bottom:7px;font-size:10px;font-weight:600;color:var(--muted)}
-@media(max-width:700px){.upd-mini{right:24px}}@media print{.upd-mini{display:none}}
-@keyframes growY{from{transform:scaleY(0)}}@keyframes fillX{from{transform:scaleX(0)}}@keyframes rise{from{opacity:0;transform:translateY(10px)}}@keyframes sweep{from{opacity:0;transform:translateX(90px) rotate(16deg)}}
+.upd-mini{position:relative;z-index:3;display:inline-block;margin-top:8px;font-size:9px;font-weight:700;color:#17324b;background:#edf4fa;border:1px solid #cbd9e6;border-radius:7px;padding:3px 7px;box-shadow:0 2px 6px rgba(11,39,66,.06);max-width:min(100%,420px);white-space:normal;overflow-wrap:anywhere;line-height:1.25}
+@media(max-width:700px){.upd-mini{font-size:8px;padding:3px 6px;max-width:100%}.header{padding-bottom:24px}#acc{padding:10px}#acc .mbox{padding:16px;border-radius:14px}#acc h3{font-size:21px}#acc .admin-guide{grid-template-columns:1fr;gap:7px}#acc .msec{padding:13px}#acc .mrow input{min-width:100%;width:100%}#acc .perm-checks{grid-template-columns:1fr}#acc .table-wrap{max-height:260px}}@media print{.upd-mini{display:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes modalUp{from{opacity:0;transform:translateY(12px) scale(.99)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes growY{from{transform:scaleY(0)}}@keyframes fillX{from{transform:scaleX(0)}}@keyframes rise{from{opacity:0;transform:translateY(10px)}}@keyframes sweep{from{opacity:0;transform:translateX(90px) rotate(16deg)}}
 .header:before,.header:after{animation:sweep .9s cubic-bezier(.2,.8,.2,1) backwards}
 .fx .bar{transform-origin:bottom;animation:growY .75s cubic-bezier(.2,.8,.2,1) backwards}.fx .progress>div{transform-origin:left;animation:fillX .9s cubic-bezier(.2,.8,.2,1) .15s backwards}.fx .kpi{animation:rise .5s cubic-bezier(.2,.8,.2,1) backwards}.fx .kpi:nth-child(2){animation-delay:0.05s}.fx .kpi:nth-child(3){animation-delay:0.10s}.fx .kpi:nth-child(4){animation-delay:0.15s}.fx .kpi:nth-child(5){animation-delay:0.20s}.fx .kpi:nth-child(6){animation-delay:0.25s}.fx .kpi:nth-child(7){animation-delay:0.30s}.fx .kpi:nth-child(8){animation-delay:0.35s}
 #login .box,#force .box{animation:rise .5s cubic-bezier(.2,.8,.2,1) backwards}
 .kpi{transition:transform .2s,box-shadow .2s}.kpi:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(11,39,66,.16)}.card{transition:box-shadow .2s}.card:hover{box-shadow:0 12px 30px rgba(11,39,66,.13)}
 .bar{transition:filter .15s}.bar:hover{filter:brightness(1.18)}.btn,.tab,.rank-switch button{transition:transform .15s,filter .15s,background .15s}.btn:hover:not(:disabled){filter:brightness(1.1);transform:translateY(-1px)}.tab:hover:not(.active){background:#eef2f6}.rank-bar>div{transition:width .6s cubic-bezier(.2,.8,.2,1)}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}@media print{*{animation:none!important}}
-#ctr{position:fixed;inset:0;z-index:800;background:var(--bg);overflow:auto;padding:24px 44px 44px}
-#ctr.hidden{display:none}
+#ctr{position:fixed;inset:0;z-index:800;background:var(--bg);overflow:auto;padding:24px 44px 44px;opacity:1;transform:translateY(0);transition:opacity .28s ease,transform .34s cubic-bezier(.2,.8,.2,1)}
+#ctr.hidden{display:none}#ctr.view-enter{opacity:0;transform:translateY(14px)}#ctr.view-leave{opacity:0;transform:translateY(8px);pointer-events:none}
+#app{transition:opacity .24s ease,transform .3s cubic-bezier(.2,.8,.2,1)}#app.view-leave{opacity:0;transform:translateY(-5px)}#app.view-enter{opacity:0;transform:translateY(6px)}
+#ctrHistoryModal{position:fixed;inset:0;z-index:1200;background:rgba(8,24,40,.66);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:18px;animation:fadeIn .2s ease-out}#ctrHistoryModal.hidden{display:none}#ctrHistoryModal .history-box{background:#fff;border-radius:16px;width:100%;max-width:1000px;max-height:88vh;overflow:auto;padding:20px;box-shadow:0 24px 70px rgba(0,0,0,.3);border-top:5px solid var(--red);animation:modalUp .3s cubic-bezier(.2,.8,.2,1)}#ctrHistoryModal .history-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}#ctrHistoryModal h3{margin:0;font-size:21px}#ctrHistoryModal .history-sub{color:var(--muted);font-size:12px;margin:5px 0 14px}#ctrHistoryModal .table-wrap{max-height:55vh;border:1px solid var(--line);border-radius:10px}#ctrHistoryModal td{white-space:normal;min-width:100px}#ctrHistoryModal .hist-data{font-size:11px;line-height:1.45;overflow-wrap:anywhere}
 #ctr .chead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
 #ctr h2{margin:0;font-size:26px;font-weight:900;letter-spacing:-.8px}#ctr h2 span{color:var(--red)}
 #ctr .ctr-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
@@ -179,6 +201,13 @@ html:not(.is-admin) .admin-only{display:none!important}
 .ctr-msg span{color:var(--muted);font-weight:700;margin:0 6px}
 @media(max-width:700px){#ctr{padding:16px}}
 @media print{#ctr,.ctr-msg{display:none!important}}
+
+.perm-checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.perm-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:#f8fafc;font-size:12px}.perm-item label{font-weight:700;color:var(--navy)}.perm-item input{flex:0 0 auto;min-width:0;width:18px;height:18px;accent-color:var(--green)}.perm-state{font-size:10px;color:var(--muted);display:block;margin-top:3px}@media(max-width:600px){.perm-checks{grid-template-columns:1fr}}
+
+.confidential-footer{display:flex;align-items:center;justify-content:center;gap:9px;margin:14px 0 0;padding:12px 16px;border:1px solid #f0c8cc;border-left:5px solid var(--red);border-radius:10px;background:#fff4f4;color:#8f1d2a;font-size:11px;font-weight:900;letter-spacing:.15px;text-align:center;line-height:1.4}
+.confidential-footer .conf-icon{display:inline-grid;place-items:center;flex:0 0 20px;width:20px;height:20px;border-radius:50%;background:#fbe0e3;color:#8f1d2a;font-size:12px}
+#ctr .confidential-footer{display:none!important;margin-top:18px}
+@media(max-width:700px){.confidential-footer{font-size:10px;padding:10px;align-items:flex-start}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
@@ -187,25 +216,28 @@ html:not(.is-admin) .admin-only{display:none!important}
 <form id="loginForm" onsubmit="return false"><label for="lgEmail">E-mail</label><input id="lgEmail" type="email" autocomplete="username" required><label for="lgPass">Senha</label><input id="lgPass" type="password" autocomplete="current-password" required><button class="btn" id="loginBtn" type="submit">Entrar</button><div id="loginErr" role="alert"></div></form></div></div>
 <div id="force" class="hidden"><div class="box"><h2>Crie a sua senha</h2><p>Este é o seu primeiro acesso, ou a sua senha foi redefinida pelo administrador. Escolha uma senha pessoal para continuar.</p>
 <form id="forceForm" onsubmit="return false"><label for="fpA">Nova senha (mín. 10 caracteres)</label><input id="fpA" type="password" autocomplete="new-password" required><label for="fpB">Repita a nova senha</label><input id="fpB" type="password" autocomplete="new-password" required><button class="btn" id="fpBtn" type="submit">Salvar e entrar</button><div id="forceErr" role="alert"></div><button class="btn btn-out" id="fpOut" type="button" style="width:100%;margin-top:6px">Sair</button></form></div></div>
-<div id="acc" class="hidden"><div class="mbox"><div class="mhead"><h3>Minha conta</h3><button class="btn btn-out" id="accClose" type="button">Fechar</button></div><div id="accMsg" role="status"></div>
-<div class="msec"><b>Trocar minha senha</b><div class="mrow"><input id="myPass" type="password" autocomplete="new-password" placeholder="Nova senha (mín. 10 caracteres)"><button class="btn" id="myPassBtn" type="button">Salvar senha</button></div></div>
-<div class="admin-only"><div class="msec"><b>Adicionar usuário</b><div class="mrow"><input id="nuEmail" type="email" placeholder="E-mail"><input id="nuPass" type="text" autocomplete="off" placeholder="Senha provisória (mín. 10)"><select id="nuRole"><option value="user">Usuário</option><option value="admin">Administrador</option></select><button class="btn" id="nuBtn" type="button">Criar usuário</button></div></div>
-<div class="msec"><b>Usuários cadastrados</b><div class="table-wrap"><table id="usrTb"><thead><tr><th>E-mail</th><th>Perfil</th><th>Último acesso</th><th>Ações</th></tr></thead><tbody></tbody></table></div></div></div>
+<div id="acc" class="hidden"><div class="mbox"><div class="mhead"><div><h3>Conta e administração</h3><div class="account-intro">Gerencie sua senha, os acessos da equipe e o que cada perfil pode visualizar ou executar.</div></div><button class="btn btn-out" id="accClose" type="button">Fechar</button></div><div id="accMsg" role="status"></div>
+<div class="msec"><div class="admin-section-title"><span class="section-num">↗</span>Minha conta</div><p class="msec-desc">Altere sua senha de acesso. Use uma senha pessoal com pelo menos 10 caracteres.</p><div class="mrow"><input id="myPass" type="password" autocomplete="new-password" placeholder="Nova senha (mín. 10 caracteres)"><button class="btn" id="myPassBtn" type="button">Salvar senha</button></div></div>
+<div class="admin-only"><div class="admin-guide"><div class="guide-step"><span class="guide-num">1</span><div><b>Crie o usuário</b><br>Cadastre o e-mail e uma senha provisória.</div></div><div class="guide-step"><span class="guide-num">2</span><div><b>Configure o perfil</b><br>Marque o que pode ver ou fazer e salve.</div></div><div class="guide-step"><span class="guide-num">3</span><div><b>Vincule o perfil</b><br>Escolha o perfil na linha do usuário. Ele deve entrar novamente.</div></div></div>
+<div class="msec"><div class="admin-section-title"><span class="section-num">1</span>Adicionar usuário</div><p class="msec-desc">Crie uma conta para alguém da equipe. A senha provisória deve ter no mínimo 10 caracteres; no primeiro acesso, a pessoa precisará criar a própria senha.</p><div class="mrow"><input id="nuEmail" type="email" placeholder="E-mail do usuário"><input id="nuPass" type="text" autocomplete="off" placeholder="Senha provisória (mín. 10)"><select id="nuRole" aria-label="Tipo de conta"><option value="user">Usuário</option><option value="admin">Administrador</option></select><button class="btn" id="nuBtn" type="button">Criar usuário</button></div></div>
+<div class="msec"><div class="admin-section-title"><span class="section-num">2</span>Perfis e permissões</div><p class="msec-desc">Escolha um perfil para configurar o que a equipe pode fazer. Marque as permissões desejadas e clique em <b>Salvar permissões</b>. Depois, vincule esse perfil ao usuário na lista abaixo. Administradores têm acesso total.</p><div class="mrow" style="margin-bottom:12px"><select id="permProfileSelect" aria-label="Perfil de permissões" style="min-width:180px"><option value="consulta">consulta</option></select><input id="permNewProfile" placeholder="Nome do novo perfil"><button class="btn btn-out" id="permNewBtn" type="button">+ Criar perfil</button></div><div id="permChecks" class="perm-checks"></div><div class="mrow" style="margin-top:14px;align-items:center"><button class="btn" id="permSaveBtn" type="button">Salvar permissões</button><span id="permStatus" role="status" style="font-size:12px;align-self:center;font-weight:700"></span></div></div>
+<div class="msec"><div class="admin-section-title"><span class="section-num">3</span>Usuários cadastrados</div><p class="msec-desc">Defina o tipo de conta e o perfil de cada usuário. A opção Administrador libera todas as funções administrativas; Usuário respeita as permissões do perfil. A permissão <b>Acessar e atualizar contratos realizados</b> libera a edição, inclusão e exclusão de contratos. O histórico de alterações continua exclusivo dos administradores.</p><div class="table-wrap"><table id="usrTb"><thead><tr><th>E-mail</th><th>Tipo de conta</th><th>Perfil de permissões</th><th>Último acesso</th><th>Ações</th></tr></thead><tbody></tbody></table></div></div></div>
 </div></div>
-<div id="ctr" class="hidden admin-only"><div class="chead"><h2>CONTRATOS <span>REALIZADOS</span></h2><button class="btn btn-out" id="ctrClose" type="button">Voltar ao dashboard</button></div>
+<div id="ctr" class="hidden"><div class="chead"><h2>CONTRATOS <span>REALIZADOS</span></h2><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-out admin-only" id="ctrHistoryBtn" type="button">Histórico de alterações</button><button class="btn btn-out" id="ctrClose" type="button">Voltar ao dashboard</button></div></div>
 <div class="grid-kpi k6" id="ctrKpis" style="grid-template-columns:repeat(5,1fr)"></div>
 <div class="section-title">Dashboard por agência</div>
 <div class="grid3" style="grid-template-columns:1.2fr 1fr"><section class="card"><div class="card-title">Fornecedores por agência</div><div class="card-sub">Total x recebidos x atualizados</div><div class="bar-chart industry-chart" id="ctrChart"></div><div class="legend"><span><i class="n"></i>Fornecedores</span><span><i class="r"></i>Recebidos</span><span><i style="background:var(--green)"></i>Atualizados</span></div></section>
 <section class="card"><div class="card-title">Resumo por agência</div><div class="card-sub">Pendências de recebimento e atualização</div><div class="table-wrap" style="max-height:340px"><table id="ctrAgTb"><thead><tr><th>Agência</th><th>Forn.</th><th>Receb.</th><th>Pend. receb.</th><th>Atual.</th><th>Pend. atual.</th></tr></thead><tbody></tbody></table></div></section></div>
-<div class="section-title">Editor</div>
-<div class="ctr-add"><input id="ctrNewAg" placeholder="Agência (ex.: GOLD)"><input id="ctrNewForn" placeholder="Fornecedor (nome igual ao do ColetorPRO)"><button class="btn" id="ctrAddBtn" type="button">Adicionar fornecedor</button></div>
+<div class="section-title contracts-edit-only">Editar contratos</div>
+<div class="ctr-add contracts-edit-only"><input id="ctrNewAg" placeholder="Agência (ex.: GOLD)"><input id="ctrNewForn" placeholder="Fornecedor (nome igual ao do ColetorPRO)"><button class="btn" id="ctrAddBtn" type="button">Adicionar fornecedor</button></div>
 <div class="ctr-tools"><input class="search" id="ctrQ" placeholder="Buscar fornecedor..."><select id="ctrFAg"></select><select id="ctrFSt"><option value="">Todos os status</option><option value="pr">Pendente de recebimento</option><option value="pa">Pendente de atualização</option><option value="ok">Recebido e atualizado</option></select><span id="ctrStatus" role="status"></span></div>
 <div class="ctr-grid"><table id="ctrTb"><thead><tr><th>#</th><th>Agência</th><th>Fornecedor</th><th>Recebido</th><th>Atualizado</th><th>Observação</th><th></th></tr></thead><tbody></tbody></table></div>
-<div class="small-note" style="margin-top:8px">Edite direto na tabela: ao mudar uma célula ela é salva na hora. Para limpar uma data, apague o campo.</div></div>
+<div class="small-note contracts-edit-only" style="margin-top:8px">Dica: edite os campos diretamente na tabela; as alterações são salvas automaticamente. Para apagar uma data, limpe o campo e confirme a alteração.</div><div class="confidential-footer"><span class="conf-icon" aria-hidden="true">!</span><span>* Informações de consulta interna, proibido compartilhar</span></div></div>
+<div id="ctrHistoryModal" class="hidden" role="dialog" aria-modal="true" aria-labelledby="ctrHistoryTitle"><div class="history-box"><div class="history-head"><h3 id="ctrHistoryTitle">Histórico de alterações</h3><button class="btn btn-out" id="ctrHistoryClose" type="button">Fechar</button></div><div class="history-sub">Registro de quem alterou contratos, quando e quais informações mudaram. Visível somente para administradores.</div><div id="ctrHistoryStatus" class="small-note" role="status" style="margin-bottom:10px"></div><div class="table-wrap"><table><thead><tr><th>Data e hora</th><th>Usuário</th><th>Ação</th><th>Fornecedor</th><th>Detalhes</th></tr></thead><tbody id="ctrHistoryTb"></tbody></table></div></div></div>
 <header class="header"><div class="brand"><div class="eyebrow">Resultados em campo • ColetorPRO</div><h1 id="ttl">EXECUÇÃO POR INDÚSTRIA <span>| Dashboard</span></h1><div class="subtitle" id="sub">Acesso restrito • dados carregados após o login</div></div><div class="period" id="period">CARREGANDO DADOS</div><div class="upd-mini" id="updMini"></div></header>
 <main class="wrap">
 <div class="topbar"><div class="combo"><label>Indústria (fornecedor)</label><input id="indIn" placeholder="Carregando dados publicados..." autocomplete="off" disabled><div class="combo-list hidden" id="indList"></div></div>
-<div class="top-actions"><button class="btn btn-pdf" id="pdfBtn" disabled onclick="exportPDF()">Exportar PDF</button><button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML()">Baixar HTML</button><button class="btn btn-up admin-only" id="upBtn" type="button">Atualizar base (.xlsx)</button><button class="btn admin-only" id="ctrBtn" type="button" style="background:var(--navy2)">Contratos realizados</button><input type="file" id="upFile" accept=".xlsx,.xls,.json,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden><span class="up-status admin-only" id="upStatus" role="status"></span><span class="who" id="who"></span><button class="btn btn-out" id="accBtn" type="button">Conta</button><button class="btn btn-out" id="logoutBtn" type="button">Sair</button></div>
+<div class="top-actions"><button class="btn btn-pdf" id="pdfBtn" disabled onclick="exportPDF()">Exportar PDF</button><button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML()">Baixar HTML</button><button class="btn btn-up" id="upBtn" type="button">Atualizar base (.csv, .xlsx)</button><button class="btn" id="ctrBtn" type="button" style="background:var(--navy2);display:none">Contratos realizados</button><input type="file" id="upFile" accept=".csv,.xlsx,.xls,.json,text/csv,application/csv,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden><span class="up-status" id="upStatus" role="status"></span><span class="who" id="who"></span><button class="btn btn-out" id="accBtn" type="button">Conta</button><button class="btn btn-out" id="logoutBtn" type="button">Sair</button></div>
 </div>
 <div id="empty">Carregando dados publicados...</div>
 <div id="app" class="hidden">
@@ -222,7 +254,7 @@ html:not(.is-admin) .admin-only{display:none!important}
 <div class="section-title">Detalhamento completo</div>
 <section class="card"><div class="tabs" id="tabs"></div><div class="table-tools"><div><div class="card-title" id="tbTitle"></div><div class="card-sub" id="tbSub"></div></div><input class="search" id="q" placeholder="Buscar..."></div><div class="table-wrap"><table id="tb"><thead></thead><tbody></tbody></table></div></section>
 <div id="pdfDetail" class="pdf-detail">
-<div class="pdf-report-head"><div class="pdf-report-kicker">COLETORPRO • RELATÓRIO COMPLETO</div><div class="pdf-report-title" id="pdfTitle">Execução por indústria</div><div class="card-sub pdf-context" id="pdfContext"></div></div>
+<div class="pdf-report-head"><div class="pdf-report-kicker">COLETORPRO • RELATÓRIO COMPLETO</div><div class="pdf-report-title" id="pdfTitle">Execução por indústria</div><div class="card-sub pdf-context" id="pdfContext"></div><div class="pdf-contract-context" id="pdfContractContext"></div></div>
 <div class="section-title">Resumo da indústria</div>
 <div class="pdf-summary" id="pdfSummary"></div>
 <div class="section-title">Visão operacional</div>
@@ -237,8 +269,9 @@ html:not(.is-admin) .admin-only{display:none!important}
 <div class="section-title">Detalhamento completo — Promotores</div><div class="pdf-table-wrap"><table id="pdfProm"><thead></thead><tbody></tbody></table></div>
 <div class="section-title">Detalhamento completo — Visitas</div><div class="pdf-table-wrap"><table id="pdfVisitas"><thead></thead><tbody></tbody></table></div>
 </div>
+<div class="confidential-footer pdf-confidential-footer"><span class="conf-icon" aria-hidden="true">!</span><span>* Informações de consulta interna, proibido compartilhar</span></div>
 </div>
-<div class="footer"><span>Fonte: Relatório “Horas Contratadas x Executadas – Completo” • ColetorPRO</span><span id="upd"></span></div></main>
+<div class="footer"><span>Fonte: Relatório “Horas Contratadas x Executadas – Completo” • ColetorPRO</span><span id="upd"></span></div><div class="confidential-footer"><span class="conf-icon" aria-hidden="true">!</span><span>* Informações de consulta interna, proibido compartilhar</span></div></main>
 <script>
 if(window.top!==window.self){document.documentElement.innerHTML=''}
 const $=id=>document.getElementById(id);
@@ -250,11 +283,16 @@ const hm=s=>{s=(s||'').trim();if(!s.includes(':'))return 0;const[a,b]=s.split(':
 /* CORREÇÃO: normaliza datas com ano de 2 ou 4 dígitos para o mesmo padrão DD/MM/AAAA. */
 const normalizarData=s=>{
  s=String(s||'').trim();
- const m=s.match(/^(\d{2})\/(\d{2})\/(\d{4}|\d{2})/);
+ // O relatório de origem usa DD/MM/AA HH:mm - DD/MM/AA HH:mm.
+ // Considera sempre a primeira data do intervalo, sem deixar o navegador inverter dia e mês.
+ const m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})(?:\s|$)/);
  if(!m)return '';
- let ano=m[3];
- if(ano.length===2)ano='20'+ano;
- return `${m[1]}/${m[2]}/${ano}`;
+ const dia=Number(m[1]),mes=Number(m[2]);
+ let ano=Number(m[3]);
+ if(m[3].length===2)ano+=2000;
+ const dt=new Date(Date.UTC(ano,mes-1,dia));
+ if(dt.getUTCFullYear()!==ano||dt.getUTCMonth()!==mes-1||dt.getUTCDate()!==dia)return '';
+ return `${String(dia).padStart(2,'0')}/${String(mes).padStart(2,'0')}/${ano}`;
 };
 
 const dataOrdenavel=d=>{
@@ -265,10 +303,21 @@ const dataOrdenavel=d=>{
 const badge=p=>p==null?'—':`<span class="badge ${p>=90?'ok':p>=60?'warn':'bad'}">${fP(p)}</span>`;
 let ALL=[],cur=[],tab='lojas',sortS={key:'real',dir:-1},suppliers=[];
 function parse(txt){
- const lines=txt.replace(/^\uFEFF/,'').split(/\r?\n/);const out=[];
- for(let i=1;i<lines.length;i++){const l=lines[i];if(!l.trim())continue;const c=l.split(';');if(c.length<15)continue;
-  const st=normSt(c[5]),ent=(c[6]||'').split(' - '),d=normalizarData(ent[0]||c[4]||'');
-  out.push({loja:c[0].trim(),forn:c[1].trim(),comp:c[2].trim(),prom:c[3].trim(),status:st,date:d,tempo:hm(c[7]),nota:parseFloat(c[10])||0,contr:hm(c[13]),loja_ok:1,aval:c[9]});}
+ const lines=String(txt||'').replace(/^\uFEFF/,'').split(/\r?\n/);const out=[];
+ if(!lines.length)return out;
+ // Usa os títulos do relatório quando disponíveis, mas mantém fallback para o layout original.
+ const header=lines[0].split(';').map(v=>v.trim().toLocaleLowerCase('pt-BR'));
+ const findCol=(patterns,fallback)=>{const i=header.findIndex(h=>patterns.some(p=>h===p||h.includes(p)));return i>=0?i:fallback};
+ const ix={loja:findCol(['loja'],0),forn:findCol(['fornecedor'],1),comp:findCol(['comprador'],2),prom:findCol(['promotor'],3),status:findCol(['status'],5),periodo:findCol(['entrada e saída','entrada e saida'],6),tempo:findCol(['tempo'],7),aval:findCol(['avaliação','avaliacao'],9),nota:findCol(['nota'],10),contr:findCol(['total horas contratadas','horas contratadas'],13)};
+ for(let i=1;i<lines.length;i++){
+  const l=lines[i];if(!l.trim())continue;const c=l.split(';');
+  // O CSV recebido tem campos vazios extras no fim; eles são ignorados sem deslocar as colunas nomeadas.
+  if(c.length<Math.max(ix.loja,ix.forn,ix.status,ix.periodo,ix.tempo,ix.nota,ix.contr)+1)continue;
+  const val=k=>(c[ix[k]]??'').trim();
+  const periodo=val('periodo');const ent=periodo.split(/\s+-\s+/);const d=normalizarData(ent[0]||'');
+  const numeroNota=Number(String(val('nota')).replace(',','.'));
+  out.push({loja:val('loja'),forn:val('forn'),comp:val('comp'),prom:val('prom'),status:normSt(val('status')),date:d,tempo:hm(val('tempo')),nota:Number.isFinite(numeroNota)?numeroNota:0,contr:hm(val('contr')),loja_ok:1,aval:val('aval')});
+ }
  return out
 }
 function agg(rows){
@@ -365,6 +414,7 @@ function buildPdfDetail(){
  const selectedIndustry=curInd,rows=selectedIndustry==='__all__'?ALL.slice():ALL.filter(r=>r.forn===selectedIndustry),O=agg(rows),all=selectedIndustry==='__all__';
  const std=[['ag','Agendadas',x=>fI(x.ag)],['real','Realizadas',x=>fI(x.real)],['pct','Execução',x=>fP(x.pct)],['nc','Não compareceu',x=>fI(x.nc)],['ea','Em andamento',x=>fI(x.ea)],['sc','Agendado (a realizar)',x=>fI(x.sc)],['contr','Horas contratadas',x=>fH(x.contr)],['exec','Horas executadas',x=>fH(x.exec)],['util','Utilização das horas',x=>x.util==null?'—':fP(x.util)],['avg','Tempo médio',x=>fH(x.avg)],['min','Menor atendimento',x=>fMin(x.min)],['nota','Nota / 5',x=>fN(x.nota)]];
  $('pdfTitle').textContent=all?'Execução geral — relatório completo':'Indústria — '+selectedIndustry;$('pdfContext').textContent=(all?'Todas as indústrias — banco completo':'Indústria selecionada: '+selectedIndustry)+' • '+fI(rows.length)+' visitas';
+ const pdfContract=$('pdfContractContext');if(pdfContract){let cc=null;if(!all){if('__COLETOR_EXPORTED_CONTRATO__' in window)cc=window.__COLETOR_EXPORTED_CONTRATO__;else cc=CTR.find(x=>nk(x.fornecedor)===nk(selectedIndustry));}pdfContract.textContent=cc?('Contrato: '+(cc.recebido?'recebido dia '+fD(cc.recebido):'ainda não recebido')+' • '+(cc.atualizado?'atualizado dia '+fD(cc.atualizado):'ainda não atualizado')):'';}
  const summary=[['Visitas agendadas',fI(O.ag),'programadas'],['Visitas realizadas',fI(O.real),fP(O.pct)+' de execução'],['Horas contratadas',fH(O.contr),'base registrada'],['Horas executadas',fH(O.exec),O.util==null?'sem horas contratadas':fP(O.util)+' das contratadas'],['Tempo médio',fH(O.avg),'por visita realizada'],['Nota média',fN(O.nota),'escala máxima 5,0'],['Não compareceu',fI(O.nc),'visitas'],['Em andamento',fI(O.ea),'visitas'],['Agendado (a realizar)',fI(O.sc),'visitas'],['Gap de visitas',fI(O.real-O.ag),'realizadas − agendadas'],['Gap de horas',fH(O.exec-O.contr),'executadas − contratadas'],['Menor atendimento',fMin(O.min),'entre realizadas']];
  $('pdfSummary').innerHTML=summary.map(x=>`<div class="pdf-summary-item"><div class="label">${x[0]}</div><div class="value">${x[1]}</div><div class="note">${x[2]}</div></div>`).join('');
  const byName=(a,b)=>a.name.localeCompare(b.name),rankBase=all?group(rows,'forn'):group(rows,'loja'),noneBase=all?group(rows,r=>r.loja+' — '+r.forn):rankBase;
@@ -386,7 +436,7 @@ function buildPdfDetail(){
  buildPdfTable('pdfVisitas',visitData,[['date','Data',x=>esc(x.date)],['loja','Loja',x=>esc(x.loja)],['prom','Promotor',x=>esc(x.prom)],['comp','Comprador',x=>esc(x.comp||'—')],['status','Status',x=>esc(x.status)],['tempo','Tempo',x=>fH(x.tempo)],['nota','Nota',x=>x.nota?esc(x.nota):'—']]);
  $('pdfDetail').dataset.industry=selectedIndustry;
 }
-function exportPDF(){closeIndustryList();buildPdfDetail();const old=document.title,nm=curInd==='__all__'?'Geral':curInd.split(' - ')[0].trim();document.title='ColetorPRO - '+nm+' - '+$('period').textContent;window.onafterprint=()=>{document.title=old;window.onafterprint=null};requestAnimationFrame(()=>requestAnimationFrame(()=>window.print()))}
+async function exportPDF(){if(!window.__COLETOR_EXPORTED_DATA__&&!await requireServerPerm('export_pdf'))return;closeIndustryList();buildPdfDetail();const old=document.title,nm=curInd==='__all__'?'Geral':curInd.split(' - ')[0].trim();document.title='ColetorPRO - '+nm+' - '+$('period').textContent;window.onafterprint=()=>{document.title=old;window.onafterprint=null};requestAnimationFrame(()=>requestAnimationFrame(()=>window.print()))}
 async function loadPublishedData(){
  try{
   $('empty').innerHTML='Carregando dados publicados...';
@@ -405,10 +455,11 @@ async function loadPublishedData(){
   }
   /* Segurança extra para HTMLs exportados: normaliza também os registros já incorporados. */
   ALL=ALL.map(r=>({...r,date:normalizarData(r.date),tempo:+r.tempo||0,nota:+r.nota||0,contr:+r.contr||0}));
-  $('empty').classList.add('hidden');$('app').classList.remove('hidden');render();
- }catch(err){console.error(err);$('empty').innerHTML='Nenhum dado publicado ainda.'}
+  $('empty').classList.add('hidden');render();if(ME)applyPermissionUI();else $('app').classList.remove('hidden');return true;
+ }catch(err){console.error(err);$('empty').classList.remove('hidden');$('empty').innerHTML='<strong>Não foi possível carregar o dashboard.</strong><br><span style="font-size:12px">'+esc(err?.message||'Confira a base publicada e as permissões de acesso.')+'</span>';if(ME&&!(canPerm('dashboard')||canPerm('consult_industries')||canPerm('visit_details'))) $('app').classList.add('hidden');return false}
 }
-function exportHTML(){if(!ME)return;closeIndustryList();const selected=curInd;if(!selected||selected==='__all__'){alert('Selecione uma indústria antes de baixar o HTML.');return}const rows=ALL.filter(r=>r.forn===selected);if(!rows.length){alert('A indústria selecionada não possui dados.');return}const k=nk(selected),c=CTR.find(x=>nk(x.fornecedor)===k)||null;const contractText=c?('Contrato '+(c.recebido?'recebido dia '+fD(c.recebido):'ainda não recebido')+' <span>•</span> '+(c.atualizado?'Atualizado dia '+fD(c.atualizado):'ainda não atualizado')):'';let snapshot=document.documentElement.outerHTML.replace(/(SUPABASE_URL=)'[^']*'/,"$1''").replace(/(SUPABASE_ANON_KEY=)'[^']*'/,"$1''").replace(/<script src="https:\/\/cdn\.jsdelivr[^>]*><\/script>/,'');const payload=JSON.stringify(rows).replace(/</g,'\\u003c');const contractPayload=JSON.stringify(c?{recebido:c.recebido||'',atualizado:c.atualizado||''}:null).replace(/</g,'\\u003c');const boot=`<script>window.__COLETOR_EXPORTED_DATA__=${payload};window.__COLETOR_EXPORTED_INDUSTRY__=${JSON.stringify(selected)};window.__COLETOR_EXPORTED_CONTRATO__=${contractPayload};<\/script>`;let out=snapshot.replace(/<script>/i,boot+'<script>');if(contractText){const escaped=contractText.replace(/\\/g,'\\\\').replace(/'/g,"\\'");out=out.replace(/<div class="ctr-msg hidden" id="ctrMsg"><\/div>/,`<div class="ctr-msg" id="ctrMsg">${contractText}</div>`)}out=out.replace(/<body>/i,'<body class="exported-view">');out=out.replace(/<button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML\(\)">Baixar HTML<\/button>/,'<button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML()">Baixar HTML</button>');const safe=selected.replace(/[\\/:*?"<>|]+/g,' - ').replace(/\s+/g,' ').trim().slice(0,140);const blob=new Blob([out],{type:'text/html;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ColetorPRO - '+safe+'.html';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
+async function exportHTML(){if(!await requireServerPerm('download_html'))return;if(!ME)return;closeIndustryList();const selected=curInd;if(!selected||selected==='__all__'){alert('Selecione uma indústria antes de baixar o HTML.');return}const rows=ALL.filter(r=>r.forn===selected);if(!rows.length){alert('A indústria selecionada não possui dados.');return}const snapshot=document.documentElement.outerHTML.replace(/(SUPABASE_URL=)'[^']*'/,"$1''").replace(/(SUPABASE_ANON_KEY=)'[^']*'/,"$1''").replace(/<script src="https:\/\/cdn\.jsdelivr[^>]*><\/script>/,'');const payload=JSON.stringify(rows).replace(/</g,'\\u003c');const boot=`<script>window.__COLETOR_EXPORTED_DATA__=${payload};window.__COLETOR_EXPORTED_INDUSTRY__=${JSON.stringify(selected)};window.__COLETOR_EXPORTED_CONTRATOS__=${JSON.stringify(CTR.map(c=>({fornecedor:c.fornecedor,recebido:c.recebido||'',atualizado:c.atualizado||''}))).replace(/</g,'\\u003c')};window.__COLETOR_EXPORTED_CONTRATO__=${JSON.stringify((()=>{const k=nk(selected),c=CTR.find(x=>nk(x.fornecedor)===k);return c?{fornecedor:c.fornecedor,recebido:c.recebido||'',atualizado:c.atualizado||''}:null})()).replace(/</g,'\\u003c')};<\/script>`;let out=snapshot.replace(/<script>/i,boot+'<script>');out=out.replace(/<body>/i,'<body class="exported-view">');out=out.replace(/<button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML\(\)">Baixar HTML<\/button>/,'<button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML()">Baixar HTML</button>');const safe=selected.replace(/[\\/:*?"<>|]+/g,' - ').replace(/\s+/g,' ').trim().slice(0,140);// O HTML exportado contém uma cópia dos dados e deixa de ser protegido pelo login/Supabase após o download.
+const blob=new Blob([out],{type:'text/html;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ColetorPRO - '+safe+'.html';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
 $('q').addEventListener('input',renderTable);
 /* ===== Supabase: login, perfis e upload (somente admin) ===== */
 const SUPABASE_URL='https://nduabnxombkgwmlzzsjg.supabase.co',SUPABASE_ANON_KEY='sb_publishable_UgW5UpjaJNqtTm8aUoHakA_KdMz7bQ9',BUCKET='dashboard-data',FILE='dados.json';
@@ -416,17 +467,67 @@ let sb=null,ME=null,idleT,fails=0;const IDLE=30*60e3;
 function idleReset(){clearTimeout(idleT);if(ME)idleT=setTimeout(()=>sb.auth.signOut(),IDLE)}
 ['click','keydown','mousemove','touchstart','scroll'].forEach(ev=>addEventListener(ev,idleReset,{passive:true}));
 const showLogin=m=>{$('login').classList.remove('hidden');$('loginErr').textContent=m||''};
-async function setUpdated(){try{const{data}=await sb.storage.from(BUCKET).list('',{search:FILE});const o=(data||[]).find(x=>x.name===FILE);if(!o)return;const d=new Date(o.updated_at),t=d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});$('updMini').textContent='Atualizado em '+t;$('upd').textContent='Base atualizada em '+t}catch(e){}}
+async function setUpdated(){try{const{data}=await sb.storage.from(BUCKET).list('',{search:FILE});const o=(data||[]).find(x=>x.name===FILE);if(!o)return;const d=new Date(o.updated_at),t=d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});$('updMini').textContent='● Base atualizada em '+t;$('upd').textContent='Base atualizada em '+t}catch(e){}}
+const PERMISSION_DEFS=[
+ {key:'dashboard',label:'Dashboard e indicadores'},
+ {key:'consult_industries',label:'Consultar indústrias e lojas'},
+ {key:'visit_details',label:'Detalhamento das visitas'},
+ {key:'export_pdf',label:'Exportar PDF'},
+ {key:'download_html',label:'Baixar HTML'},
+ {key:'update_data',label:'Atualizar a base de dados'},
+ {key:'contracts_access',label:'Acessar e atualizar contratos realizados'},
+ {key:'manage_users',label:'Gerenciar usuários e permissões'}
+];
+const CONSULTA_DEFAULT={dashboard:false,consult_industries:false,visit_details:false,export_pdf:false,download_html:false,update_data:false,contracts_access:true,manage_users:false};
+let USER_PERMISSIONS={},PERMISSION_PROFILES=[],USER_PROFILE_MAP={};
+function canPerm(k){return !!(ME&&(ME.role==='admin'||USER_PERMISSIONS[k]===true))}
+function requirePerm(k){if(canPerm(k))return true;alert('Seu perfil não tem permissão para realizar esta ação.');return false}
+async function requireServerPerm(k){if(!sb||!ME)return false;try{const {data,error}=await sb.rpc('coletor_can',{permission_key:k});if(error||data!==true){alert('O Supabase não autorizou esta ação para o seu perfil.');return false}return true}catch(e){alert('Não foi possível validar a permissão no Supabase. A ação foi bloqueada.');return false}}
+function applyPermissionUI(){
+ const isAdmin=!!(ME&&ME.role==='admin'),hasMain=canPerm('dashboard')||canPerm('consult_industries')||canPerm('visit_details');
+ document.documentElement.classList.toggle('is-admin',isAdmin);
+ $('upBtn').style.display=canPerm('update_data')?'':'none';$('upStatus').style.display=canPerm('update_data')?'':'none';
+ $('ctrBtn').style.display=canPerm('contracts_access')?'':'none';document.querySelectorAll('.contracts-edit-only').forEach(el=>el.style.display=canPerm('contracts_access')?'':'none');
+ $('accBtn').style.display='';
+ $('pdfBtn').style.display=canPerm('export_pdf')?'':'none';$('htmlBtn').style.display=canPerm('download_html')?'':'none';
+ const showDetails=canPerm('visit_details');
+ const canBrowse=canPerm('dashboard')||canPerm('consult_industries');
+ const detailTitle=[...document.querySelectorAll('.section-title')].find(e=>e.textContent.trim()==='Detalhamento completo');
+ if(detailTitle)detailTitle.style.display=showDetails?'':'none';
+ const detailCard=$('tabs')?.closest('.card');if(detailCard)detailCard.style.display=showDetails?'':'none';
+ const search=$('indIn')?.closest('.combo');if(search)search.style.display=canPerm('consult_industries')?'':'none';
+ // Each permission controls its own view: indicators, industry/store charts, and visit-level details.
+ $('kpis').style.display=canPerm('dashboard')?'':'none';
+ const grid=$('chart')?.closest('.grid2');if(grid){grid.style.display=canBrowse?'':'none';grid.style.gridTemplateColumns=(!canPerm('dashboard')&&canPerm('consult_industries'))?'1fr':'';}
+ const op=$('chart')?.closest('.grid2')?.querySelector('.operation-card');if(op)op.style.display=canPerm('dashboard')?'':'none';
+ const store=$('storeChart')?.closest('.visits-store-card');if(store)store.style.display=canPerm('consult_industries')?'':'none';
+ const quality=$('at')?.closest('.grid3');if(quality)quality.style.display=canPerm('dashboard')?'':'none';
+ document.querySelectorAll('#app>.section-title').forEach(el=>{const t=el.textContent.trim();if(t==='Detalhamento completo')el.style.display=showDetails?'':'none';else if(t==='Visão operacional')el.style.display=canBrowse?'':'none';else el.style.display=canPerm('dashboard')?'':'none'});
+ $('app').classList.toggle('hidden',!hasMain);
+}
+async function loadMyPermissions(userId){
+ USER_PERMISSIONS={...CONSULTA_DEFAULT};
+ if(ME&&ME.role==='admin'){USER_PERMISSIONS=Object.fromEntries(PERMISSION_DEFS.map(x=>[x.key,true]));return}
+ const {data:up,error:ue}=await sb.from('coletor_user_profiles').select('profile_name').eq('user_id',userId).maybeSingle();
+ if(ue)throw new Error('Não foi possível validar seu perfil de permissões no Supabase: '+ue.message);
+ const profileName=up?.profile_name||'consulta';USER_PROFILE_MAP[userId]=profileName;
+ const {data:pp,error:pe}=await sb.from('coletor_permission_profiles').select('permissions').eq('profile_name',profileName).maybeSingle();
+ if(pe)throw new Error('Não foi possível carregar as permissões do perfil: '+pe.message);
+ if(!pp)throw new Error('O perfil “'+profileName+'” não existe no Supabase. Peça ao administrador para configurar os perfis.');
+ USER_PERMISSIONS={...CONSULTA_DEFAULT,...(pp.permissions||{})};
+}
 async function startSession(session){
  const{data:p,error}=await sb.from('profiles').select('role,must_change_password').eq('id',session.user.id).single();
  if(error||!p){await sb.auth.signOut();showLogin('Conta sem perfil de acesso. Fale com o administrador.');return}
  if(p.must_change_password){$('login').classList.add('hidden');$('force').classList.remove('hidden');return}
- $('force').classList.add('hidden');ME={email:session.user.email,role:p.role};
- document.documentElement.classList.toggle('is-admin',p.role==='admin');
- $('who').textContent=ME.email+' • '+(p.role==='admin'?'Administrador':'Usuário');
- $('login').classList.add('hidden');idleReset();
- await loadContratos();await loadPublishedData();setUpdated();
+ ME={id:session.user.id,email:session.user.email,role:p.role};
+ try{await loadMyPermissions(session.user.id)}catch(err){ME=null;await sb.auth.signOut();showLogin(err.message);return}
+ $('force').classList.add('hidden');$('who').textContent=ME.email+' • '+(p.role==='admin'?'Administrador':(USER_PROFILE_MAP[ME.id]||'Usuário'));
+ $('login').classList.add('hidden');idleReset();applyPermissionUI();
+ if(canPerm('dashboard')||canPerm('consult_industries')||canPerm('visit_details')){await loadPublishedData();setUpdated()}
+ if(canPerm('contracts_access')){await loadContratos();ctrRender();const hasMain=canPerm('dashboard')||canPerm('consult_industries')||canPerm('visit_details');if(!hasMain){$('ctr').classList.remove('hidden');$('app').classList.add('hidden')}else{$('ctr').classList.add('hidden')}}
 }
+
 async function boot(){
  if(window.__COLETOR_EXPORTED_DATA__){$('login').classList.add('hidden');return loadPublishedData()}
  if(!window.supabase||SUPABASE_URL.includes('SEU-PROJETO')){showLogin('Configure SUPABASE_URL e SUPABASE_ANON_KEY no index.html.');return}
@@ -456,18 +557,26 @@ function xlsxToCsv(ws){
    row.push(v.replace(/[;\r\n]+/g,' '));}
   out.push(row.join(';'));}
  return out.join('\n')}
-$('upBtn').onclick=()=>$('upFile').click();
+$('upBtn').onclick=async()=>{if(await requireServerPerm('update_data'))$('upFile').click()};
 $('upFile').onchange=async e=>{
- const f=e.target.files[0];e.target.value='';if(!f||!ME||ME.role!=='admin')return;const st=$('upStatus');
+ const f=e.target.files[0];e.target.value='';if(!f||!await requireServerPerm('update_data'))return;const st=$('upStatus');
  try{
   st.textContent='Validando arquivo…';if(f.size>50*1048576)throw new Error('arquivo acima de 50 MB');
   let rows,body=f;
   if(/\.json$/i.test(f.name))rows=JSON.parse(await f.text());
   else{
-   if(!window.XLSX)throw new Error('leitor de Excel não carregou; recarregue a página');
-   const wb=XLSX.read(await f.arrayBuffer(),{type:'array',cellNF:true});
+   if(!window.XLSX)throw new Error('leitor de planilhas não carregou; confira a conexão e recarregue a página');
+   let wb;
+   if(/\.csv$/i.test(f.name)||/csv/i.test(f.type)){
+    // Aceita CSV UTF-8, com separador vírgula ou ponto e vírgula; SheetJS detecta o delimitador.
+    const csvText=(await f.text()).replace(/^\uFEFF/,'');
+    wb=XLSX.read(csvText,{type:'string',cellNF:true,raw:false});
+   }else{
+    wb=XLSX.read(await f.arrayBuffer(),{type:'array',cellNF:true});
+   }
+   if(!wb.SheetNames||!wb.SheetNames.length)throw new Error('não foi possível ler a planilha/CSV');
    rows=parse(xlsxToCsv(wb.Sheets[wb.SheetNames[0]]));
-   if(!rows.length)throw new Error('nenhuma visita encontrada na 1ª aba (esperado: planilha exportada do ColetorPRO, cabeçalho na linha 1 e ao menos 15 colunas)');
+   if(!rows.length)throw new Error('nenhuma visita encontrada. Use o CSV ou Excel exportado do ColetorPRO, com cabeçalho na primeira linha e as colunas originais de visitas.');
    body=new Blob([JSON.stringify(rows)],{type:'application/json'});
   }
   const S=['loja','forn','comp','prom','status','date'],N=['tempo','nota','contr'];
@@ -478,20 +587,39 @@ $('upFile').onchange=async e=>{
   st.textContent='Enviando '+(body.size/1048576).toFixed(1)+' MB…';
   const{error}=await sb.storage.from(BUCKET).upload(FILE,body,{upsert:true,contentType:'application/json',cacheControl:'0'});
   if(error)throw error;
-  await loadPublishedData();await setUpdated();st.textContent='Base atualizada: '+fI(rows.length)+' registros.';
+  const loaded=await loadPublishedData();if(!loaded)throw new Error('O arquivo foi enviado, mas o dashboard não conseguiu carregar a base. Confira o formato dos registros e o acesso ao arquivo dados.json.');await setUpdated();st.textContent='Base atualizada: '+fI(rows.length)+' registros.';
  }catch(err){st.textContent='Erro: '+(err.message||err)}
 };
 /* ===== Conta e gestão de usuários ===== */
 let USERS=[];
+const PERMISSION_PROFILE_DEFAULTS={consulta:CONSULTA_DEFAULT,completo:{dashboard:true,consult_industries:true,visit_details:true,export_pdf:true,download_html:true,update_data:false,contracts_access:true,manage_users:false}};
+function renderPermissionChecks(perms={}){$('permChecks').innerHTML=PERMISSION_DEFS.map(p=>`<div class="perm-item"><div><label for="perm-${p.key}">${p.label}</label><span class="perm-state" id="perm-state-${p.key}">${perms[p.key]?'Permitido':'Bloqueado'}</span></div><input id="perm-${p.key}" type="checkbox" data-permission="${p.key}" ${perms[p.key]?'checked':''} aria-label="${p.label}"></div>`).join('');$('permChecks').querySelectorAll('[data-permission]').forEach(c=>c.addEventListener('change',()=>{$('perm-state-'+c.dataset.permission).textContent=c.checked?'Permitido':'Bloqueado'}))}
+async function loadPermissionProfiles(){
+ const {data,error}=await sb.from('coletor_permission_profiles').select('profile_name,permissions').order('profile_name');
+ if(error){$('permStatus').textContent='Execute a migração SQL de permissões no Supabase.';return}
+ PERMISSION_PROFILES=data||[];const sel=$('permProfileSelect'),current=sel.value||'consulta';
+ sel.innerHTML=PERMISSION_PROFILES.map(p=>`<option value="${esc(p.profile_name)}">${esc(p.profile_name)}</option>`).join('');
+ if(!PERMISSION_PROFILES.some(p=>p.profile_name===current))sel.value=PERMISSION_PROFILES.some(p=>p.profile_name==='consulta')?'consulta':(PERMISSION_PROFILES[0]?.profile_name||'');else sel.value=current;
+ showProfilePermissions();
+}
+function showProfilePermissions(){const p=PERMISSION_PROFILES.find(x=>x.profile_name===$('permProfileSelect').value);renderPermissionChecks(p?.permissions||CONSULTA_DEFAULT)}
+$('permProfileSelect').addEventListener('change',showProfilePermissions);
+$('permNewBtn').onclick=async()=>{const name=$('permNewProfile').value.trim().toLowerCase().replace(/[^a-z0-9_-]/g,'_');if(!name)return accMsg('Informe um nome de perfil.',1);if(PERMISSION_PROFILES.some(p=>p.profile_name===name))return accMsg('Esse perfil já existe.',1);try{const {error}=await sb.from('coletor_permission_profiles').insert({profile_name:name,permissions:{...CONSULTA_DEFAULT}});if(error)throw error;$('permNewProfile').value='';await loadPermissionProfiles();$('permProfileSelect').value=name;showProfilePermissions();accMsg('Perfil criado. Configure as permissões e salve.')}catch(e){accMsg('Não foi possível criar o perfil: '+e.message,1)}};
+$('permSaveBtn').onclick=async()=>{if(!requirePerm('manage_users'))return;const name=$('permProfileSelect').value;if(!name)return;const permissions=Object.fromEntries(PERMISSION_DEFS.map(p=>[p.key,!!$('perm-'+p.key)?.checked]));const b=$('permSaveBtn');b.disabled=true;try{const {error}=await sb.from('coletor_permission_profiles').upsert({profile_name:name,permissions,updated_at:new Date().toISOString()},{onConflict:'profile_name'});if(error)throw error;PERMISSION_PROFILES=PERMISSION_PROFILES.map(p=>p.profile_name===name?{...p,permissions}:p);$('permStatus').textContent='Permissões salvas no Supabase.';accMsg('Permissões do perfil “'+name+'” atualizadas. Usuários precisam entrar novamente para aplicar.')}catch(e){$('permStatus').textContent='';accMsg('Erro ao salvar permissões: '+e.message,1)}finally{b.disabled=false}};
 const accMsg=(t,bad)=>{const m=$('accMsg');m.textContent=t||'';m.style.color=bad?'var(--danger)':'var(--green)';if(t)m.scrollIntoView({block:'nearest'})};
 async function adm(body){const{data,error}=await sb.functions.invoke('admin-users',{body});if(error){let m=error.message;try{const j=await error.context.json();m=j.error||j.message||m}catch(e){}throw new Error(m)}return data}
 async function loadUsers(){
- const tb=$('usrTb').querySelector('tbody');tb.innerHTML='<tr><td colspan="4">Carregando…</td></tr>';
- try{USERS=(await adm({action:'list'})).users.sort((a,b)=>a.email.localeCompare(b.email));
-  tb.innerHTML=USERS.map(u=>{const me=u.email===ME.email,id=esc(u.id);return `<tr><td>${esc(u.email)}${me?' (você)':''}${u.must_change_password?' <span class="pill">senha provisória</span>':''}</td><td><select data-role="${id}"${me?' disabled':''}><option value="user"${u.role==='user'?' selected':''}>Usuário</option><option value="admin"${u.role==='admin'?' selected':''}>Administrador</option></select></td><td>${u.last_sign_in_at?new Date(u.last_sign_in_at).toLocaleString('pt-BR'):'nunca'}</td><td>${me?'—':`<button class="tab" data-pw="${id}">Nova senha</button><button class="tab" data-del="${id}">Remover</button>`}</td></tr>`}).join('')||'<tr><td colspan="4">Nenhum usuário.</td></tr>';
- }catch(err){tb.innerHTML='';accMsg(err.message,1)}
+ const tb=$('usrTb').querySelector('tbody');tb.innerHTML='<tr><td colspan="5">Carregando…</td></tr>';
+ try{
+  USERS=(await adm({action:'list'})).users.sort((a,b)=>a.email.localeCompare(b.email));
+  const {data:ups,error:upe}=await sb.from('coletor_user_profiles').select('user_id,profile_name');if(upe)throw upe;
+  USER_PROFILE_MAP=Object.fromEntries((ups||[]).map(x=>[x.user_id,x.profile_name]));
+  const profileOptions=PERMISSION_PROFILES.map(p=>`<option value="${esc(p.profile_name)}">${esc(p.profile_name)}</option>`).join('');
+  tb.innerHTML=USERS.map(u=>{const me=u.email===ME.email,id=esc(u.id),prof=USER_PROFILE_MAP[u.id]||'consulta';return `<tr><td>${esc(u.email)}${me?' (você)':''}${u.must_change_password?' <span class="pill">senha provisória</span>':''}</td><td><select data-role="${id}"${me?' disabled':''}><option value="user"${u.role==='user'?' selected':''}>Usuário</option><option value="admin"${u.role==='admin'?' selected':''}>Administrador</option></select></td><td><select data-user-profile="${id}"${u.role==='admin'?' disabled':''}>${profileOptions}</select></td><td>${u.last_sign_in_at?new Date(u.last_sign_in_at).toLocaleString('pt-BR'):'nunca'}</td><td>${me?'—':`<button class="tab" data-pw="${id}">Nova senha</button><button class="tab" data-del="${id}">Remover</button>`}</td></tr>`}).join('')||'<tr><td colspan="5">Nenhum usuário.</td></tr>';
+  tb.querySelectorAll('select[data-user-profile]').forEach(sel=>{sel.value=USER_PROFILE_MAP[sel.dataset.userProfile]||'consulta'});
+ }catch(err){tb.innerHTML='';accMsg('Falha ao carregar usuários/perfis: '+err.message,1)}
 }
-$('accBtn').onclick=()=>{$('acc').classList.remove('hidden');accMsg('');if(ME&&ME.role==='admin')loadUsers()};
+$('accBtn').onclick=async()=>{$('acc').classList.remove('hidden');accMsg('');if(ME&&ME.role==='admin'){await loadPermissionProfiles();await loadUsers()}};
 $('accClose').onclick=()=>$('acc').classList.add('hidden');
 $('myPassBtn').onclick=async()=>{const p=$('myPass').value;if(p.length<10)return accMsg('A senha precisa ter pelo menos 10 caracteres.',1);const{error}=await sb.auth.updateUser({password:p});if(error)return accMsg(error.message,1);$('myPass').value='';accMsg('Senha alterada.')};
 $('nuBtn').onclick=async()=>{const b=$('nuBtn'),em=$('nuEmail').value.trim(),pw=$('nuPass').value;
@@ -508,7 +636,7 @@ $('usrTb').addEventListener('click',async e=>{
   else if(confirm('Remover '+u.email+'? Essa ação não pode ser desfeita.')){await adm({action:'delete',id});accMsg(u.email+' removido.');loadUsers()}
  }catch(err){accMsg(err.message,1)}
 });
-$('usrTb').addEventListener('change',async e=>{const s=e.target.closest('select[data-role]');if(!s)return;try{await adm({action:'set_role',id:s.dataset.role,role:s.value});accMsg('Perfil atualizado.')}catch(err){accMsg(err.message,1);loadUsers()}});
+$('usrTb').addEventListener('change',async e=>{const ps=e.target.closest('select[data-user-profile]');if(ps){try{const {error}=await sb.from('coletor_user_profiles').upsert({user_id:ps.dataset.userProfile,profile_name:ps.value,updated_at:new Date().toISOString()},{onConflict:'user_id'});if(error)throw error;USER_PROFILE_MAP[ps.dataset.userProfile]=ps.value;accMsg('Perfil de permissões atualizado. O usuário deve entrar novamente para aplicar.')}catch(err){accMsg(err.message,1);loadUsers()}return}const s=e.target.closest('select[data-role]');if(!s)return;try{await adm({action:'set_role',id:s.dataset.role,role:s.value});accMsg('Tipo de conta atualizado.');loadUsers()}catch(err){accMsg(err.message,1);loadUsers()}});
 /* ===== Animações discretas ===== */
 function countUp(el){
  const fin=el.textContent;if(!/\d/.test(fin)||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
@@ -535,6 +663,7 @@ let CTR=[];
 const nk=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/\s+/g,' ').trim();
 const fD=s=>s?s.split('-').reverse().join('/'):'';
 async function loadContratos(){
+ if(!canPerm('contracts_access')){CTR=[];return}
  try{const{data,error}=await sb.from('contratos').select('*').order('fornecedor').range(0,4999);if(error)throw error;CTR=data||[]}
  catch(e){console.error('contratos:',e);CTR=[]}
 }
@@ -543,7 +672,8 @@ function ctrMsg(){
  if(curInd==='__all__'){el.classList.add('hidden');return}
  let c;
  if('__COLETOR_EXPORTED_CONTRATO__' in window)c=window.__COLETOR_EXPORTED_CONTRATO__;
- else{const k=nk(curInd);c=CTR.find(x=>nk(x.fornecedor)===k)}
+ if(!c&&Array.isArray(window.__COLETOR_EXPORTED_CONTRATOS__))c=window.__COLETOR_EXPORTED_CONTRATOS__.find(x=>nk(x.fornecedor)===nk(curInd));
+ if(!c){const k=nk(curInd);c=CTR.find(x=>nk(x.fornecedor)===k)}
  if(!c){el.classList.add('hidden');return}
  el.innerHTML='Contrato '+(c.recebido?'recebido dia '+fD(c.recebido):'ainda não recebido')+'<span>•</span>'+(c.atualizado?'Atualizado dia '+fD(c.atualizado):'ainda não atualizado');
  el.classList.remove('hidden');
@@ -560,17 +690,26 @@ function ctrDash(){
  $('ctrFAg').innerHTML='<option value="">Todas as agências</option>'+ags.map(a=>`<option value="${esc(a)}">${esc(a||'SEM AGÊNCIA DEFINIDA')}</option>`).join('');$('ctrFAg').value=cur;
 }
 function ctrGrid(){
+ const canEdit=canPerm('contracts_access');
  const q=nk($('ctrQ').value),ag=$('ctrFAg').value,st=$('ctrFSt').value;
  const L=CTR.filter(c=>(!q||nk(c.fornecedor).includes(q))&&(!ag||(c.agencia||'')===ag)&&(!st||(st==='pr'&&!c.recebido)||(st==='pa'&&!c.atualizado)||(st==='ok'&&c.recebido&&c.atualizado)));
- $('ctrTb').querySelector('tbody').innerHTML=L.map((c,i)=>`<tr><td class="num">${i+1}</td><td><input data-id="${c.id}" data-f="agencia" value="${esc(c.agencia)}" style="min-width:110px"></td><td class="f"><input data-id="${c.id}" data-f="fornecedor" value="${esc(c.fornecedor)}"></td><td><input type="date" data-id="${c.id}" data-f="recebido" value="${c.recebido||''}"></td><td><input type="date" data-id="${c.id}" data-f="atualizado" value="${c.atualizado||''}"></td><td><input data-id="${c.id}" data-f="obs" value="${esc(c.obs)}" style="min-width:150px"></td><td><button class="xdel" data-del="${c.id}" title="Remover">✕</button></td></tr>`).join('')||'<tr><td colspan="7">Nenhum fornecedor.</td></tr>';
+ $('ctrTb').querySelector('tbody').innerHTML=L.map((c,i)=>`<tr><td class="num">${i+1}</td><td>${canEdit?`<input data-id="${c.id}" data-f="agencia" value="${esc(c.agencia)}" style="min-width:110px">`:esc(c.agencia)}</td><td class="f">${canEdit?`<input data-id="${c.id}" data-f="fornecedor" value="${esc(c.fornecedor)}">`:esc(c.fornecedor)}</td><td>${canEdit?`<input type="date" data-id="${c.id}" data-f="recebido" value="${c.recebido||''}">`:esc(fD(c.recebido))}</td><td>${canEdit?`<input type="date" data-id="${c.id}" data-f="atualizado" value="${c.atualizado||''}">`:esc(fD(c.atualizado))}</td><td>${canEdit?`<input data-id="${c.id}" data-f="obs" value="${esc(c.obs)}" style="min-width:150px">`:esc(c.obs||'')}</td><td>${canEdit?`<button class="xdel" data-del="${c.id}" title="Remover">✕</button>`:''}</td></tr>`).join('')||'<tr><td colspan="7">Nenhum fornecedor.</td></tr>';
 }
 function ctrRender(){ctrDash();ctrGrid()}
-$('ctrBtn').onclick=async()=>{if(!ME||ME.role!=='admin')return;$('ctr').classList.remove('hidden');ctrSt('Carregando…');await loadContratos();ctrSt('');ctrRender()};
-$('ctrClose').onclick=()=>{$('ctr').classList.add('hidden');render()};
+async function openContractsView(){if(!await requireServerPerm('contracts_access'))return;const app=$('app'),view=$('ctr');app.classList.add('view-leave');setTimeout(()=>{app.classList.add('hidden');app.classList.remove('view-leave');view.classList.remove('hidden');view.classList.add('view-enter');requestAnimationFrame(()=>requestAnimationFrame(()=>view.classList.remove('view-enter')))},130);ctrSt('Carregando…');await loadContratos();ctrSt('');ctrRender()}
+$('ctrBtn').onclick=openContractsView;
+$('ctrClose').onclick=()=>{const view=$('ctr');view.classList.add('view-leave');setTimeout(()=>{view.classList.add('hidden');view.classList.remove('view-leave');if(canPerm('dashboard')||canPerm('consult_industries')||canPerm('visit_details')){const app=$('app');app.classList.remove('hidden');app.classList.add('view-enter');requestAnimationFrame(()=>requestAnimationFrame(()=>app.classList.remove('view-enter')));applyPermissionUI();render()}else $('app').classList.add('hidden')},180)};
+function histFmt(v){if(!v)return '—';try{return new Date(v).toLocaleString('pt-BR')}catch(e){return String(v)}}
+function histDetails(row){const old=row.old_data||{},neu=row.new_data||{};const keys=['agencia','fornecedor','recebido','atualizado','obs'];const labels={agencia:'Agência',fornecedor:'Fornecedor',recebido:'Recebido',atualizado:'Atualizado',obs:'Observação'};const parts=[];for(const k of keys){const a=old[k]??'',b=neu[k]??'';if(String(a)!==String(b))parts.push(`<b>${labels[k]}:</b> ${esc(a||'—')} → ${esc(b||'—')}`)}if(row.action==='DELETE')return 'Registro removido. '+parts.join(' • ');if(row.action==='INSERT')return 'Novo fornecedor cadastrado. '+parts.join(' • ');return parts.join('<br>')||'Alteração registrada.'}
+async function loadCtrHistory(){if(!ME||ME.role!=='admin')return;const status=$('ctrHistoryStatus'),tb=$('ctrHistoryTb');status.textContent='Carregando histórico…';tb.innerHTML='';try{const{data,error}=await sb.from('contratos_historico').select('*').order('changed_at',{ascending:false}).limit(500);if(error)throw error;tb.innerHTML=(data||[]).map(r=>`<tr><td>${esc(histFmt(r.changed_at))}</td><td>${esc(r.changed_by_email||r.changed_by||'Sistema')}</td><td>${esc(({INSERT:'Cadastro',UPDATE:'Alteração',DELETE:'Exclusão'})[r.action]||r.action||'—')}</td><td>${esc(r.fornecedor||'—')}</td><td class="hist-data">${histDetails(r)}</td></tr>`).join('')||'<tr><td colspan="5">Nenhuma alteração registrada ainda.</td></tr>';status.textContent=`Exibindo ${(data||[]).length} registro(s), no máximo os 500 mais recentes.`}catch(e){console.error('histórico contratos:',e);status.textContent='Não foi possível carregar o histórico. Confirme se a migração SQL do histórico foi aplicada no Supabase.';status.style.color='var(--danger)'}}
+$('ctrHistoryBtn').onclick=async()=>{if(!ME||ME.role!=='admin')return;$('ctrHistoryModal').classList.remove('hidden');await loadCtrHistory()};
+$('ctrHistoryClose').onclick=()=>$('ctrHistoryModal').classList.add('hidden');
+$('ctrHistoryModal').addEventListener('click',e=>{if(e.target===$('ctrHistoryModal'))$('ctrHistoryModal').classList.add('hidden')});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('ctrHistoryModal').classList.add('hidden')});
 ['ctrQ','ctrFAg','ctrFSt'].forEach(i=>$(i).addEventListener('input',ctrGrid));
 $('ctrTb').addEventListener('change',async e=>{
- const i=e.target.closest('input[data-id]');if(!i||!ME||ME.role!=='admin')return;
- const id=+i.dataset.id,f=i.dataset.f,c=CTR.find(x=>x.id===id);if(!c)return;
+ const i=e.target.closest('input[data-id]');if(!i||!canPerm('contracts_access'))return;
+ if(!await requireServerPerm('contracts_access')){ctrRender();return}const id=+i.dataset.id,f=i.dataset.f,c=CTR.find(x=>x.id===id);if(!c)return;
  let v=i.value.trim();if(f==='recebido'||f==='atualizado')v=v||null;
  if(f==='fornecedor'&&!v){i.value=c.fornecedor;return}
  const{error}=await sb.from('contratos').update({[f]:v,updated_at:new Date().toISOString()}).eq('id',id);
@@ -579,12 +718,13 @@ $('ctrTb').addEventListener('change',async e=>{
  i.classList.add('saved');setTimeout(()=>i.classList.remove('saved'),700);ctrSt('Salvo.');ctrDash();
 });
 $('ctrTb').addEventListener('click',async e=>{
- const b=e.target.closest('button[data-del]');if(!b||!ME||ME.role!=='admin')return;
- const id=+b.dataset.del,c=CTR.find(x=>x.id===id);if(!c||!confirm('Remover '+c.fornecedor+'?'))return;
+ const b=e.target.closest('button[data-del]');if(!b||!canPerm('contracts_access'))return;
+ if(!await requireServerPerm('contracts_access'))return;const id=+b.dataset.del,c=CTR.find(x=>x.id===id);if(!c||!confirm('Remover '+c.fornecedor+'?'))return;
  const{error}=await sb.from('contratos').delete().eq('id',id);if(error){ctrSt('Erro: '+error.message,1);return}
  CTR=CTR.filter(x=>x.id!==id);ctrRender();ctrSt('Removido.');
 });
 $('ctrAddBtn').onclick=async()=>{
+ if(!await requireServerPerm('contracts_access'))return;
  const ag=$('ctrNewAg').value.trim().toUpperCase(),fn=$('ctrNewForn').value.trim();
  if(!fn)return ctrSt('Informe o fornecedor.',1);
  const{data,error}=await sb.from('contratos').insert({agencia:ag,fornecedor:fn}).select().single();
