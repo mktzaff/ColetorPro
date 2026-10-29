@@ -226,7 +226,7 @@ html:not(.is-admin) .admin-only{display:none!important}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-</head><body>
+<style id="performance-ui">#busyOverlay{position:fixed;inset:0;z-index:3000;background:rgba(10,30,50,.78);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:20px;cursor:progress}#busyOverlay.active{display:flex}#busyOverlay .busy-card{background:white;border-radius:16px;padding:28px 32px;max-width:350px;width:100%;text-align:center;box-shadow:0 20px 55px #0004;color:#123b5f;font-weight:800}#busyOverlay .busy-spin{height:43px;width:43px;border:5px solid #e5ebf1;border-top-color:#e30613;border-radius:50%;animation:busySpin .7s linear infinite;margin:0 auto 17px}#busyOverlay small{display:block;margin-top:7px;color:#667788;font-weight:500}@keyframes busySpin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){#busyOverlay .busy-spin{animation:none;border-top-color:#e30613}}#tableMoreBtn{margin-top:12px}</style></head><body><div id="busyOverlay" role="status" aria-live="polite" aria-label="Carregando"><div class="busy-card"><div class="busy-spin"></div><div id="busyText">Atualizando informações…</div><small>Aguarde a conclusão antes de continuar.</small></div></div>
 <div id="login"><div class="box"><h2>ColetorPRO</h2><p>Acesso restrito. Entre com o e-mail e a senha cadastrados pelo administrador.</p>
 <form id="loginForm" onsubmit="return false"><label for="lgEmail">E-mail</label><input id="lgEmail" type="email" autocomplete="username" required><label for="lgPass">Senha</label><input id="lgPass" type="password" autocomplete="current-password" required><button class="btn" id="loginBtn" type="submit">Entrar</button><div id="loginErr" role="alert"></div></form></div></div>
 <div id="force" class="hidden"><div class="box"><h2>Crie a sua senha</h2><p>Este é o seu primeiro acesso, ou a sua senha foi redefinida pelo administrador. Escolha uma senha pessoal para continuar.</p>
@@ -268,7 +268,7 @@ html:not(.is-admin) .admin-only{display:none!important}
 <section class="card"><div class="card-title">Nota média do repositor</div><div class="card-sub">Escala máxima = 5,0</div><div class="score"><div class="score-num" id="as"></div><div><div class="stars">★★★★★</div><div class="small-note">média das avaliações registradas</div></div></div></section>
 <section class="card"><div class="card-title" id="rkTitle"></div><div class="card-sub" id="rkSub"></div><div class="rank-switch" id="rankSwitch"><button class="active" data-rank="more">Mais horas</button><button data-rank="less">Menos horas</button><button data-rank="none">Sem visitas</button></div><div class="rank-count" id="rankCount"></div><div class="rank-list" id="rank"></div></section></div>
 <div class="section-title">Detalhamento completo</div>
-<section class="card"><div class="tabs" id="tabs"></div><div class="table-tools"><div><div class="card-title" id="tbTitle"></div><div class="card-sub" id="tbSub"></div></div><input class="search" id="q" placeholder="Buscar..."></div><div class="table-wrap"><table id="tb"><thead></thead><tbody></tbody></table></div></section>
+<section class="card"><div class="tabs" id="tabs"></div><div class="table-tools"><div><div class="card-title" id="tbTitle"></div><div class="card-sub" id="tbSub"></div></div><input class="search" id="q" placeholder="Buscar..."></div><div class="table-wrap"><table id="tb"><thead></thead><tbody></tbody></table></div><button type="button" class="btn btn-out" id="tableMoreBtn" style="display:none">Mostrar mais registros</button></section>
 <div id="pdfDetail" class="pdf-detail">
 <div class="pdf-report-head"><div class="pdf-report-kicker">COLETORPRO • RELATÓRIO COMPLETO</div><div class="pdf-report-title" id="pdfTitle">Execução por indústria</div><div class="card-sub pdf-context" id="pdfContext"></div><div class="pdf-contract-context" id="pdfContractContext"></div></div>
 <div class="section-title">Resumo da indústria</div>
@@ -320,7 +320,7 @@ const badge=p=>p==null?'—':`<span class="badge ${p>=90?'ok':p>=60?'warn':'bad'
 let ALL=[],cur=[],tab='lojas',sortS={key:'real',dir:-1},suppliers=[];
 let STORE_DB=[],REVENUE_DB=[];
 let revenueVisible=true;
-function toggleRevenueVisibility(){revenueVisible=!revenueVisible;render();}
+function toggleRevenueVisibility(){revenueVisible=!revenueVisible;runBusy(()=>render(),'Atualizando faturamento…');}
 const STORE_FILE='lojas.json',REVENUE_FILE='faturamento.json';
 const fBRL=n=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(Number(n)||0);
 const auxMatchKey=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\b(stok|comercial\s+zaffari)\b/g,' ').replace(/\b(ltda|me|eireli|industria|industrias|comercio|distribuidora)\b/g,' ').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');
@@ -331,10 +331,10 @@ const auxCanonical=v=>auxMatchKey(v).split(' ').filter(Boolean).sort().join(' ')
 const auxStoreMatchKey=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\b(comercial\s+zaffari|stok\s*center|stok|center)\b/g,' ').replace(/\b(loja|regiao|reg|filial|unidade)\b/g,' ').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');
 const auxStoreCanonical=v=>auxStoreMatchKey(v).split(' ').filter(Boolean).sort().join(' ');
 const auxKey=(forn,loja)=>auxCanonical(forn)+'|'+String(loja).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/\s+/g,' ').trim();
-// Identidade do fornecedor: remove apenas qualificadores jurídicos, sem
+// Identidade do fornecedor: ignora a ordem das palavras e qualificadores jurídicos, sem
 // tentar aproximar empresas diferentes pela semelhança parcial dos nomes.
 const supplierTokens=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/\bS\s*\/?\s*A\b/g,' ').replace(/[^A-Z0-9]+/g,' ').trim().split(/\s+/).filter(t=>t&&!['LTDA','EIRELI','ME','S','A','SA'].includes(t));
-const supplierKey=v=>supplierTokens(v).join(' ');
+const supplierKey=v=>supplierTokens(v).sort((a,b)=>a.localeCompare(b)).join(' ');
 const auxPairMatches=(a,b)=>!!supplierKey(a)&&supplierKey(a)===supplierKey(b);
 // Não confundir fornecedores diferentes quando há uma abreviação: somente
 // relacionar aliases manuais explícitos, editáveis abaixo se necessário.
@@ -349,6 +349,8 @@ function storeIdentity(v){
  const m=t.match(/\b(?:LOJA|STOK|FILIAL)\s*[-#:]?\s*(\d+)\b/)||t.match(/^\s*(\d+)\s*[-–]/);
  return m?{number:String(Number(m[1])),brand}:null;
 }
+// Loja 100 é desconsiderada em todas as visões e totais, sem apagar dados publicados.
+function isExcludedStore(v){const id=storeIdentity(v);return !!id&&id.number==='100';}
 function revenueStoreId(r){
  const x=storeIdentity(r.loja),d=String(r.divisao||'').toUpperCase();
  const brand=x?.brand||(/STOK/.test(d)?'STOK':/ZAFFARI/.test(d)?'ZAFFARI':'');
@@ -359,16 +361,20 @@ function auxStoreMatches(a,b){
  if(x&&y)return x.number===y.number&&(!x.brand||!y.brand||x.brand===y.brand);
  return auxStoreCanonical(a)!==''&&auxStoreCanonical(a)===auxStoreCanonical(b);
 }
-let revenueMatchCache=new Map();
-function revenueFor(forn,loja){
- const ck=supplierId(forn)+"|"+auxStoreCanonical(loja);if(revenueMatchCache.has(ck))return revenueMatchCache.get(ck);
- const xs=REVENUE_DB.filter(r=>sameSupplier(r.forn,forn)&&auxStoreMatches(r.loja,loja));
- const uniqueBrands=new Set(xs.map(r=>storeIdentity(r.loja)?.brand||(/STOK/i.test(r.divisao||'')?'STOK':/ZAFFARI/i.test(r.divisao||'')?'ZAFFARI':'')));
- if(uniqueBrands.size>1&&!storeIdentity(loja)?.brand)return null;
- const match=xs.filter(r=>{const brand=storeIdentity(r.loja)?.brand||(/STOK/i.test(r.divisao||'')?'STOK':/ZAFFARI/i.test(r.divisao||'')?'ZAFFARI':'');const target=storeIdentity(loja)?.brand;return !target||!brand||target===brand;});
- const result=match.length?match.reduce((s,r)=>s+(Number(r.faturamento)||0),0):null;revenueMatchCache.set(ck,result);return result;
+let revenueIndex=new Map(),revenueTotalIndex=new Map(),revenueStoreIndex=new Map();
+function rebuildRevenueIndex(){
+ revenueIndex=new Map();revenueTotalIndex=new Map();revenueStoreIndex=new Map();revenueMatchCache.clear();
+ for(const r of REVENUE_DB){if(isExcludedStore(r.loja))continue;const id=supplierId(r.forn),entry=revenueIndex.get(id)||[];entry.push(r);revenueIndex.set(id,entry);revenueTotalIndex.set(id,(revenueTotalIndex.get(id)||0)+(Number(r.faturamento)||0));}
 }
-function revenueTotal(forn=null){return REVENUE_DB.reduce((s,r)=>s+(forn===null||sameSupplier(r.forn,forn)?(Number(r.faturamento)||0):0),0)}
+function fastRevenueStoreMatch(forn,loja){
+ const target=storeIdentity(loja),list=revenueIndex.get(supplierId(forn))||[];
+ const unique=new Set();let total=0,found=false;
+ for(const r of list){if(!auxStoreMatches(r.loja,loja))continue;const brand=storeIdentity(r.loja)?.brand||(/STOK/i.test(r.divisao||'')?'STOK':/ZAFFARI/i.test(r.divisao||'')?'ZAFFARI':'');unique.add(brand);if(!target?.brand||!brand||target.brand===brand){total+=Number(r.faturamento)||0;found=true}}
+ return unique.size>1&&!target?.brand?null:found?total:null;
+}
+let revenueMatchCache=new Map();
+function revenueFor(forn,loja){const ck=supplierId(forn)+'|'+String(loja).toUpperCase();if(revenueMatchCache.has(ck))return revenueMatchCache.get(ck);const v=fastRevenueStoreMatch(forn,loja);revenueMatchCache.set(ck,v);return v;}
+function revenueTotal(forn=null){if(forn===null)return [...revenueTotalIndex.values()].reduce((a,b)=>a+b,0);return revenueTotalIndex.get(supplierId(forn))||0;}
 // A base financeira é independente das visitas: todas as lojas importadas entram no detalhamento.
 function revenueByStore(forn){
  const rs=REVENUE_DB.filter(r=>forn==='__all__'||sameSupplier(r.forn,forn));
@@ -393,18 +399,10 @@ function renderRevenueStores(){
 
 function storesWithoutVisits(){
  const selected=curInd==='__all__'?ALL:ALL.filter(r=>r.forn===curInd);
- const scheduled=group(selected,r=>r.forn+'|'+r.loja).filter(g=>g.ag>0);
+ const scheduled=new Map();
+ for(const r of selected){const id=supplierId(r.forn),obj=scheduled.get(id)||{numbers:new Map(),names:new Set()};const st=storeIdentity(r.loja);if(st){const brands=obj.numbers.get(st.number)||new Set();brands.add(st.brand);obj.numbers.set(st.number,brands)}else obj.names.add(auxStoreCanonical(r.loja));scheduled.set(id,obj)}
  const missing=new Map();
- // Fonte única: lojas presentes na base financeira, sem agendamentos na base de visitas.
- for(const fin of REVENUE_DB){
-  if(curInd!=='__all__'&&!sameSupplier(fin.forn,curInd))continue;
-  const hasSchedule=scheduled.some(g=>{
-   const first=g.rows[0];return sameSupplier(first.forn,fin.forn)&&auxStoreMatches(first.loja,fin.loja);
-  });
-  if(hasSchedule)continue;
-  const key=revenueStoreId(fin);
-  if(!missing.has(key))missing.set(key,{forn:fin.forn,loja:fin.loja,ag:0});
- }
+ for(const fin of REVENUE_DB){if(curInd!=='__all__'&&!sameSupplier(fin.forn,curInd))continue;const key=revenueStoreId(fin);if(missing.has(key))continue;const matches=scheduled.get(supplierId(fin.forn));const id=storeIdentity(fin.loja);if(matches){if(id){const brands=matches.numbers.get(id.number);if(brands&&(!id.brand||brands.has(id.brand)||brands.has('')))continue}else if(matches.names.has(auxStoreCanonical(fin.loja)))continue;}missing.set(key,{forn:fin.forn,loja:fin.loja,ag:0});}
  return [...missing.values()].sort((a,b)=>a.loja.localeCompare(b.loja,'pt-BR')||a.forn.localeCompare(b.forn,'pt-BR'));
 }
 
@@ -474,11 +472,11 @@ function render(){
  const mh=rankMode==='less'?(list[list.length-1]?.exec||1):(list[0]?.exec||1);
  $('rank').className='rank-list'+(rankMode==='none'?' all-none':'');
  $('rank').innerHTML=list.length?list.map((x,i)=>{const width=rankMode==='none'?100:x.exec/mh*100;return `<div class="rank-item"><div class="rank-num">${i+1}</div><div><div class="rank-name" title="${esc(x.name)}">${esc(x.name)}</div><div class="rank-bar"><div style="width:${Math.max(width,2)}%"></div></div></div><div class="rank-val">${rankMode==='none'?'Sem visitas':fH(x.exec)}</div></div>`}).join(''):`<div class="rank-empty">${rankMode==='none'?'Nenhuma loja com 0 agendamentos identificada na base de faturamento.':'Nenhum registro disponível.'}`;
- $('rankSwitch').querySelectorAll('button').forEach(b=>b.onclick=()=>{window.rankMode=b.dataset.rank;render()});
+ $('rankSwitch').querySelectorAll('button').forEach(b=>b.onclick=()=>{window.rankMode=b.dataset.rank;runBusy(()=>render(),'Atualizando visão…')});
  const tabs=all?[['forn','Indústrias'],['lojas','Lojas'],['prom','Promotores']]:[['lojas','Lojas'],['prom','Promotores'],['visitas','Visitas']];
  if(!tabs.find(t=>t[0]===tab))tab=tabs[0][0];
  $('tabs').innerHTML=tabs.map(t=>`<button class="tab ${t[0]===tab?'active':''}" data-t="${t[0]}">${t[1]}</button>`).join('');
- $('tabs').querySelectorAll('.tab').forEach(b=>b.onclick=()=>{tab=b.dataset.t;sortS={key:'real',dir:-1};if(tab==='visitas')sortS={key:'date',dir:-1};render()});
+ $('tabs').querySelectorAll('.tab').forEach(b=>b.onclick=()=>{tab=b.dataset.t;sortS={key:'real',dir:-1};if(tab==='visitas')sortS={key:'date',dir:-1};runBusy(()=>render(),'Carregando tabela…')});
  renderTable();
 }
 function renderTable(){
@@ -502,8 +500,9 @@ function renderTable(){
  if(tab==='lojas'&&curInd!=='__all__')data.forEach(x=>x.faturamento=revenueFor(curInd,x.name)??0);
  const s=sortS;data.sort((a,b)=>{let A=a[s.key],B=b[s.key];if(key_isStr(A))return String(A).localeCompare(String(B))*s.dir;return((A??-Infinity)-(B??-Infinity))*s.dir});
  $('tbTitle').textContent=title;$('tbSub').textContent=sub;
- $('tb').querySelector('thead').innerHTML='<tr>'+cols.map(c=>`<th data-k="${c[0]}">${c[1]}</th>`).join('');$('tb').querySelectorAll('th').forEach(th=>th.onclick=()=>{sortS.dir=sortS.key===th.dataset.k?-sortS.dir:-1;sortS.key=th.dataset.k;renderTable()});
- $('tb').querySelector('tbody').innerHTML=data.slice(0,3000).map(x=>'<tr>'+cols.map(c=>`<td>${c[2](x)}</td>`).join('')+'</tr>').join('');
+ $('tb').querySelector('thead').innerHTML='<tr>'+cols.map(c=>`<th data-k="${c[0]}">${c[1]}</th>`).join('');$('tb').querySelectorAll('th').forEach(th=>th.onclick=()=>{sortS.dir=sortS.key===th.dataset.k?-sortS.dir:-1;sortS.key=th.dataset.k;runBusy(()=>renderTable(),'Ordenando registros…')});
+ window.__tableRows=data;window.__tableCols=cols;window.__tableShown=200;
+ $('tb').querySelector('tbody').innerHTML=data.slice(0,200).map(x=>'<tr>'+cols.map(c=>`<td>${c[2](x)}</td>`).join('')+'</tr>').join('');const more=$('tableMoreBtn');if(more){more.style.display=data.length>200?'inline-block':'none';more.textContent='Mostrar mais ('+Math.min(200,Math.max(0,data.length-200))+' de '+(data.length-200)+' restantes)';}
 }
 const key_isStr=v=>typeof v==='string';
 let curInd='__all__';const ALLTXT='TODAS AS INDÚSTRIAS (visão geral)';
@@ -512,7 +511,7 @@ function showList(f){
  L.innerHTML=(!q?'<div class="all" data-v="__all__">'+ALLTXT+'</div>':'')+items.slice(0,400).map(s=>`<div data-v="${esc(s)}">${esc(s)}</div>`).join('')+(items.length?'':'<div class="none">Nenhuma indústria encontrada</div>');
  L.classList.remove('hidden');const f1=L.querySelector('div[data-v]:not(.all)');if(q&&f1)f1.classList.add('act');}
 function closeIndustryList(){const L=$('indList');L.classList.add('hidden');$('indIn').value=curInd==='__all__'?ALLTXT:curInd;}
-function setInd(v){curInd=v;$('indIn').value=v==='__all__'?ALLTXT:v;closeIndustryList();tab='lojas';sortS={key:'real',dir:-1};render()}
+function setInd(v){curInd=v;$('indIn').value=v==='__all__'?ALLTXT:v;closeIndustryList();tab='lojas';sortS={key:'real',dir:-1};runBusy(()=>render(),'Carregando indústria…')}
 $('indIn').addEventListener('focus',e=>{e.target.select();showList('')});
 $('indIn').addEventListener('input',e=>showList(e.target.value));
 $('indIn').addEventListener('keydown',e=>{const L=$('indList');if(e.key==='Enter'){const a=L.querySelector('.act')||L.querySelector('div[data-v]');if(a){setInd(a.dataset.v);e.preventDefault();return}}else if(e.key==='Escape'){closeIndustryList();$('indIn').blur();e.preventDefault();return}else if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();const it=[...L.querySelectorAll('div[data-v]')];if(!it.length)return;let i=it.findIndex(x=>x.classList.contains('act'));it.forEach(x=>x.classList.remove('act'));i=e.key==='ArrowDown'?Math.min(it.length-1,i+1):Math.max(0,i-1);it[i].classList.add('act');it[i].scrollIntoView({block:'nearest'})}});
@@ -561,7 +560,7 @@ async function loadAuxBases(){
  if(!sb||window.__COLETOR_EXPORTED_DATA__)return;
  const revenue=await readAuxPublished(REVENUE_FILE);const stores=[];
  STORE_DB=stores.filter(x=>x&&typeof x.forn==='string'&&typeof x.loja==='string').map(x=>({forn:x.forn.trim(),loja:x.loja.trim()}));
- const revMap=new Map();for(const x of revenue.filter(x=>x&&typeof x.forn==='string'&&typeof x.loja==='string')){const row={forn:x.forn.trim(),loja:x.loja.trim(),faturamento:Number(x.faturamento)||0,divisao:String(x.divisao||'')},key=revenueStoreId(row);if(revMap.has(key))revMap.get(key).faturamento+=row.faturamento;else revMap.set(key,row)}REVENUE_DB=[...revMap.values()];revenueMatchCache.clear();
+ const revMap=new Map();for(const x of revenue.filter(x=>x&&typeof x.forn==='string'&&typeof x.loja==='string')){const row={forn:x.forn.trim(),loja:x.loja.trim(),faturamento:Number(x.faturamento)||0,divisao:String(x.divisao||'')},key=revenueStoreId(row);if(revMap.has(key))revMap.get(key).faturamento+=row.faturamento;else revMap.set(key,row)}REVENUE_DB=[...revMap.values()].filter(r=>!isExcludedStore(r.loja));rebuildRevenueIndex();
 }
 function normAuxHeader(v){return String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'')}
 function parseMoney(v){if(typeof v==='number')return Number.isFinite(v)?v:NaN;let s=String(v??'').trim();if(!s)return NaN;let neg=false;if(/^\(.*\)$/.test(s)){neg=true;s=s.slice(1,-1)}s=s.replace(/R\$/gi,'').replace(/BRL/gi,'').replace(/[\s\u00a0]/g,'').replace(/[^0-9,.-]/g,'');if(!s||!/[0-9]/.test(s))return NaN;const comma=s.lastIndexOf(','),dot=s.lastIndexOf('.');if(comma>=0&&dot>=0){if(comma>dot)s=s.replace(/\./g,'').replace(',','.');else s=s.replace(/,/g,'')}else if(comma>=0){const dec=s.length-comma-1;if(dec===2||dec===1)s=s.replace(/\./g,'').replace(',','.');else s=s.replace(/,/g,'')}else if(dot>=0){const dec=s.length-dot-1;if(dec===3&&/^[-+]?\d{1,3}(\.\d{3})+$/.test(s))s=s.replace(/\./g,'')}const n=Number(s);return Number.isFinite(n)?(neg?-n:n):NaN}
@@ -586,7 +585,7 @@ async function parseAuxFile(file,kind){
   if(fi<0||li<0||(kind==='revenue'&&vi<0))throw new Error(kind==='stores'?'Colunas necessárias: Bandeira e Loja.':'Colunas necessárias no faturamento: Empresa, Fornecedor e Venda.');
   raw=matrix.slice(1).filter(row=>row.some(v=>String(v??'').trim())).map(row=>({forn:row[fi],loja:row[li],...(kind==='revenue'?{faturamento:row[vi],divisao:di>=0?row[di]:''}:{})}));
  }
- const result=[];for(let i=0;i<raw.length;i++){const r=raw[i]||{};const keys=Object.keys(r).reduce((m,k)=>(m[normAuxHeader(k)]=r[k],m),{});const forn=r.forn??keys.industria??keys.fornecedor??keys.bandeira,loja=r.loja??keys.empresa??keys.loja??keys.nomedaloja??keys.nomefantasia;const item={forn:String(forn??'').trim(),loja:String(loja??'').trim()};if(kind==='revenue')item.divisao=String(r.divisao??keys.divisao??'').trim();if(!item.forn||!item.loja)continue;if(kind==='revenue'){const val=parseMoney(r.faturamento??keys.venda??keys.vendar2026??keys.vendar??keys.faturamento??keys.valorfaturamento??keys.valorvenda??keys.vendas);if(!Number.isFinite(val))throw new Error('Venda/faturamento inválido na linha '+(i+2)+'.');item.faturamento=val;}result.push(item)}
+ const result=[];for(let i=0;i<raw.length;i++){const r=raw[i]||{};const keys=Object.keys(r).reduce((m,k)=>(m[normAuxHeader(k)]=r[k],m),{});const forn=r.forn??keys.industria??keys.fornecedor??keys.bandeira,loja=r.loja??keys.empresa??keys.loja??keys.nomedaloja??keys.nomefantasia;const item={forn:String(forn??'').trim(),loja:String(loja??'').trim()};if(kind==='revenue')item.divisao=String(r.divisao??keys.divisao??'').trim();if(!item.forn||!item.loja||isExcludedStore(item.loja))continue;if(kind==='revenue'){const val=parseMoney(r.faturamento??keys.venda??keys.vendar2026??keys.vendar??keys.faturamento??keys.valorfaturamento??keys.valorvenda??keys.vendas);if(!Number.isFinite(val))throw new Error('Venda/faturamento inválido na linha '+(i+2)+'.');item.faturamento=val;}result.push(item)}
  if(!result.length)throw new Error('Nenhum registro válido encontrado. Confira os cabeçalhos e o conteúdo do arquivo.');
  // A planilha de faturamento pode ter várias linhas para a mesma indústria e empresa. Somar essas linhas evita perder vendas por sobrescrita.
  const unique=new Map();for(const r of result){const key=kind==='revenue'?revenueStoreId(r):auxKey(r.forn,r.loja);if(kind==='revenue'&&unique.has(key)){const prev=unique.get(key);prev.faturamento+=r.faturamento;}else unique.set(key,{...r});}return [...unique.values()];
@@ -638,12 +637,12 @@ async function loadPublishedData(){
    const ds=ALL.map(r=>r.date).filter(Boolean).sort((a,b)=>dkey(a)-dkey(b));$('period').textContent=ds.length?ds[0]+' A '+ds[ds.length-1]:'SEM PERÍODO';$('upd').textContent='Dados publicados em '+new Date().toLocaleDateString('pt-BR');$('indIn').disabled=false;$('pdfBtn').disabled=false;curInd='__all__';$('indIn').value=ALLTXT;
   }
   /* Segurança extra para HTMLs exportados: normaliza também os registros já incorporados. */
-  ALL=ALL.map(r=>({...r,date:normalizarData(r.date),tempo:+r.tempo||0,nota:+r.nota||0,contr:+r.contr||0}));
+  ALL=ALL.map(r=>({...r,date:normalizarData(r.date),tempo:+r.tempo||0,nota:+r.nota||0,contr:+r.contr||0})).filter(r=>!isExcludedStore(r.loja));
   await loadAuxBases();
   $('empty').classList.add('hidden');render();if(ME)applyPermissionUI();else $('app').classList.remove('hidden');return true;
  }catch(err){console.error(err);$('empty').classList.remove('hidden');$('empty').innerHTML='<strong>Não foi possível carregar o dashboard.</strong><br><span style="font-size:12px">'+esc(err?.message||'Confira a base publicada e as permissões de acesso.')+'</span>';if(ME&&!(canPerm('dashboard')||canPerm('consult_industries')||canPerm('visit_details'))) $('app').classList.add('hidden');return false}
 }
-$('q').addEventListener('input',renderTable);
+let searchTimer;$('q').addEventListener('input',()=>{clearTimeout(searchTimer);searchTimer=setTimeout(renderTable,180)});
 /* ===== Supabase: login, perfis e upload (somente admin) ===== */
 const SUPABASE_URL='https://nduabnxombkgwmlzzsjg.supabase.co',SUPABASE_ANON_KEY='sb_publishable_UgW5UpjaJNqtTm8aUoHakA_KdMz7bQ9',BUCKET='dashboard-data',FILE='dados.json';
 let sb=null,ME=null,idleT,fails=0;const IDLE=30*60e3;
@@ -828,8 +827,12 @@ function countUp(el){
  const t0=performance.now();
  (function f(now){const k=Math.min(1,(now-t0)/800),e=1-Math.pow(1-k,3);let n=0;el.textContent=k>=1?fin:fin.replace(/\d[\d.,]*/g,()=>{const o=T[n++];return fmt(o.v*e,o)});if(k<1)requestAnimationFrame(f)})(t0);
 }
-let _fxSig='';const _render=render;
-render=function(){const sig=curInd+'|'+ALL.length,go=sig!==_fxSig;_fxSig=sig;$('app').classList.toggle('fx',go);_render();if(go)document.querySelectorAll('#kpis .value').forEach(countUp)};
+let busyCount=0;function showBusy(msg='Atualizando informações…'){busyCount++;$('busyText').textContent=msg;$('busyOverlay').classList.add('active')}
+function hideBusy(){busyCount=Math.max(0,busyCount-1);if(!busyCount)$('busyOverlay').classList.remove('active')}
+function runBusy(action,msg){if(busyCount)return;showBusy(msg);setTimeout(()=>{try{action()}catch(e){console.error(e);alert('Não foi possível concluir a operação: '+e.message)}finally{requestAnimationFrame(()=>hideBusy())}},35)}
+const _render=render;
+render=function(){_render()};
+$('tableMoreBtn').addEventListener('click',()=>runBusy(()=>{const rows=window.__tableRows||[],cols=window.__tableCols||[],from=window.__tableShown||0,to=Math.min(rows.length,from+200);$('tb').querySelector('tbody').insertAdjacentHTML('beforeend',rows.slice(from,to).map(x=>'<tr>'+cols.map(c=>`<td>${c[2](x)}</td>`).join('')+'</tr>').join(''));window.__tableShown=to;const btn=$('tableMoreBtn');btn.style.display=to<rows.length?'inline-block':'none';btn.textContent='Mostrar mais ('+Math.min(200,rows.length-to)+' de '+(rows.length-to)+' restantes)'},'Carregando mais registros…'));
 /* ===== Troca de senha obrigatória ===== */
 $('forceForm').addEventListener('submit',async e=>{
  e.preventDefault();const a=$('fpA').value,er=$('forceErr');er.textContent='';
