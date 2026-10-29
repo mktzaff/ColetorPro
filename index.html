@@ -371,11 +371,29 @@ const auxKey=(forn,loja)=>auxCanonical(forn)+'|'+String(loja).normalize('NFD').r
 const supplierTokens=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/\bS\s*\/?\s*A\b/g,' ').replace(/[^A-Z0-9]+/g,' ').trim().split(/\s+/).filter(t=>t&&!['LTDA','EIRELI','ME','S','A','SA'].includes(t));
 const supplierKey=v=>supplierTokens(v).sort((a,b)=>a.localeCompare(b)).join(' ');
 const auxPairMatches=(a,b)=>!!supplierKey(a)&&supplierKey(a)===supplierKey(b);
-// Não confundir fornecedores diferentes quando há uma abreviação: somente
-// relacionar aliases manuais explícitos, editáveis abaixo se necessário.
-const SUPPLIER_ALIASES={};
-const supplierId=v=>{const k=supplierKey(v);return SUPPLIER_ALIASES[k]||k};
-const sameSupplier=(a,b)=>!!supplierId(a)&&supplierId(a)===supplierId(b);
+// Reconhecimento geral de indústrias entre bases com razão social, nome fantasia,
+// abreviações e ordem de palavras diferentes. Sem lista fixa por empresa.
+// Só aceita correspondência forte e não ambígua: pelo menos 2 tokens distintivos
+// coincidentes e (inclusão dos tokens ou similaridade Jaccard >= 0.80).
+const supplierId=v=>supplierKey(v);
+const supplierTokensForMatch=v=>supplierTokens(v).filter(t=>t.length>1);
+const supplierSimilarity=(a,b)=>{
+ const A=new Set(supplierTokensForMatch(a)),B=new Set(supplierTokensForMatch(b));
+ if(!A.size||!B.size)return 0;
+ let n=0;for(const t of A)if(B.has(t))n++;
+ if(n<2)return 0;
+ const containment=n/Math.min(A.size,B.size),jaccard=n/(A.size+B.size-n);
+ return containment===1||jaccard>=.80?Math.max(containment,jaccard):0;
+};
+const canonicalSupplierId=v=>{
+ const key=supplierId(v);if(!key)return '';
+ const candidates=[...new Set((REVENUE_DB||[]).map(r=>supplierId(r.forn)).filter(Boolean))];
+ if(candidates.includes(key))return key;
+ let best=0,match=[];
+ for(const candidate of candidates){const score=supplierSimilarity(v,candidate);if(score>best){best=score;match=[candidate]}else if(score===best&&score>0)match.push(candidate)}
+ return best>0&&match.length===1?match[0]:key;
+};
+const sameSupplier=(a,b)=>!!canonicalSupplierId(a)&&canonicalSupplierId(a)===canonicalSupplierId(b);
 // A loja é vinculada pelo número identificador, nunca por texto parcial.
 // Ex.: 55-STOK 55 = STOK LOJA 55; 5 não pode corresponder a 55.
 function storeIdentity(v){
@@ -399,17 +417,17 @@ function auxStoreMatches(a,b){
 let revenueIndex=new Map(),revenueTotalIndex=new Map(),revenueStoreIndex=new Map();
 function rebuildRevenueIndex(){
  revenueIndex=new Map();revenueTotalIndex=new Map();revenueStoreIndex=new Map();revenueMatchCache.clear();
- for(const r of REVENUE_DB){if(isExcludedStore(r.loja))continue;const id=supplierId(r.forn),entry=revenueIndex.get(id)||[];entry.push(r);revenueIndex.set(id,entry);revenueTotalIndex.set(id,(revenueTotalIndex.get(id)||0)+(Number(r.faturamento)||0));}
+ for(const r of REVENUE_DB){if(isExcludedStore(r.loja))continue;const id=canonicalSupplierId(r.forn),entry=revenueIndex.get(id)||[];entry.push(r);revenueIndex.set(id,entry);revenueTotalIndex.set(id,(revenueTotalIndex.get(id)||0)+(Number(r.faturamento)||0));}
 }
 function fastRevenueStoreMatch(forn,loja){
- const target=storeIdentity(loja),list=revenueIndex.get(supplierId(forn))||[];
+ const target=storeIdentity(loja),list=revenueIndex.get(canonicalSupplierId(forn))||revenueIndex.get(supplierId(forn))||[];
  const unique=new Set();let total=0,found=false;
  for(const r of list){if(!auxStoreMatches(r.loja,loja))continue;const brand=storeIdentity(r.loja)?.brand||(/STOK/i.test(r.divisao||'')?'STOK':/ZAFFARI/i.test(r.divisao||'')?'ZAFFARI':'');unique.add(brand);if(!target?.brand||!brand||target.brand===brand){total+=Number(r.faturamento)||0;found=true}}
  return unique.size>1&&!target?.brand?null:found?total:null;
 }
 let revenueMatchCache=new Map();
-function revenueFor(forn,loja){const ck=supplierId(forn)+'|'+String(loja).toUpperCase();if(revenueMatchCache.has(ck))return revenueMatchCache.get(ck);const v=fastRevenueStoreMatch(forn,loja);revenueMatchCache.set(ck,v);return v;}
-function revenueTotal(forn=null){if(forn===null)return [...revenueTotalIndex.values()].reduce((a,b)=>a+b,0);return revenueTotalIndex.get(supplierId(forn))||0;}
+function revenueFor(forn,loja){const ck=canonicalSupplierId(forn)+'|'+String(loja).toUpperCase();if(revenueMatchCache.has(ck))return revenueMatchCache.get(ck);const v=fastRevenueStoreMatch(forn,loja);revenueMatchCache.set(ck,v);return v;}
+function revenueTotal(forn=null){if(forn===null)return [...revenueTotalIndex.values()].reduce((a,b)=>a+b,0);return revenueTotalIndex.get(canonicalSupplierId(forn))||revenueTotalIndex.get(supplierId(forn))||0;}
 // A base financeira é independente das visitas: todas as lojas importadas entram no detalhamento.
 function revenueByStore(forn){
  const rs=REVENUE_DB.filter(r=>forn==='__all__'||sameSupplier(r.forn,forn));
