@@ -319,10 +319,14 @@ let ALL=[],cur=[],tab='lojas',sortS={key:'real',dir:-1},suppliers=[];
 let STORE_DB=[],REVENUE_DB=[];
 const STORE_FILE='lojas.json',REVENUE_FILE='faturamento.json';
 const fBRL=n=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(Number(n)||0);
-const auxMatchKey=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\b(stok|comercial\s+zaffari)\b/g,' ').replace(/[^a-z0-9]/g,'');
-const auxKey=(forn,loja)=>auxMatchKey(forn)+'|'+auxMatchKey(loja);
-function revenueFor(forn,loja){const key=auxKey(forn,loja);const xs=REVENUE_DB.filter(r=>auxKey(r.forn,r.loja)===key);return xs.length?xs.reduce((s,r)=>s+r.faturamento,0):null}
-function revenueTotal(forn=null){return REVENUE_DB.reduce((s,r)=>s+(forn===null||auxMatchKey(r.forn)===auxMatchKey(forn)?r.faturamento:0),0)}
+const auxMatchKey=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\b(stok|comercial\s+zaffari)\b/g,' ').replace(/\b(ltda|me|eireli|industria|industrias|comercio|distribuidora)\b/g,' ').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');
+// Compara nomes também sem depender da ordem das palavras.
+const auxMatchKeys=v=>{const k=auxMatchKey(v);if(!k)return [''];const sorted=k.split(' ').filter(Boolean).sort().join(' ');return [...new Set([k,sorted,k.replace(/\s/g,''),sorted.replace(/\s/g,'')])];};
+const auxCanonical=v=>auxMatchKey(v).split(' ').filter(Boolean).sort().join(' ');
+const auxKey=(forn,loja)=>auxCanonical(forn)+'|'+auxCanonical(loja);
+const auxPairMatches=(a,b)=>auxMatchKeys(a).some(k=>auxMatchKeys(b).includes(k));
+function revenueFor(forn,loja){const xs=REVENUE_DB.filter(r=>auxPairMatches(r.forn,forn)&&auxPairMatches(r.loja,loja));return xs.length?xs.reduce((s,r)=>s+(Number(r.faturamento)||0),0):null}
+function revenueTotal(forn=null){return REVENUE_DB.reduce((s,r)=>s+(forn===null||auxPairMatches(r.forn,forn)?(Number(r.faturamento)||0):0),0)}
 function storesWithoutVisits(){const visited=new Set(ALL.map(r=>auxKey(r.forn,r.loja)));return STORE_DB.filter(r=>(curInd==='__all__'||nk(r.forn)===nk(curInd))&&!visited.has(auxKey(r.forn,r.loja))).sort((a,b)=>a.loja.localeCompare(b.loja)||a.forn.localeCompare(b.forn))}
 
 function parse(txt){
@@ -473,7 +477,7 @@ async function loadAuxBases(){
  const revMap=new Map();for(const x of revenue.filter(x=>x&&typeof x.forn==='string'&&typeof x.loja==='string')){const row={forn:x.forn.trim(),loja:x.loja.trim(),faturamento:Number(x.faturamento)||0},key=auxKey(row.forn,row.loja);if(revMap.has(key))revMap.get(key).faturamento+=row.faturamento;else revMap.set(key,row)}REVENUE_DB=[...revMap.values()];
 }
 function normAuxHeader(v){return String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'')}
-function parseMoney(v){if(typeof v==='number')return v;let s=String(v??'').trim().replace(/R\$/gi,'').replace(/\s/g,'');if(!s)return NaN;const comma=s.lastIndexOf(','),dot=s.lastIndexOf('.');if(comma>=0&&dot>=0){if(comma>dot)s=s.replace(/\./g,'').replace(',','.');else s=s.replace(/,/g,'')}else if(comma>=0)s=s.replace(/\./g,'').replace(',','.');const n=Number(s);return Number.isFinite(n)?n:NaN}
+function parseMoney(v){if(typeof v==='number')return Number.isFinite(v)?v:NaN;let s=String(v??'').trim();if(!s)return NaN;let neg=false;if(/^\(.*\)$/.test(s)){neg=true;s=s.slice(1,-1)}s=s.replace(/R\$/gi,'').replace(/BRL/gi,'').replace(/[\s\u00a0]/g,'').replace(/[^0-9,.-]/g,'');if(!s||!/[0-9]/.test(s))return NaN;const comma=s.lastIndexOf(','),dot=s.lastIndexOf('.');if(comma>=0&&dot>=0){if(comma>dot)s=s.replace(/\./g,'').replace(',','.');else s=s.replace(/,/g,'')}else if(comma>=0){const dec=s.length-comma-1;if(dec===2||dec===1)s=s.replace(/\./g,'').replace(',','.');else s=s.replace(/,/g,'')}else if(dot>=0){const dec=s.length-dot-1;if(dec===3&&/^[-+]?\d{1,3}(\.\d{3})+$/.test(s))s=s.replace(/\./g,'')}const n=Number(s);return Number.isFinite(n)?(neg?-n:n):NaN}
 async function parseAuxFile(file,kind){
  let raw;
  if(/\.json$/i.test(file.name)){raw=JSON.parse(await file.text());if(!Array.isArray(raw))throw new Error('O JSON precisa conter uma lista de registros.');}
@@ -481,7 +485,7 @@ async function parseAuxFile(file,kind){
   if(!window.XLSX)throw new Error('Leitor de planilhas não carregou. Confira a conexão e recarregue a página.');
   let wb;if(/\.csv$/i.test(file.name)||/csv/i.test(file.type))wb=XLSX.read((await file.text()).replace(/^\uFEFF/,''),{type:'string',raw:false});else wb=XLSX.read(await file.arrayBuffer(),{type:'array',raw:false});
   if(!wb.SheetNames?.length)throw new Error('Não foi possível ler a planilha/CSV.');
-  const matrix=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:'',raw:false});if(matrix.length<2)throw new Error('O arquivo precisa ter cabeçalho e ao menos um registro.');
+  const matrix=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:'',raw:true});if(matrix.length<2)throw new Error('O arquivo precisa ter cabeçalho e ao menos um registro.');
   const headers=matrix[0].map(normAuxHeader);const pick=names=>headers.findIndex(h=>names.some(n=>h===n||h.includes(n)));
   // No faturamento mensal, Empresa identifica a loja, Fornecedor identifica a indústria e Venda é o valor.
   const fi=kind==='revenue'?pick(['fornecedor','industria']):pick(['bandeira']);
