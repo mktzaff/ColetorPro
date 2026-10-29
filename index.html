@@ -330,16 +330,24 @@ const auxCanonical=v=>auxMatchKey(v).split(' ').filter(Boolean).sort().join(' ')
 // Normaliza nomes de lojas separadamente: a planilha pode trazer 'STOK CENTER LOJA 15 - REG 2', enquanto as visitas mostram 'LOJA 15'.
 const auxStoreMatchKey=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\b(comercial\s+zaffari|stok\s*center|stok|center)\b/g,' ').replace(/\b(loja|regiao|reg|filial|unidade)\b/g,' ').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');
 const auxStoreCanonical=v=>auxStoreMatchKey(v).split(' ').filter(Boolean).sort().join(' ');
-const auxKey=(forn,loja)=>auxCanonical(forn)+'|'+auxStoreCanonical(loja);
+const auxKey=(forn,loja)=>auxCanonical(forn)+'|'+String(loja).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/\s+/g,' ').trim();
 const auxPairMatches=(a,b)=>{
- const ka=auxMatchKey(a),kb=auxMatchKey(b);if(!ka||!kb)return false;
- if(auxMatchKeys(a).some(k=>auxMatchKeys(b).includes(k)))return true;
- // Visit records sometimes have legal suffixes after the supplier name. Only allow whole-token prefixes.
- const aTokens=ka.split(' '),bTokens=kb.split(' ');
- const short=aTokens.length<=bTokens.length?aTokens:bTokens,long=aTokens.length<=bTokens.length?bTokens:aTokens;
- return short.length>=2&&short.every((word,i)=>long[i]===word)&&long.length-short.length<=2;
+ const clean=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/\b(S\/?A|LTDA|EIRELI|ME)\b/g,' ').replace(/[^A-Z0-9]+/g,' ').trim().replace(/\s+/g,' ');
+ return !!clean(a)&&clean(a)===clean(b);
 };
-function auxStoreMatches(a,b){const ka=auxStoreMatchKey(a),kb=auxStoreMatchKey(b);if(!ka||!kb)return false;if(ka===kb||auxStoreCanonical(a)===auxStoreCanonical(b))return true;const ta=ka.split(' ').filter(Boolean),tb=kb.split(' ').filter(Boolean);const na=ta.filter(t=>/\d+/.test(t)),nb=tb.filter(t=>/\d+/.test(t));if(!na.length||!nb.length||!na.some(t=>nb.includes(t)))return false;const short=ta.length<=tb.length?ta:tb,long=ta.length<=tb.length?tb:ta;return short.every(t=>long.includes(t));}
+// A loja é vinculada pelo número identificador, nunca por texto parcial.
+// Ex.: 55-STOK 55 = STOK LOJA 55; 5 não pode corresponder a 55.
+function storeIdentity(v){
+ const t=String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
+ const brand=/STOK/.test(t)?'STOK':/ZAFFARI/.test(t)?'ZAFFARI':'';
+ const m=t.match(/\b(?:LOJA|STOK|FILIAL)\s*[-#:]?\s*(\d+)\b/)||t.match(/^\s*(\d+)\s*[-–]/);
+ return m?{number:String(Number(m[1])),brand}:null;
+}
+function auxStoreMatches(a,b){
+ const x=storeIdentity(a),y=storeIdentity(b);
+ if(x&&y)return x.number===y.number&&(!x.brand||!y.brand||x.brand===y.brand);
+ return auxStoreCanonical(a)!==''&&auxStoreCanonical(a)===auxStoreCanonical(b);
+}
 function revenueFor(forn,loja){const xs=REVENUE_DB.filter(r=>auxPairMatches(r.forn,forn)&&auxStoreMatches(r.loja,loja));return xs.length?xs.reduce((s,r)=>s+(Number(r.faturamento)||0),0):null}
 function revenueTotal(forn=null){return REVENUE_DB.reduce((s,r)=>s+(forn===null||auxPairMatches(r.forn,forn)?(Number(r.faturamento)||0):0),0)}
 // A base financeira é independente das visitas: todas as lojas importadas entram no detalhamento.
@@ -354,7 +362,7 @@ function revenueByStore(forn){
  return [...grouped.values()].sort((a,b)=>b.faturamento-a.faturamento||a.loja.localeCompare(b.loja,'pt-BR'));
 }
 function renderRevenueStores(){
- const root=$('revenueStores');if(!root)return;
+ const root=$('revenueStores');if(!root)return;root.style.display='';
  const rows=revenueByStore(curInd),all=curInd==='__all__';
  $('revenueStoresTitle').textContent=all?'Faturamento por indústria e loja':'Faturamento por loja — '+curInd;
  $('revenueStoresSub').textContent=rows.length+' lojas/combinações da base de faturamento • '+(all?'todas as indústrias':'somente a indústria selecionada')+' • Total: '+(revenueVisible?fBRL(rows.reduce((s,r)=>s+r.faturamento,0)):'••••••');
@@ -401,7 +409,7 @@ function render(){
  const k=[];
  if(all){k.push(['Indústrias',suppliers.length,'na base']);k.push(['Lojas',O.lojas,'com registros'])}
  k.push(['Visitas agendadas',fI(O.ag),'programadas'],['Visitas realizadas',fI(O.real),fP(O.pct)+' de execução'],['Faturamento <button type="button" class="revenue-eye" onclick="toggleRevenueVisibility()" title="'+(revenueVisible?'Ocultar faturamento':'Mostrar faturamento')+'" aria-label="'+(revenueVisible?'Ocultar faturamento':'Mostrar faturamento')+'">'+(revenueVisible?'◉':'◎')+'</button>',revenueVisible?fBRL(revenueTotal(all?null:sel)):'••••••',all?'todas as indústrias':'indústria selecionada'],['Horas contratadas',fH(O.contr),'base registrada',1],['Horas executadas',fH(O.exec),O.util==null?'sem horas contratadas':fP(O.util)+' das contratadas',1],['Tempo médio',fH(O.avg),'por visita realizada'],['Nota média',fN(O.nota),'escala máxima 5,0']);
- renderRevenueStores();
+ if(!all)renderRevenueStores();else if($('revenueStores'))$('revenueStores').style.display='none';
  $('kpis').className='grid-kpi'+(k.length===6?' k6':k.length===7?' k7':k.length===9?' k9':'');
  $('kpis').innerHTML=k.map(x=>`<div class="kpi ${x[3]?'dark':''}"><div class="label">${x[0]}</div><div class="value">${x[1]}</div><div class="note">${x[2]}</div></div>`).join('');
  $('vp').textContent=fP(O.pct);$('hp').textContent=O.util==null?'—':fP(O.util);$('vb').style.width=Math.min(O.pct,100)+'%';$('hb').style.width=Math.min(O.util||0,100)+'%';
