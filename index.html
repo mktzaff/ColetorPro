@@ -258,14 +258,14 @@ html:not(.is-admin) .admin-only{display:none!important}
 </style>
 <style id="cmp-inline-style">
 .cmp-card{margin-top:4px;padding:16px 20px}.cmp-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}.cmp-top .card-sub{margin-bottom:6px}.cmp-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.cmp-actions .btn{padding:7px 12px;font-size:11px}
-.cmp-body{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:18px;align-items:center}.cmp-chart{min-width:0}.cmp-svg{width:100%;height:auto;max-height:270px;display:block;overflow:visible}.cmp-empty{padding:34px 10px;text-align:center;color:var(--muted);font-size:13px;font-weight:800}
-.cmp-stats{display:flex;flex-direction:column;gap:10px}.cmp-stat{border:1px solid var(--line);border-left:5px solid var(--c);border-radius:10px;padding:10px 12px}.cmp-stat .l{font-size:10px;font-weight:900;text-transform:uppercase;color:var(--muted);letter-spacing:.4px}.cmp-stat .v{font-size:26px;font-weight:900;letter-spacing:-1px;color:var(--c);line-height:1.15}.cmp-stat .d{display:inline-block;margin-top:3px;font-size:10px;font-weight:900;border-radius:6px;padding:3px 7px;background:#f1f5f9;color:var(--muted)}.cmp-stat .d.up{background:#e4f6ee;color:#13724b}.cmp-stat .d.down{background:#fff1d8;color:#95650b}
+.cmp-body{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:18px;align-items:center}.cmp-chart{min-width:0}.cmp-svg{width:100%;height:auto;max-height:290px;display:block;overflow:visible}.cmp-empty{padding:34px 10px;text-align:center;color:var(--muted);font-size:13px;font-weight:800}
+.cmp-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.cmp-legend{display:flex;gap:6px 16px;flex-wrap:wrap;font-size:11px;font-weight:800;color:var(--muted);margin-bottom:4px}.cmp-legend span{display:flex;align-items:center;gap:6px}.cmp-legend i{width:18px;height:4px;border-radius:3px;display:inline-block}.cmp-stat{border:1px solid var(--line);border-left:5px solid var(--c);border-radius:10px;padding:8px 10px;min-width:0}.cmp-stat .l{font-size:10px;font-weight:900;text-transform:uppercase;color:var(--muted);letter-spacing:.4px}.cmp-stat .v{font-size:21px;font-weight:900;letter-spacing:-1px;color:var(--c);line-height:1.15}.cmp-stat .d{display:inline-block;margin-top:3px;font-size:10px;font-weight:900;border-radius:6px;padding:3px 7px;background:#f1f5f9;color:var(--muted)}.cmp-stat .d.up{background:#e4f6ee;color:#13724b}.cmp-stat .d.down{background:#fff1d8;color:#95650b}
 .cmp-line{fill:none;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:cmpDraw 1.1s cubic-bezier(.3,.7,.2,1) .1s forwards}.cmp-area{opacity:0;animation:cmpFade .9s ease .5s forwards}.cmp-pt{transform-box:fill-box;transform-origin:center;animation:cmpPop .45s cubic-bezier(.2,1.4,.4,1) both}
 @keyframes cmpDraw{to{stroke-dashoffset:0}}@keyframes cmpFade{to{opacity:1}}@keyframes cmpPop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
 .cmp-status{font-size:11px;font-weight:800;color:var(--muted)}.cmp-warning{font-size:12px;font-weight:700;color:#93610a;margin-top:8px;line-height:1.45}.cmp-warning:empty{display:none}
 .exported-view .cmp-actions{display:none!important}@media print{.cmp-actions{display:none!important}.cmp-line{animation:none;stroke-dashoffset:0}.cmp-area{animation:none;opacity:1}.cmp-pt{animation:none}}
 @media(prefers-reduced-motion:reduce){.cmp-line{animation:none;stroke-dashoffset:0}.cmp-area{animation:none;opacity:1}.cmp-pt{animation:none}}
-@media(max-width:900px){.cmp-body{grid-template-columns:1fr}.cmp-stats{flex-direction:row}.cmp-stat{flex:1}}
+@media(max-width:1100px){.cmp-body{grid-template-columns:1fr}.cmp-stats{grid-template-columns:repeat(4,1fr)}}@media(max-width:700px){.cmp-stats{grid-template-columns:1fr 1fr}}
 </style></head><body><div id="busyOverlay" role="status" aria-live="polite" aria-label="Carregando"><div class="busy-card"><div class="busy-spin"></div><div id="busyText">Atualizando informações…</div><small>Aguarde a conclusão antes de continuar.</small></div></div>
 <div id="login"><div class="box"><h2>ColetorPRO</h2><p>Acesso restrito. Entre com o e-mail e a senha cadastrados pelo administrador.</p>
 <form id="loginForm" onsubmit="return false"><label for="lgEmail">E-mail</label><input id="lgEmail" type="email" autocomplete="username" required><label for="lgPass">Senha</label><input id="lgPass" type="password" autocomplete="current-password" required><button class="btn" id="loginBtn" type="submit">Entrar</button><div id="loginErr" role="alert"></div></form></div></div>
@@ -309,7 +309,7 @@ html:not(.is-admin) .admin-only{display:none!important}
 <section class="card"><div class="card-title" id="rkTitle"></div><div class="card-sub" id="rkSub"></div><div class="rank-switch" id="rankSwitch"><button class="active" data-rank="more">Mais horas</button><button data-rank="less">Menos horas</button><button data-rank="none">Sem visitas</button></div><div class="rank-count" id="rankCount"></div><div class="rank-list" id="rank"></div></section></div>
 <div class="section-title">Evolução da marca na rede</div>
 <section class="card cmp-card" id="cmpSection">
-<div class="cmp-top"><div><div class="card-title">% de execução x % de horas contratadas</div><div class="card-sub" id="cmpIndustry"></div></div><div class="cmp-actions"><span class="cmp-status" id="cmpStatus" role="status"></span><button class="btn btn-out" id="cmpReloadBtn" type="button">Atualizar</button><button class="btn btn-up" id="cmpSaveBtn" type="button" style="display:none">Registrar base atual</button></div></div>
+<div class="cmp-top"><div><div class="card-title">Execução, horas contratadas, tempo médio e nota</div><div class="card-sub" id="cmpIndustry"></div></div><div class="cmp-actions"><span class="cmp-status" id="cmpStatus" role="status"></span><button class="btn btn-out" id="cmpReloadBtn" type="button">Atualizar</button><button class="btn btn-up" id="cmpSaveBtn" type="button" style="display:none">Registrar base atual</button></div></div>
 <div class="cmp-body"><div class="cmp-chart" id="cmpChart" aria-label="Evolução da marca na rede nos últimos três meses"></div><div class="cmp-stats" id="cmpTrend"></div></div>
 <div class="cmp-warning" id="cmpWarning" role="status"></div>
 </section>
@@ -999,14 +999,18 @@ function comparativoFormat(metric,value,hasRecord=true){if(!hasRecord||value==nu
 function comparativoValue(row,metric){if(!row)return null;if(metric==='pct'||metric==='util')return row[metric]==null||!isFinite(Number(row[metric]))?null:Number(row[metric]);return Number(row[metric])||0}
 function renderComparativo(history,industry,warning=''){
  const months=comparativoWindow(),key=String(industry||'');
- const items=months.map(m=>{const row=(history||[]).find(x=>x.mes===m.mes&&sameSupplier(x.forn,key));return{...m,row:row||null,pct:row?comparativoValue(row,'pct'):null,util:row?comparativoValue(row,'util'):null}});
+ const items=months.map(m=>{const row=(history||[]).find(x=>x.mes===m.mes&&sameSupplier(x.forn,key));const pos=v=>Number(v)>0?Number(v):null;return{...m,row:row||null,pct:row?comparativoValue(row,'pct'):null,util:row?comparativoValue(row,'util'):null,avg:row?pos(row.avg):null,nota:row?pos(row.nota):null}});
  window.__comparativoRows=items;
  $('cmpIndustry').textContent='Indústria: '+key+' • últimos três meses';$('cmpWarning').textContent=warning;$('cmpStatus').textContent='';
- $('cmpChart').innerHTML=compLineSVG(items);
- $('cmpTrend').innerHTML=COMP_SERIES.map(sr=>{const prev=items[1][sr.k],cur=items[2][sr.k];let d='sem comparação',c='';if(prev!=null&&cur!=null){const x=cur-prev;d=(x>0?'▲ +':x<0?'▼ ':'')+x.toFixed(1).replace('.',',')+' p.p. vs. mês anterior';c=x>0?'up':x<0?'down':''}
-  return '<div class="cmp-stat" style="--c:'+sr.color+'"><div class="l">'+sr.name+' • '+esc(items[2].label)+'</div><div class="v">'+(cur==null?'—':fP(cur))+'</div><span class="d '+c+'">'+d+'</span></div>'}).join('');
+ $('cmpChart').innerHTML='<div class="cmp-legend">'+COMP_SERIES.map(sr=>'<span><i style="background:'+sr.color+'"></i>'+sr.name+(sr.axis==='R'?' (eixo direito)':'')+'</span>').join('')+'</div>'+compLineSVG(items);
+ $('cmpTrend').innerHTML=COMP_SERIES.map(sr=>{const prev=items[1][sr.k],cur=items[2][sr.k];let d='sem comparação',c='';if(prev!=null&&cur!=null){const x=cur-prev;d=(x>0?'▲ +':x<0?'▼ ':'')+sr.dfmt(x)+' vs. mês ant.';c=sr.k==='avg'?'':(x>0?'up':x<0?'down':'')}
+  return '<div class="cmp-stat" style="--c:'+sr.color+'"><div class="l">'+sr.name+'</div><div class="v">'+(cur==null?'—':sr.fmt(cur))+'</div><span class="d '+c+'">'+d+'</span></div>'}).join('');
 }
-const COMP_SERIES=[{k:'pct',name:'% de execução',color:'#123b5f'},{k:'util',name:'% horas contratadas',color:'#e30613'}];
+const COMP_SERIES=[
+ {k:'pct',name:'% de execução',color:'#123b5f',axis:'L',fmt:v=>fP(v),dfmt:x=>x.toFixed(1).replace('.',',')+' p.p.'},
+ {k:'util',name:'% horas contratadas',color:'#e30613',axis:'L',fmt:v=>fP(v),dfmt:x=>x.toFixed(1).replace('.',',')+' p.p.'},
+ {k:'avg',name:'Tempo médio',color:'#e08a00',axis:'R',dash:true,fmt:v=>Math.round(v)+' min',dfmt:x=>Math.round(x)+' min'},
+ {k:'nota',name:'Nota média',color:'#20a36a',axis:'L',scale:20,fmt:v=>fN(v),dfmt:x=>x.toFixed(2).replace('.',',')+' pt'}];
 async function refreshComparativo(){
  $('cmpStatus').textContent='Atualizando…';$('cmpWarning').textContent='';
  try{
@@ -1088,23 +1092,24 @@ $('ctrAddBtn').onclick=async()=>{
 /* ===== Comparativo mensal inline (grafico de linha) ===== */
 function compSmooth(p){if(p.length<2)return '';const f=n=>n.toFixed(1);let d='M'+f(p[0].x)+','+f(p[0].y);for(let k=0;k<p.length-1;k++){const a=p[k],b=p[k+1],pa=p[k-1]||a,pb=p[k+2]||b,t=.22;let c1x=a.x+(b.x-pa.x)*t,c1y=a.y+(b.y-pa.y)*t,c2x=b.x-(pb.x-a.x)*t,c2y=b.y-(pb.y-a.y)*t;const lo=Math.min(a.y,b.y),hi=Math.max(a.y,b.y);c1y=Math.min(hi,Math.max(lo,c1y));c2y=Math.min(hi,Math.max(lo,c2y));d+=' C'+f(c1x)+','+f(c1y)+' '+f(c2x)+','+f(c2y)+' '+f(b.x)+','+f(b.y)}return d}
 function compLineSVG(items){
- const mob=window.innerWidth<700,W=mob?420:1000,H=mob?270:240,pl=mob?40:50,pr=mob?24:40,pt=34,pb=34,iw=W-pl-pr,ih=H-pt-pb,n=4,base=pt+ih;
- const all=[];items.forEach(m=>COMP_SERIES.forEach(sr=>{if(m[sr.k]!=null)all.push(m[sr.k])}));
- const max=Math.ceil(Math.max(100,Math.max(0,...all)*1.1)/20)*20;
- const X=i=>pl+iw*(.14+.36*i),Y=v=>pt+ih-(v/max)*ih;
- let g='';for(let k=0;k<=n;k++){const v=max*k/n,y=Y(v);g+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y+'" y2="'+y+'" stroke="'+(k?'#e9edf1':'#cfd8e2')+'"/><text x="'+(pl-8)+'" y="'+(y+4)+'" text-anchor="end" font-size="11" font-weight="700" fill="#6c7783">'+Math.round(v)+'%</text>'}
+ const mob=window.innerWidth<700,W=mob?420:1000,H=mob?290:270,pl=mob?40:50,pr=mob?46:62,pt=16,pb=34,iw=W-pl-pr,ih=H-pt-pb,n=4,base=pt+ih;
+ const lv=[];let rv=[];items.forEach(m=>COMP_SERIES.forEach(sr=>{const v=m[sr.k];if(v==null)return;if(sr.axis==='R')rv.push(v);else lv.push(v*(sr.scale||1))}));
+ const max=Math.ceil(Math.max(100,Math.max(0,...lv)*1.1)/20-1e-6)*20,maxR=Math.max(4,Math.ceil(Math.max(0,...rv)*1.15/n-1e-6)*n)||60;
+ const X=i=>pl+iw*(.12+.34*i),yOf=(sr,v)=>pt+ih-(sr.axis==='R'?v/maxR:v*(sr.scale||1)/max)*ih;
+ let g='';for(let k=0;k<=n;k++){const y=pt+ih-k/n*ih;g+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y+'" y2="'+y+'" stroke="'+(k?'#e9edf1':'#cfd8e2')+'"/><text x="'+(pl-8)+'" y="'+(y+4)+'" text-anchor="end" font-size="11" font-weight="700" fill="#6c7783">'+Math.round(max*k/n)+'%</text><text x="'+(W-pr+8)+'" y="'+(y+4)+'" font-size="11" font-weight="700" fill="#e08a00">'+Math.round(maxR*k/n)+'m</text>'}
  let defs='',body='';
- COMP_SERIES.forEach((sr,si)=>{const pts=items.map((m,i)=>m[sr.k]!=null?{x:X(i),y:Y(m[sr.k]),i}:null).filter(Boolean);
-  defs+='<linearGradient id="cmpA'+si+'" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="'+sr.color+'" stop-opacity=".16"/><stop offset="1" stop-color="'+sr.color+'" stop-opacity="0"/></linearGradient>';
-  if(pts.length>=2){const d=compSmooth(pts);body+='<path class="cmp-area" d="'+d+' L'+pts[pts.length-1].x+','+base+' L'+pts[0].x+','+base+' Z" fill="url(#cmpA'+si+')"/><path class="cmp-line" pathLength="1" d="'+d+'" stroke="'+sr.color+'"/>'}});
- items.forEach((m,i)=>{const x=X(i),last=i===items.length-1,has=COMP_SERIES.some(sr=>m[sr.k]!=null);
+ COMP_SERIES.forEach((sr,si)=>{const pts=items.map((m,i)=>m[sr.k]!=null?{x:X(i),y:yOf(sr,m[sr.k]),i}:null).filter(Boolean);
+  if(pts.length>=2){const d=compSmooth(pts);if(si<2){defs+='<linearGradient id="cmpA'+si+'" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="'+sr.color+'" stop-opacity=".13"/><stop offset="1" stop-color="'+sr.color+'" stop-opacity="0"/></linearGradient>';body+='<path class="cmp-area" d="'+d+' L'+pts[pts.length-1].x+','+base+' L'+pts[0].x+','+base+' Z" fill="url(#cmpA'+si+')"/>'}
+   body+='<path class="cmp-line" pathLength="1" d="'+d+'" stroke="'+sr.color+'"'+(sr.dash?' style="stroke-dasharray:.03 .02;animation:none;stroke-dashoffset:0"':'')+'/>'}});
+ items.forEach((m,i)=>{const x=X(i),last=i===items.length-1,av=COMP_SERIES.filter(sr=>m[sr.k]!=null);
   body+='<text x="'+x+'" y="'+(H-10)+'" text-anchor="middle" font-size="12" font-weight="900" fill="#0b2742">'+esc(m.label)+'</text>';
-  if(!has){body+='<g><title>'+esc(m.label)+': sem base salva</title><circle cx="'+x+'" cy="'+base+'" r="7" fill="#fff" stroke="#aab4bf" stroke-width="2" stroke-dasharray="4 3"/><text x="'+x+'" y="'+(base-14)+'" text-anchor="middle" font-size="11" font-weight="800" fill="#8a949e">sem base</text></g>';return}
-  const av=COMP_SERIES.filter(sr=>m[sr.k]!=null),hi=av.length>1?(m[av[0].k]>=m[av[1].k]?av[0].k:av[1].k):av[0].k;
-  av.forEach((sr,j)=>{const v=m[sr.k],y=Y(v),disp=fP(v),w=disp.length*7.4+14,above=sr.k===hi,ty=above?Math.max(2,y-33):Math.min(H-pb-4,y+11);
-   body+='<g class="cmp-pt" style="animation-delay:'+(.5+i*.15)+'s"><title>'+esc(m.label)+' — '+sr.name+': '+disp+'</title>'+(last?'<circle cx="'+x+'" cy="'+y+'" r="14" fill="'+sr.color+'" opacity=".14"/>':'')+'<circle cx="'+x+'" cy="'+y+'" r="'+(last?7.5:6)+'" fill="'+(last?sr.color:'#fff')+'" stroke="'+(last?'#fff':sr.color)+'" stroke-width="'+(last?3:3.5)+'"/><rect x="'+(x-w/2)+'" y="'+ty+'" width="'+w+'" height="22" rx="7" fill="'+sr.color+'"/><text x="'+x+'" y="'+(ty+15)+'" text-anchor="middle" font-size="12" font-weight="900" fill="#fff">'+disp+'</text></g>'})});
- const leg=COMP_SERIES.map((sr,k)=>'<circle cx="'+(pl+k*170+6)+'" cy="10" r="5" fill="'+sr.color+'"/><text x="'+(pl+k*170+16)+'" y="14" font-size="11" font-weight="800" fill="#6c7783">'+sr.name+'</text>').join('');
- return '<svg class="cmp-svg" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="% de execução e % de horas contratadas nos últimos três meses"><defs>'+defs+'</defs>'+leg+g+body+'</svg>'}
+  if(!av.length){body+='<g><title>'+esc(m.label)+': sem base salva</title><circle cx="'+x+'" cy="'+base+'" r="7" fill="#fff" stroke="#aab4bf" stroke-width="2" stroke-dasharray="4 3"/><text x="'+x+'" y="'+(base-14)+'" text-anchor="middle" font-size="11" font-weight="800" fill="#8a949e">sem base</text></g>';return}
+  const pl2=av.map(sr=>({sr,y:yOf(sr,m[sr.k]),disp:sr.fmt(m[sr.k])})).sort((a,b)=>a.y-b.y);
+  pl2.forEach((e,j)=>{e.ty=e.y-11;if(j&&e.ty<pl2[j-1].ty+22)e.ty=pl2[j-1].ty+22});
+  const over=pl2[pl2.length-1].ty+20-(base+4);if(over>0)pl2.forEach(e=>e.ty-=over);const top=pl2[0].ty;if(top<0)pl2.forEach(e=>e.ty-=top);
+  pl2.forEach(e=>{const sr=e.sr,w=e.disp.length*7.2+12,r=last?7:5.5;
+   body+='<g class="cmp-pt" style="animation-delay:'+(.5+i*.15)+'s"><title>'+esc(m.label)+' — '+sr.name+': '+esc(e.disp)+'</title>'+(last?'<circle cx="'+x+'" cy="'+e.y+'" r="13" fill="'+sr.color+'" opacity=".14"/>':'')+'<circle cx="'+x+'" cy="'+e.y+'" r="'+r+'" fill="'+(last?sr.color:'#fff')+'" stroke="'+(last?'#fff':sr.color)+'" stroke-width="3"/><rect x="'+(x+12)+'" y="'+e.ty+'" width="'+w+'" height="20" rx="6" fill="'+sr.color+'"/><text x="'+(x+12+w/2)+'" y="'+(e.ty+14)+'" text-anchor="middle" font-size="11.5" font-weight="900" fill="#fff">'+esc(e.disp)+'</text></g>'})});
+ return '<svg class="cmp-svg" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Execução, horas contratadas, tempo médio e nota nos últimos três meses"><defs>'+defs+'</defs>'+g+body+'</svg>'}
 let COMP_STATE='idle',COMP_WARN='',COMP_KEY={a:null,c:null},COMP_MERGED=[];
 function compShowEmpty(msg){$('cmpIndustry').textContent='';$('cmpChart').innerHTML='<div class="cmp-empty">'+esc(msg)+'</div>';$('cmpTrend').innerHTML='';$('cmpStatus').textContent='';$('cmpWarning').textContent=''}
 async function updateComparativoInline(){
