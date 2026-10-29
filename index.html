@@ -319,9 +319,10 @@ let ALL=[],cur=[],tab='lojas',sortS={key:'real',dir:-1},suppliers=[];
 let STORE_DB=[],REVENUE_DB=[];
 const STORE_FILE='lojas.json',REVENUE_FILE='faturamento.json';
 const fBRL=n=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(Number(n)||0);
-const auxKey=(forn,loja)=>nk(forn)+'|'+nk(loja);
-function revenueFor(forn,loja){const x=REVENUE_DB.find(r=>auxKey(r.forn,r.loja)===auxKey(forn,loja));return x?x.faturamento:null}
-function revenueTotal(forn=null){return REVENUE_DB.reduce((s,r)=>s+(forn===null||nk(r.forn)===nk(forn)?r.faturamento:0),0)}
+const auxMatchKey=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\b(stok|comercial\s+zaffari)\b/g,' ').replace(/[^a-z0-9]/g,'');
+const auxKey=(forn,loja)=>auxMatchKey(forn)+'|'+auxMatchKey(loja);
+function revenueFor(forn,loja){const key=auxKey(forn,loja);const xs=REVENUE_DB.filter(r=>auxKey(r.forn,r.loja)===key);return xs.length?xs.reduce((s,r)=>s+r.faturamento,0):null}
+function revenueTotal(forn=null){return REVENUE_DB.reduce((s,r)=>s+(forn===null||auxMatchKey(r.forn)===auxMatchKey(forn)?r.faturamento:0),0)}
 function storesWithoutVisits(){const visited=new Set(ALL.map(r=>auxKey(r.forn,r.loja)));return STORE_DB.filter(r=>(curInd==='__all__'||nk(r.forn)===nk(curInd))&&!visited.has(auxKey(r.forn,r.loja))).sort((a,b)=>a.loja.localeCompare(b.loja)||a.forn.localeCompare(b.forn))}
 
 function parse(txt){
@@ -469,7 +470,7 @@ async function loadAuxBases(){
  if(!sb||window.__COLETOR_EXPORTED_DATA__)return;
  const [stores,revenue]=await Promise.all([readAuxPublished(STORE_FILE),readAuxPublished(REVENUE_FILE)]);
  STORE_DB=stores.filter(x=>x&&typeof x.forn==='string'&&typeof x.loja==='string').map(x=>({forn:x.forn.trim(),loja:x.loja.trim()}));
- REVENUE_DB=revenue.filter(x=>x&&typeof x.forn==='string'&&typeof x.loja==='string').map(x=>({forn:x.forn.trim(),loja:x.loja.trim(),faturamento:Number(x.faturamento)||0}));
+ const revMap=new Map();for(const x of revenue.filter(x=>x&&typeof x.forn==='string'&&typeof x.loja==='string')){const row={forn:x.forn.trim(),loja:x.loja.trim(),faturamento:Number(x.faturamento)||0},key=auxKey(row.forn,row.loja);if(revMap.has(key))revMap.get(key).faturamento+=row.faturamento;else revMap.set(key,row)}REVENUE_DB=[...revMap.values()];
 }
 function normAuxHeader(v){return String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'')}
 function parseMoney(v){if(typeof v==='number')return v;let s=String(v??'').trim().replace(/R\$/gi,'').replace(/\s/g,'');if(!s)return NaN;const comma=s.lastIndexOf(','),dot=s.lastIndexOf('.');if(comma>=0&&dot>=0){if(comma>dot)s=s.replace(/\./g,'').replace(',','.');else s=s.replace(/,/g,'')}else if(comma>=0)s=s.replace(/\./g,'').replace(',','.');const n=Number(s);return Number.isFinite(n)?n:NaN}
@@ -491,7 +492,8 @@ async function parseAuxFile(file,kind){
  }
  const result=[];for(let i=0;i<raw.length;i++){const r=raw[i]||{};const keys=Object.keys(r).reduce((m,k)=>(m[normAuxHeader(k)]=r[k],m),{});const forn=r.forn??keys.industria??keys.fornecedor??keys.bandeira,loja=r.loja??keys.empresa??keys.loja??keys.nomedaloja??keys.nomefantasia;const item={forn:String(forn??'').trim(),loja:String(loja??'').trim()};if(!item.forn||!item.loja)continue;if(kind==='revenue'){const val=parseMoney(r.faturamento??keys.venda??keys.faturamento??keys.valorfaturamento??keys.valorvenda??keys.vendas);if(!Number.isFinite(val))throw new Error('Venda/faturamento inválido na linha '+(i+2)+'.');item.faturamento=val;}result.push(item)}
  if(!result.length)throw new Error('Nenhum registro válido encontrado. Confira os cabeçalhos e o conteúdo do arquivo.');
- const unique=new Map();for(const r of result)unique.set(auxKey(r.forn,r.loja),r);return [...unique.values()];
+ // A planilha de faturamento pode ter várias linhas para a mesma indústria e empresa. Somar essas linhas evita perder vendas por sobrescrita.
+ const unique=new Map();for(const r of result){const key=auxKey(r.forn,r.loja);if(kind==='revenue'&&unique.has(key)){const prev=unique.get(key);prev.faturamento+=r.faturamento;}else unique.set(key,{...r});}return [...unique.values()];
 }
 async function uploadAuxBase(kind,file){
  const st=$('upStatus'),isRevenue=kind==='revenue',path=isRevenue?REVENUE_FILE:STORE_FILE;
