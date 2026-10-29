@@ -325,13 +325,9 @@ const auxMatchKey=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'
 // Compara nomes também sem depender da ordem das palavras.
 const auxMatchKeys=v=>{const k=auxMatchKey(v);if(!k)return [''];const sorted=k.split(' ').filter(Boolean).sort().join(' ');return [...new Set([k,sorted,k.replace(/\s/g,''),sorted.replace(/\s/g,'')])];};
 const auxCanonical=v=>auxMatchKey(v).split(' ').filter(Boolean).sort().join(' ');
-// Normaliza nomes de lojas separadamente: a planilha pode trazer 'STOK CENTER LOJA 15 - REG 2', enquanto as visitas mostram 'LOJA 15'.
-const auxStoreMatchKey=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\b(comercial\s+zaffari|stok\s*center|stok|center)\b/g,' ').replace(/\b(loja|regiao|reg|filial|unidade)\b/g,' ').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');
-const auxStoreCanonical=v=>auxStoreMatchKey(v).split(' ').filter(Boolean).sort().join(' ');
-const auxKey=(forn,loja)=>auxCanonical(forn)+'|'+auxStoreCanonical(loja);
+const auxKey=(forn,loja)=>auxCanonical(forn)+'|'+auxCanonical(loja);
 const auxPairMatches=(a,b)=>auxMatchKeys(a).some(k=>auxMatchKeys(b).includes(k));
-function auxStoreMatches(a,b){const ka=auxStoreMatchKey(a),kb=auxStoreMatchKey(b);if(!ka||!kb)return false;if(ka===kb||auxStoreCanonical(a)===auxStoreCanonical(b))return true;const ta=ka.split(' ').filter(Boolean),tb=kb.split(' ').filter(Boolean);const na=ta.filter(t=>/\d+/.test(t)),nb=tb.filter(t=>/\d+/.test(t));if(!na.length||!nb.length||!na.some(t=>nb.includes(t)))return false;const short=ta.length<=tb.length?ta:tb,long=ta.length<=tb.length?tb:ta;return short.every(t=>long.includes(t));}
-function revenueFor(forn,loja){const xs=REVENUE_DB.filter(r=>auxPairMatches(r.forn,forn)&&auxStoreMatches(r.loja,loja));return xs.length?xs.reduce((s,r)=>s+(Number(r.faturamento)||0),0):null}
+function revenueFor(forn,loja){const xs=REVENUE_DB.filter(r=>auxPairMatches(r.forn,forn)&&auxPairMatches(r.loja,loja));return xs.length?xs.reduce((s,r)=>s+(Number(r.faturamento)||0),0):null}
 function revenueTotal(forn=null){return REVENUE_DB.reduce((s,r)=>s+(forn===null||auxPairMatches(r.forn,forn)?(Number(r.faturamento)||0):0),0)}
 function storesWithoutVisits(){const visited=new Set(ALL.map(r=>auxKey(r.forn,r.loja)));return STORE_DB.filter(r=>(curInd==='__all__'||nk(r.forn)===nk(curInd))&&!visited.has(auxKey(r.forn,r.loja))).sort((a,b)=>a.loja.localeCompare(b.loja)||a.forn.localeCompare(b.forn))}
 
@@ -416,8 +412,26 @@ function renderTable(){
   data=data.filter(x=>(x.loja+x.prom+x.comp+x.status).toLowerCase().includes(q));sub=fI(data.length)+' visitas';
  }else{
   const key=tab==='forn'?'forn':tab==='lojas'?'loja':'prom';const lab=tab==='forn'?'Indústria':tab==='lojas'?'Loja':'Promotor';
-  data=group(cur,key).filter(x=>x.name.toLowerCase().includes(q));cols=[['name',lab,x=>esc(x.name)],...(tab==='lojas'&&curInd!=='__all__'?[[ 'faturamento','Faturamento',x=>{const v=revenueFor(curInd,x.name);return v==null?'—':(revenueVisible?fBRL(v):'••••••')}]]:[['lojas','Lojas',x=>x.lojas]]),...std];
-  title='Todas as '+(tab==='forn'?'indústrias':tab==='lojas'?'lojas':'promotores');sub=fI(data.length)+' registros • busca e ordenação';
+  if(tab==='lojas'&&curInd!=='__all__'){
+   // A tabela de faturamento deve partir da base mensal de vendas, não apenas das lojas que tiveram visitas.
+   // Assim aparecem todas as lojas da indústria selecionada, inclusive as que não têm visita registrada.
+   const rev=REVENUE_DB.filter(r=>auxPairMatches(r.forn,curInd));
+   const revByStore=new Map();for(const r of rev){const k=auxCanonical(r.loja);if(!revByStore.has(k))revByStore.set(k,{name:r.loja,faturamento:0,forn:r.forn});revByStore.get(k).faturamento+=Number(r.faturamento)||0;}
+   const visitRows=group(cur,'loja');
+   if(revByStore.size){
+    data=[...revByStore.values()].map(r=>{const v=visitRows.find(x=>auxPairMatches(x.name,r.name));const stats=v||{lojas:0,ag:0,real:0,pct:0,nc:0,ea:0,sc:0,contr:0,exec:0,util:null,avg:0,min:null,nota:0};return {...stats,name:r.name,faturamento:r.faturamento};}).filter(x=>x.name.toLowerCase().includes(q));
+    cols=[['name','Loja',x=>esc(x.name)],['faturamento','Faturamento',x=>revenueVisible?fBRL(x.faturamento):'••••••'],...std];
+    sub=fI(data.length)+' lojas na base de faturamento da indústria selecionada';
+   }else{
+    data=visitRows.filter(x=>x.name.toLowerCase().includes(q));
+    cols=[['name','Loja',x=>esc(x.name)],['faturamento','Faturamento',x=>{const v=revenueFor(curInd,x.name);return v==null?'—':(revenueVisible?fBRL(v):'••••••')}],...std];
+    sub=fI(data.length)+' registros de visita • não foram encontradas vendas para esta indústria';
+   }
+  }else{
+   data=group(cur,key).filter(x=>x.name.toLowerCase().includes(q));
+   cols=[['name',lab,x=>esc(x.name)],['lojas','Lojas',x=>x.lojas],...std];
+  }
+  title='Todas as '+(tab==='forn'?'indústrias':tab==='lojas'?'lojas':'promotores');if(!sub)sub=fI(data.length)+' registros • busca e ordenação';
  }
  const s=sortS;data.sort((a,b)=>{let A=a[s.key],B=b[s.key];if(key_isStr(A))return String(A).localeCompare(String(B))*s.dir;return((A??-Infinity)-(B??-Infinity))*s.dir});
  $('tbTitle').textContent=title;$('tbSub').textContent=sub;
@@ -481,6 +495,9 @@ async function loadAuxBases(){
  const [stores,revenue]=await Promise.all([readAuxPublished(STORE_FILE),readAuxPublished(REVENUE_FILE)]);
  STORE_DB=stores.filter(x=>x&&typeof x.forn==='string'&&typeof x.loja==='string').map(x=>({forn:x.forn.trim(),loja:x.loja.trim()}));
  const revMap=new Map();for(const x of revenue.filter(x=>x&&typeof x.forn==='string'&&typeof x.loja==='string')){const row={forn:x.forn.trim(),loja:x.loja.trim(),faturamento:Number(x.faturamento)||0},key=auxKey(row.forn,row.loja);if(revMap.has(key))revMap.get(key).faturamento+=row.faturamento;else revMap.set(key,row)}REVENUE_DB=[...revMap.values()];
+ // Inclui as indústrias da base mensal na busca, mesmo quando ainda não têm visitas na base principal.
+ // A lista deixa de depender exclusivamente da base de visitas para permitir consultar faturamento.
+ suppliers=[...new Set([...ALL.map(r=>r.forn),...REVENUE_DB.map(r=>r.forn)].map(x=>String(x||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
 }
 function normAuxHeader(v){return String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'')}
 function parseMoney(v){if(typeof v==='number')return Number.isFinite(v)?v:NaN;let s=String(v??'').trim();if(!s)return NaN;let neg=false;if(/^\(.*\)$/.test(s)){neg=true;s=s.slice(1,-1)}s=s.replace(/R\$/gi,'').replace(/BRL/gi,'').replace(/[\s\u00a0]/g,'').replace(/[^0-9,.-]/g,'');if(!s||!/[0-9]/.test(s))return NaN;const comma=s.lastIndexOf(','),dot=s.lastIndexOf('.');if(comma>=0&&dot>=0){if(comma>dot)s=s.replace(/\./g,'').replace(',','.');else s=s.replace(/,/g,'')}else if(comma>=0){const dec=s.length-comma-1;if(dec===2||dec===1)s=s.replace(/\./g,'').replace(',','.');else s=s.replace(/,/g,'')}else if(dot>=0){const dec=s.length-dot-1;if(dec===3&&/^[-+]?\d{1,3}(\.\d{3})+$/.test(s))s=s.replace(/\./g,'')}const n=Number(s);return Number.isFinite(n)?(neg?-n:n):NaN}
