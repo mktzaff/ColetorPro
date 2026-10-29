@@ -142,6 +142,10 @@ input:focus,select:focus{box-shadow:0 0 0 3px rgba(32,105,159,.12)}
 .table-wrap{scrollbar-width:thin;scrollbar-color:#b8c7d6 transparent}
 
 @media print{.confidential-footer:not(.pdf-confidential-footer){display:none!important}.pdf-confidential-footer{display:flex!important}#ctr .confidential-footer{display:none!important}}
+
+.pdf-evolution{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:10px;align-items:start;border:1px solid var(--line);border-radius:8px;padding:8px;margin:5px 0 10px;break-inside:avoid}
+.pdf-evolution-chart{min-width:0}.pdf-evolution-chart .cmp-legend{font-size:8px;gap:4px 9px;margin-bottom:3px}.pdf-evolution-chart .cmp-svg{width:100%;max-height:220px;height:auto}.pdf-evolution-stats{display:grid;grid-template-columns:1fr 1fr;gap:5px}.pdf-evolution-stats .cmp-stat{padding:5px 6px;border-left-width:3px;border-radius:5px}.pdf-evolution-stats .cmp-stat .l{font-size:7px}.pdf-evolution-stats .cmp-stat .v{font-size:13px;letter-spacing:0}.pdf-evolution-stats .cmp-stat .d{font-size:7px;padding:2px 4px}.pdf-evolution-note{grid-column:1/-1;font-size:8px;color:var(--muted)}
+@media print{.pdf-evolution{break-inside:avoid!important;page-break-inside:avoid!important}.pdf-evolution-chart .cmp-svg{max-height:190px!important}.pdf-evolution-chart .cmp-line{animation:none!important;stroke-dashoffset:0!important}.pdf-evolution-chart .cmp-area{animation:none!important;opacity:1!important}.pdf-evolution-chart .cmp-pt{animation:none!important}}
 </style>
 <style id="auth-css">
 #storeBaseCard,#storeEditor,#storeDbBtn{display:none!important}
@@ -319,6 +323,7 @@ html:not(.is-admin) .admin-only{display:none!important}
 <div class="pdf-report-head"><div class="pdf-report-kicker">COLETORPRO • RELATÓRIO COMPLETO</div><div class="pdf-report-title" id="pdfTitle">Execução por indústria</div><div class="card-sub pdf-context" id="pdfContext"></div><div class="pdf-contract-context" id="pdfContractContext"></div></div>
 <div class="section-title">Resumo da indústria</div>
 <div class="pdf-summary" id="pdfSummary"></div>
+<div class="section-title" id="pdfEvolutionTitle">Evolução da marca na rede</div><div class="pdf-evolution" id="pdfEvolution"><div class="pdf-evolution-chart" id="pdfEvolutionChart"></div><div class="pdf-evolution-stats" id="pdfEvolutionStats"></div><div class="pdf-evolution-note" id="pdfEvolutionNote"></div></div>
 <div class="section-title">Visão operacional</div>
 <div class="pdf-op"><div><div class="pdf-chart-title">Visitas por dia — agendadas x realizadas</div><div class="pdf-vchart" id="pdfDayChart"></div><div class="pdf-legend"><span><i class="n"></i>Agendadas</span><span><i class="r"></i>Realizadas</span></div></div><div id="pdfOpSide"></div></div>
 <div class="section-title" id="pdfIndChartTitle">Visitas por indústria</div><div class="pdf-legend"><span><i class="n"></i>Agendadas</span><span><i class="r"></i>Realizadas</span></div><div class="pdf-table-wrap" id="pdfIndChartWrap"><table id="pdfIndChart" class="pdf-rank"><thead></thead><tbody></tbody></table></div>
@@ -579,15 +584,23 @@ function buildPdfDetail(){
  const pdfContract=$('pdfContractContext');if(pdfContract){let cc=null;if(!all){if('__COLETOR_EXPORTED_CONTRATO__' in window)cc=window.__COLETOR_EXPORTED_CONTRATO__;else cc=CTR.find(x=>nk(x.fornecedor)===nk(selectedIndustry));}pdfContract.textContent=cc?('Contrato: '+(cc.recebido?'recebido dia '+fD(cc.recebido):'ainda não recebido')+' • '+(cc.atualizado?'atualizado dia '+fD(cc.atualizado):'ainda não atualizado')):'';}
  const summary=[['Visitas agendadas',fI(O.ag),'programadas'],['Visitas realizadas',fI(O.real),fP(O.pct)+' de execução'],['Horas contratadas',fH(O.contr),'base registrada'],['Horas executadas',fH(O.exec),O.util==null?'sem horas contratadas':fP(O.util)+' das contratadas'],['Tempo médio',fH(O.avg),'por visita realizada'],['Nota média',fN(O.nota),'escala máxima 5,0'],['Não compareceu',fI(O.nc),'visitas'],['Em andamento',fI(O.ea),'visitas'],['Agendado (a realizar)',fI(O.sc),'visitas'],['Gap de visitas',fI(O.real-O.ag),'realizadas − agendadas'],['Gap de horas',fH(O.exec-O.contr),'executadas − contratadas'],['Menor atendimento',fMin(O.min),'entre realizadas']];
  $('pdfSummary').innerHTML=summary.map(x=>`<div class="pdf-summary-item"><div class="label">${x[0]}</div><div class="value">${x[1]}</div><div class="note">${x[2]}</div></div>`).join('');
+ // Inclui no PDF a evolução da marca na rede exibida no painel individual.
+ const evolutionChart=$('pdfEvolutionChart'),evolutionStats=$('pdfEvolutionStats'),evolutionNote=$('pdfEvolutionNote');
+ const sourceChart=$('cmpChart'),sourceStats=$('cmpTrend'),sourceIndustry=$('cmpIndustry');
+ if(evolutionChart)evolutionChart.innerHTML=sourceChart&&sourceChart.innerHTML?sourceChart.innerHTML:'<div class="cmp-empty">Evolução não disponível para esta seleção.</div>';
+ if(evolutionStats)evolutionStats.innerHTML=sourceStats&&sourceStats.innerHTML?sourceStats.innerHTML:'';
+ if(evolutionNote)evolutionNote.textContent=(sourceIndustry&&sourceIndustry.textContent?sourceIndustry.textContent+' • ':'')+'Comparativo dos últimos três meses conforme os dados disponíveis no painel.';
+ if($('pdfEvolution'))$('pdfEvolution').style.display=all?'none':'';
+ if($('pdfEvolutionTitle'))$('pdfEvolutionTitle').style.display=all?'none':'';
+
  const byName=(a,b)=>a.name.localeCompare(b.name),rankBase=all?group(rows,'forn'):group(rows,'loja'),noneBase=all?group(rows,r=>r.loja+' — '+r.forn):rankBase;
  const moreL=[...rankBase].sort((a,b)=>b.exec-a.exec||byName(a,b)),lessL=rankBase.filter(x=>x.real>0).sort((a,b)=>a.exec-b.exec||byName(a,b));
- // Inclui no PDF lojas cadastradas na base de faturamento que não possuem nenhuma visita na base operacional.
- const noneMap=new Map(noneBase.filter(x=>x.real===0).map(x=>[x.name,x]));
- for(const x of storesWithoutVisits()){const name=all?(x.loja+' — '+x.forn):x.loja;if(!noneMap.has(name))noneMap.set(name,{name,loja:x.loja,forn:x.forn,ag:0,real:0,pct:0,nc:0,ea:0,sc:0,contr:0,exec:0,util:null,avg:0,min:null,nota:0,lojas:1});}
- const noneL=[...noneMap.values()].sort(byName),nm=all?'Indústria':'Loja';
- const rankCols=[['name',nm,x=>esc(x.name)],['ag','Agend.',x=>fI(x.ag)],['real','Realiz.',x=>fI(x.real)],['contr','H. contrat.',x=>fH(x.contr)],['exec','H. exec.',x=>fH(x.exec)],['util','Util. horas',x=>x.util==null?'—':fP(x.util)]],rankNoneCols=[['name',all?'Loja — Indústria':'Loja',x=>esc(x.name)],['ag','Agend.',x=>fI(x.ag)],['nc','Não comp.',x=>fI(x.nc)],['ea','Em and.',x=>fI(x.ea)],['sc','A realizar',x=>fI(x.sc)]];
+ // Mantém a mesma regra do painel: lojas presentes na base de faturamento,
+ // mas sem correspondência na base operacional de visitas para a indústria selecionada.
+ const noneL=storesWithoutVisits().map(x=>({name:all?(x.loja+' — '+x.forn):x.loja,loja:x.loja,forn:x.forn,ag:0,real:0,pct:0,nc:0,ea:0,sc:0,contr:0,exec:0,util:null,avg:0,min:null,nota:0,lojas:1})).sort(byName),nm=all?'Indústria':'Loja';
+ const rankCols=[['name',nm,x=>esc(x.name)],['ag','Agend.',x=>fI(x.ag)],['real','Realiz.',x=>fI(x.real)],['contr','H. contrat.',x=>fH(x.contr)],['exec','H. exec.',x=>fH(x.exec)],['util','Util. horas',x=>x.util==null?'—':fP(x.util)]],rankNoneCols=[['name',all?'Loja — Indústria':'Loja',x=>esc(x.name)],['ag','Agend.',x=>fI(x.ag)],['real','Realiz.',x=>fI(x.real)]];
  buildPdfRank('pdfRankMore',moreL,rankCols);buildPdfRank('pdfRankLess',lessL,rankCols);buildPdfRank('pdfRankNone',noneL,rankNoneCols);
- const pl=all?'Indústrias':'Lojas';$('pdfMoreTitle').textContent=pl+' — mais horas executadas ('+fI(moreL.length)+')';$('pdfLessTitle').textContent=pl+' — menos horas executadas ('+fI(lessL.length)+')';$('pdfNoneTitle').textContent='Lojas — sem visitas realizadas ('+fI(noneL.length)+')';
+ const pl=all?'Indústrias':'Lojas';$('pdfMoreTitle').textContent=pl+' — mais horas executadas ('+fI(moreL.length)+')';$('pdfLessTitle').textContent=pl+' — menos horas executadas ('+fI(lessL.length)+')';$('pdfNoneTitle').textContent='Lojas sem visitas agendadas ('+fI(noneL.length)+')';
  const mxOf=a=>Math.max(1,...a.map(x=>Math.max(x.ag,x.real))),barCol=mx=>['bar','Agend. × Realiz.',x=>`<div style="min-width:48px"><div class="hb n" style="width:${Math.max(x.ag/mx*100,1)}%"></div><div class="hb r" style="width:${Math.max(x.real/mx*100,1)}%"></div></div>`];
  const days=group(rows,'date').filter(g=>g.name).sort((a,b)=>dkey(a.name)-dkey(b.name)),dmx=mxOf(days),showV=days.length<=31;
  $('pdfDayChart').innerHTML=days.map(x=>`<div class="g"><div class="bs"><div class="b n" style="height:${x.ag/dmx*84}px">${showV?`<i>${x.ag}</i>`:''}</div><div class="b r" style="height:${x.real/dmx*84}px">${showV?`<i>${x.real}</i>`:''}</div></div><div class="lb">${esc(x.name.slice(0,5))}</div></div>`).join('');
@@ -1006,7 +1019,10 @@ function comparativoFormat(metric,value,hasRecord=true){if(!hasRecord||value==nu
 function comparativoValue(row,metric){if(!row)return null;if(metric==='pct'||metric==='util')return row[metric]==null||!isFinite(Number(row[metric]))?null:Number(row[metric]);return Number(row[metric])||0}
 function renderComparativo(history,industry,warning=''){
  const months=comparativoWindow(),key=String(industry||'');
- const items=months.map(m=>{const row=(history||[]).find(x=>x.mes===m.mes&&sameSupplier(x.forn,key));const pos=v=>Number(v)>0?Number(v):null;return{...m,row:row||null,pct:row?comparativoValue(row,'pct'):null,util:row?comparativoValue(row,'util'):null,avg:row?pos(row.avg):null,nota:row?pos(row.nota):null}});
+ // Recalcula os indicadores mensais a partir das visitas da indústria selecionada.
+ // O histórico salvo só é usado para meses sem registros na base operacional atual.
+ const freshByMonth=new Map(comparativoSummaries(ALL).map(x=>[x.mes+'|'+comparativoKey(x.mes,x.forn),x]));
+ const items=months.map(m=>{const saved=(history||[]).find(x=>x.mes===m.mes&&sameSupplier(x.forn,key));const fresh=freshByMonth.get(m.mes+'|'+comparativoKey(m.mes,key));const row=fresh||saved||null;const pos=v=>Number(v)>0?Number(v):null;return{...m,row:row||null,pct:row?comparativoValue(row,'pct'):null,util:row?comparativoValue(row,'util'):null,avg:row?pos(row.avg):null,nota:row?pos(row.nota):null}});
  window.__comparativoRows=items;
  $('cmpIndustry').textContent='Indústria: '+key+' • últimos três meses';$('cmpWarning').textContent=warning;$('cmpStatus').textContent='';
  $('cmpChart').innerHTML='<div class="cmp-legend">'+COMP_SERIES.map(sr=>'<span><i style="background:'+sr.color+'"></i>'+sr.name+(sr.axis==='R'?' (eixo direito)':'')+'</span>').join('')+'</div>'+compLineSVG(items);
