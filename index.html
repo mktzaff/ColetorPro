@@ -455,21 +455,19 @@ async function loadPublishedData(){
    suppliers=[...new Set(ALL.map(r=>r.forn))].filter(Boolean).sort((a,b)=>a.localeCompare(b));
    const ds=ALL.map(r=>r.date).filter(Boolean).sort((a,b)=>dkey(a)-dkey(b));
    $('period').textContent=ds.length?ds[0]+' A '+ds[ds.length-1]:'SEM PERÍODO';$('upd').textContent='HTML da indústria • dados incorporados no arquivo';
-   curInd=window.__COLETOR_EXPORTED_INDUSTRY__ || (suppliers[0]||'__all__');$('indIn').disabled=true;$('pdfBtn').disabled=false;$('htmlBtn').disabled=true;$('indIn').value=curInd==='__all__'?ALLTXT:curInd;document.body.classList.add('exported-view');document.title=curInd==='__all__'?'ColetorPRO | Geral':'ColetorPRO | '+curInd;
+   curInd=window.__COLETOR_EXPORTED_INDUSTRY__ || (suppliers[0]||'__all__');$('indIn').disabled=true;$('pdfBtn').disabled=false;$('indIn').value=curInd==='__all__'?ALLTXT:curInd;document.body.classList.add('exported-view');document.title=curInd==='__all__'?'ColetorPRO | Geral':'ColetorPRO | '+curInd;
   }else{
    const {data:su,error:se}=await sb.storage.from(BUCKET).createSignedUrl(FILE,60);if(se||!su)throw new Error('sem acesso à base');const res=await fetch(su.signedUrl,{cache:'no-store'});if(!res.ok)throw new Error('dados.json não encontrado');ALL=await res.json();if(!Array.isArray(ALL))throw new Error('dados.json inválido');
    /* Dados publicados também são normalizados, caso o JSON antigo contenha datas em formatos diferentes. */
    ALL=ALL.map(r=>({...r,date:normalizarData(r.date),tempo:+r.tempo||0,nota:+r.nota||0,contr:+r.contr||0}));
    suppliers=[...new Set(ALL.map(r=>r.forn))].filter(Boolean).sort((a,b)=>a.localeCompare(b));
-   const ds=ALL.map(r=>r.date).filter(Boolean).sort((a,b)=>dkey(a)-dkey(b));$('period').textContent=ds.length?ds[0]+' A '+ds[ds.length-1]:'SEM PERÍODO';$('upd').textContent='Dados publicados em '+new Date().toLocaleDateString('pt-BR');$('indIn').disabled=false;$('pdfBtn').disabled=false;$('htmlBtn').disabled=false;curInd='__all__';$('indIn').value=ALLTXT;
+   const ds=ALL.map(r=>r.date).filter(Boolean).sort((a,b)=>dkey(a)-dkey(b));$('period').textContent=ds.length?ds[0]+' A '+ds[ds.length-1]:'SEM PERÍODO';$('upd').textContent='Dados publicados em '+new Date().toLocaleDateString('pt-BR');$('indIn').disabled=false;$('pdfBtn').disabled=false;curInd='__all__';$('indIn').value=ALLTXT;
   }
   /* Segurança extra para HTMLs exportados: normaliza também os registros já incorporados. */
   ALL=ALL.map(r=>({...r,date:normalizarData(r.date),tempo:+r.tempo||0,nota:+r.nota||0,contr:+r.contr||0}));
   $('empty').classList.add('hidden');render();if(ME)applyPermissionUI();else $('app').classList.remove('hidden');return true;
  }catch(err){console.error(err);$('empty').classList.remove('hidden');$('empty').innerHTML='<strong>Não foi possível carregar o dashboard.</strong><br><span style="font-size:12px">'+esc(err?.message||'Confira a base publicada e as permissões de acesso.')+'</span>';if(ME&&!(canPerm('dashboard')||canPerm('consult_industries')||canPerm('visit_details'))) $('app').classList.add('hidden');return false}
 }
-async function exportHTML(){if(!await requireServerPerm('download_html'))return;if(!ME)return;closeIndustryList();const selected=curInd;if(!selected||selected==='__all__'){alert('Selecione uma indústria antes de baixar o HTML.');return}const rows=ALL.filter(r=>r.forn===selected);if(!rows.length){alert('A indústria selecionada não possui dados.');return}const snapshot=document.documentElement.outerHTML.replace(/(SUPABASE_URL=)'[^']*'/,"$1''").replace(/(SUPABASE_ANON_KEY=)'[^']*'/,"$1''").replace(/<script src="https:\/\/cdn\.jsdelivr[^>]*><\/script>/,'');const payload=JSON.stringify(rows).replace(/</g,'\\u003c');const boot=`<script>window.__COLETOR_EXPORTED_DATA__=${payload};window.__COLETOR_EXPORTED_INDUSTRY__=${JSON.stringify(selected)};window.__COLETOR_EXPORTED_CONTRATOS__=${JSON.stringify(CTR.map(c=>({fornecedor:c.fornecedor,recebido:c.recebido||'',atualizado:c.atualizado||''}))).replace(/</g,'\\u003c')};window.__COLETOR_EXPORTED_CONTRATO__=${JSON.stringify((()=>{const k=nk(selected),c=CTR.find(x=>nk(x.fornecedor)===k);return c?{fornecedor:c.fornecedor,recebido:c.recebido||'',atualizado:c.atualizado||''}:null})()).replace(/</g,'\\u003c')};<\/script>`;let out=snapshot.replace(/<script>/i,boot+'<script>');out=out.replace(/<body>/i,'<body class="exported-view">');out=out.replace(/<button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML\(\)">Baixar HTML<\/button>/,'<button class="btn btn-html" id="htmlBtn" disabled onclick="exportHTML()">Baixar HTML</button>');const safe=selected.replace(/[\\/:*?"<>|]+/g,' - ').replace(/\s+/g,' ').trim().slice(0,140);// O HTML exportado contém uma cópia dos dados e deixa de ser protegido pelo login/Supabase após o download.
-const blob=new Blob([out],{type:'text/html;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ColetorPRO - '+safe+'.html';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
 $('q').addEventListener('input',renderTable);
 /* ===== Supabase: login, perfis e upload (somente admin) ===== */
 const SUPABASE_URL='https://nduabnxombkgwmlzzsjg.supabase.co',SUPABASE_ANON_KEY='sb_publishable_UgW5UpjaJNqtTm8aUoHakA_KdMz7bQ9',BUCKET='dashboard-data',FILE='dados.json';
@@ -483,12 +481,11 @@ const PERMISSION_DEFS=[
  {key:'consult_industries',label:'Consultar indústrias e lojas'},
  {key:'visit_details',label:'Detalhamento das visitas'},
  {key:'export_pdf',label:'Exportar PDF'},
- {key:'download_html',label:'Baixar HTML'},
  {key:'update_data',label:'Atualizar a base de dados'},
  {key:'contracts_access',label:'Acessar e atualizar contratos realizados'},
  {key:'manage_users',label:'Gerenciar usuários e permissões'}
 ];
-const CONSULTA_DEFAULT={dashboard:false,consult_industries:false,visit_details:false,export_pdf:false,download_html:false,update_data:false,contracts_access:true,manage_users:false};
+const CONSULTA_DEFAULT={dashboard:false,consult_industries:false,visit_details:false,export_pdf:false,update_data:false,contracts_access:true,manage_users:false};
 let USER_PERMISSIONS={},PERMISSION_PROFILES=[],USER_PROFILE_MAP={};
 function canPerm(k){return !!(ME&&(ME.role==='admin'||USER_PERMISSIONS[k]===true))}
 function requirePerm(k){if(canPerm(k))return true;alert('Seu perfil não tem permissão para realizar esta ação.');return false}
@@ -499,7 +496,7 @@ function applyPermissionUI(){
  $('upBtn').style.display=canPerm('update_data')?'':'none';$('upStatus').style.display=canPerm('update_data')?'':'none';
  $('ctrBtn').style.display=canPerm('contracts_access')?'':'none';document.querySelectorAll('.contracts-edit-only').forEach(el=>el.style.display=canPerm('contracts_access')?'':'none');
  $('accBtn').style.display='';
- $('pdfBtn').style.display=canPerm('export_pdf')?'':'none';$('htmlBtn').style.display=canPerm('download_html')?'':'none';
+ $('pdfBtn').style.display=canPerm('export_pdf')?'':'none';
  const showDetails=canPerm('visit_details');
  const canBrowse=canPerm('dashboard')||canPerm('consult_industries');
  const detailTitle=[...document.querySelectorAll('.section-title')].find(e=>e.textContent.trim()==='Detalhamento completo');
@@ -602,7 +599,7 @@ $('upFile').onchange=async e=>{
 };
 /* ===== Conta e gestão de usuários ===== */
 let USERS=[];
-const PERMISSION_PROFILE_DEFAULTS={consulta:CONSULTA_DEFAULT,completo:{dashboard:true,consult_industries:true,visit_details:true,export_pdf:true,download_html:true,update_data:false,contracts_access:true,manage_users:false}};
+const PERMISSION_PROFILE_DEFAULTS={consulta:CONSULTA_DEFAULT,completo:{dashboard:true,consult_industries:true,visit_details:true,export_pdf:true,update_data:false,contracts_access:true,manage_users:false}};
 function renderPermissionChecks(perms={}){$('permChecks').innerHTML=PERMISSION_DEFS.map(p=>`<div class="perm-item"><div><label for="perm-${p.key}">${p.label}</label><span class="perm-state" id="perm-state-${p.key}">${perms[p.key]?'Permitido':'Bloqueado'}</span></div><input id="perm-${p.key}" type="checkbox" data-permission="${p.key}" ${perms[p.key]?'checked':''} aria-label="${p.label}"></div>`).join('');$('permChecks').querySelectorAll('[data-permission]').forEach(c=>c.addEventListener('change',()=>{$('perm-state-'+c.dataset.permission).textContent=c.checked?'Permitido':'Bloqueado'}))}
 async function loadPermissionProfiles(){
  const {data,error}=await sb.from('coletor_permission_profiles').select('profile_name,permissions').order('profile_name');
