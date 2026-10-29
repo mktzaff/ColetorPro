@@ -262,7 +262,7 @@ html:not(.is-admin) .admin-only{display:none!important}
 </style>
 <style id="cmp-inline-style">
 .cmp-card{margin-top:4px;padding:16px 20px}.cmp-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}.cmp-top .card-sub{margin-bottom:6px}.cmp-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.cmp-actions .btn{padding:7px 12px;font-size:11px}
-.cmp-body{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;align-items:start}.cmp-chart{min-width:0}.cmp-svg{width:100%;height:auto;max-height:none;display:block;overflow:visible}.cmp-empty{padding:34px 10px;text-align:center;color:var(--muted);font-size:13px;font-weight:800}
+.cmp-body{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;align-items:start}.cmp-chart{min-width:0}.cmp-svg{width:100%;height:auto;max-height:none;display:block;overflow:visible;border-radius:12px}.cmp-empty{padding:34px 10px;text-align:center;color:var(--muted);font-size:13px;font-weight:800}
 .cmp-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.cmp-legend{display:flex;gap:6px 16px;flex-wrap:wrap;font-size:11px;font-weight:800;color:var(--muted);margin-bottom:4px}.cmp-legend span{display:flex;align-items:center;gap:6px}.cmp-legend i{width:18px;height:4px;border-radius:3px;display:inline-block}.cmp-stat{border:1px solid var(--line);border-left:5px solid var(--c);border-radius:10px;padding:8px 10px;min-width:0}.cmp-stat .l{font-size:10px;font-weight:900;text-transform:uppercase;color:var(--muted);letter-spacing:.4px}.cmp-stat .v{font-size:21px;font-weight:900;letter-spacing:-1px;color:var(--c);line-height:1.15}.cmp-stat .d{display:inline-block;margin-top:3px;font-size:10px;font-weight:900;border-radius:6px;padding:3px 7px;background:#f1f5f9;color:var(--muted)}.cmp-stat .d.up{background:#e4f6ee;color:#13724b}.cmp-stat .d.down{background:#fff1d8;color:#95650b}
 .cmp-line{fill:none;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:cmpDraw 1.1s cubic-bezier(.3,.7,.2,1) .1s forwards}.cmp-area{opacity:0;animation:cmpFade .9s ease .5s forwards}.cmp-pt{transform-box:fill-box;transform-origin:center;animation:cmpPop .45s cubic-bezier(.2,1.4,.4,1) both}
 @keyframes cmpDraw{to{stroke-dashoffset:0}}@keyframes cmpFade{to{opacity:1}}@keyframes cmpPop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
@@ -1119,24 +1119,34 @@ $('ctrAddBtn').onclick=async()=>{
 /* ===== Comparativo mensal inline (grafico de linha) ===== */
 function compSmooth(p){if(p.length<2)return '';const f=n=>n.toFixed(1);let d='M'+f(p[0].x)+','+f(p[0].y);for(let k=0;k<p.length-1;k++){const a=p[k],b=p[k+1],pa=p[k-1]||a,pb=p[k+2]||b,t=.22;let c1x=a.x+(b.x-pa.x)*t,c1y=a.y+(b.y-pa.y)*t,c2x=b.x-(pb.x-a.x)*t,c2y=b.y-(pb.y-a.y)*t;const lo=Math.min(a.y,b.y),hi=Math.max(a.y,b.y);c1y=Math.min(hi,Math.max(lo,c1y));c2y=Math.min(hi,Math.max(lo,c2y));d+=' C'+f(c1x)+','+f(c1y)+' '+f(c2x)+','+f(c2y)+' '+f(b.x)+','+f(b.y)}return d}
 function compLineSVG(items){
- // Cada indicador usa sua própria escala para não misturar percentuais, minutos e nota.
- const W=1000,H=430,gap=18,pad=18,cw=(W-pad*2-gap)/2,ch=(H-pad*2-gap)/2;
+ // Comparativo em barras: cada indicador tem painel e escala próprios.
+ const W=1000,H=430,gap=18,pad=14,cw=(W-pad*2-gap)/2,ch=(H-pad*2-gap)/2;
  let body='';
  COMP_SERIES.forEach((sr,idx)=>{
   const col=idx%2,row=Math.floor(idx/2),x0=pad+col*(cw+gap),y0=pad+row*(ch+gap);
   const vals=items.map(m=>m[sr.k]).filter(v=>v!=null&&isFinite(Number(v))).map(Number);
-  body+='<rect x="'+x0+'" y="'+y0+'" width="'+cw+'" height="'+ch+'" rx="12" fill="#f8fafc" stroke="#e2e8f0"/>';
-  body+='<text x="'+(x0+16)+'" y="'+(y0+25)+'" font-size="14" font-weight="900" fill="'+sr.color+'">'+esc(sr.name)+'</text>';
+  body+='<rect x="'+x0+'" y="'+y0+'" width="'+cw+'" height="'+ch+'" rx="14" fill="#ffffff" stroke="#e2e8f0"/>';
+  body+='<text x="'+(x0+18)+'" y="'+(y0+27)+'" font-size="15" font-weight="900" fill="#172b4d">'+esc(sr.name)+'</text>';
+  body+='<rect x="'+(x0+cw-14-8)+'" y="'+(y0+17)+'" width="8" height="8" rx="2" fill="'+sr.color+'"/><text x="'+(x0+cw-30)+'" y="'+(y0+25)+'" text-anchor="end" font-size="10" font-weight="700" fill="#64748b">mensal</text>';
   if(!vals.length){body+='<text x="'+(x0+cw/2)+'" y="'+(y0+ch/2)+'" text-anchor="middle" font-size="12" fill="#64748b">Sem dados para este indicador</text>';return}
-  let min=Math.min(...vals),max=Math.max(...vals);if(sr.k==='pct'||sr.k==='util'){min=Math.min(0,min);max=Math.max(100,max)}else if(sr.k==='nota'){min=Math.min(0,min);max=Math.max(5,max)}
-  if(max===min){const extra=Math.abs(max||1)*.15;min=Math.max(0,min-extra);max=max+extra} else {const extra=(max-min)*.16;min=Math.max(0,min-extra);max=max+extra}
-  const left=x0+38,right=x0+cw-24,top=y0+48,bottom=y0+ch-42,ww=right-left,hh=bottom-top;
-  for(let k=0;k<3;k++){const gy=top+hh*k/2;body+='<line x1="'+left+'" y1="'+gy+'" x2="'+right+'" y2="'+gy+'" stroke="#e2e8f0"/>'}
-  const pts=items.map((m,i)=>({m,i,v:m[sr.k]})).filter(o=>o.v!=null&&isFinite(Number(o.v))).map(o=>({x:items.length===1?(left+right)/2:left+ww*o.i/(items.length-1),y:bottom-(Number(o.v)-min)/(max-min)*hh,v:Number(o.v),m:o.m,i:o.i}));
-  if(pts.length>1)body+='<path d="'+pts.map((p,i)=>(i?'L':'M')+p.x+','+p.y).join(' ')+'" fill="none" stroke="'+sr.color+'" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>';
-  pts.forEach((p)=>{const label=sr.fmt(p.v),ly=Math.max(top+12,p.y-12);body+='<circle cx="'+p.x+'" cy="'+p.y+'" r="5.5" fill="#fff" stroke="'+sr.color+'" stroke-width="3"><title>'+esc(p.m.label)+' — '+esc(sr.name)+': '+esc(label)+'</title></circle><text x="'+p.x+'" y="'+ly+'" text-anchor="middle" font-size="12" font-weight="900" fill="'+sr.color+'">'+esc(label)+'</text><text x="'+p.x+'" y="'+(bottom+23)+'" text-anchor="middle" font-size="11" font-weight="800" fill="#475569">'+esc(p.m.label)+'</text>'});
+  let min=0,max=Math.max(...vals);
+  if(sr.k==='pct'||sr.k==='util')max=Math.max(100,max);
+  if(sr.k==='nota')max=Math.max(5,max);
+  if(sr.k==='avg')max=max*1.18;
+  if(max<=0)max=1;
+  const left=x0+24,right=x0+cw-20,top=y0+53,bottom=y0+ch-43,plotH=bottom-top,plotW=right-left;
+  [0,.5,1].forEach(fr=>{const gy=bottom-plotH*fr;body+='<line x1="'+left+'" y1="'+gy+'" x2="'+right+'" y2="'+gy+'" stroke="#edf1f5" stroke-width="1"/>'});
+  const n=items.length,slot=plotW/Math.max(1,n),bw=Math.min(74,slot*.48);
+  items.forEach((m,i)=>{
+   const raw=m[sr.k],valid=raw!=null&&isFinite(Number(raw)),v=valid?Number(raw):0;
+   const bh=valid?Math.max(2,(v-min)/(max-min)*plotH):0,bx=left+slot*i+(slot-bw)/2,by=bottom-bh;
+   if(valid){const opacity=i===n-1?'1':'.58';body+='<rect x="'+bx+'" y="'+by+'" width="'+bw+'" height="'+bh+'" rx="5" fill="'+sr.color+'" opacity="'+opacity+'"><title>'+esc(m.label)+' — '+esc(sr.name)+': '+esc(sr.fmt(v))+'</title></rect>';
+    const label=sr.fmt(v),labelY=Math.max(top+13,by-8);body+='<text x="'+(bx+bw/2)+'" y="'+labelY+'" text-anchor="middle" font-size="12" font-weight="900" fill="#24364b">'+esc(label)+'</text>';
+   }else{body+='<text x="'+(bx+bw/2)+'" y="'+(bottom-7)+'" text-anchor="middle" font-size="12" font-weight="800" fill="#94a3b8">—</text>'}
+   body+='<text x="'+(left+slot*i+slot/2)+'" y="'+(bottom+24)+'" text-anchor="middle" font-size="11" font-weight="800" fill="#475569">'+esc(m.label)+'</text>';
+  });
  });
- return '<svg class="cmp-svg" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Evolução mensal dos quatro indicadores, cada um em sua própria escala">'+body+'</svg>'
+ return '<svg class="cmp-svg" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Comparativo mensal em barras dos quatro indicadores, cada um em sua própria escala">'+body+'</svg>'
 }
 let COMP_STATE='idle',COMP_WARN='',COMP_KEY={a:null,c:null},COMP_MERGED=[];
 function compShowEmpty(msg){$('cmpIndustry').textContent='';$('cmpChart').innerHTML='<div class="cmp-empty">'+esc(msg)+'</div>';$('cmpTrend').innerHTML='';$('cmpStatus').textContent='';$('cmpWarning').textContent=''}
