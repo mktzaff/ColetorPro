@@ -226,7 +226,51 @@ html:not(.is-admin) .admin-only{display:none!important}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<style id="performance-ui">#busyOverlay{position:fixed;inset:0;z-index:3000;background:rgba(10,30,50,.78);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:20px;cursor:progress}#busyOverlay.active{display:flex}#busyOverlay .busy-card{background:white;border-radius:16px;padding:28px 32px;max-width:350px;width:100%;text-align:center;box-shadow:0 20px 55px #0004;color:#123b5f;font-weight:800}#busyOverlay .busy-spin{height:43px;width:43px;border:5px solid #e5ebf1;border-top-color:#e30613;border-radius:50%;animation:busySpin .7s linear infinite;margin:0 auto 17px}#busyOverlay small{display:block;margin-top:7px;color:#667788;font-weight:500}@keyframes busySpin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){#busyOverlay .busy-spin{animation:none;border-top-color:#e30613}}#tableMoreBtn{margin-top:12px}</style></head><body><div id="busyOverlay" role="status" aria-live="polite" aria-label="Carregando"><div class="busy-card"><div class="busy-spin"></div><div id="busyText">Atualizando informações…</div><small>Aguarde a conclusão antes de continuar.</small></div></div>
+<style id="performance-ui">#busyOverlay{position:fixed;inset:0;z-index:3000;background:rgba(10,30,50,.78);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:20px;cursor:progress}#busyOverlay.active{display:flex}#busyOverlay .busy-card{background:white;border-radius:16px;padding:28px 32px;max-width:350px;width:100%;text-align:center;box-shadow:0 20px 55px #0004;color:#123b5f;font-weight:800}#busyOverlay .busy-spin{height:43px;width:43px;border:5px solid #e5ebf1;border-top-color:#e30613;border-radius:50%;animation:busySpin .7s linear infinite;margin:0 auto 17px}#busyOverlay small{display:block;margin-top:7px;color:#667788;font-weight:500}@keyframes busySpin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){#busyOverlay .busy-spin{animation:none;border-top-color:#e30613}}#tableMoreBtn{margin-top:12px}</style><style id="comparativo-style">
+#cmp{position:fixed;inset:0;z-index:850;background:var(--bg);overflow:auto;padding:24px 44px 44px;opacity:1;transform:translateY(0);transition:opacity .28s ease,transform .34s cubic-bezier(.2,.8,.2,1)}
+#cmp.hidden{display:none}#cmp.view-enter{opacity:0;transform:translateY(14px)}#cmp.view-leave{opacity:0;transform:translateY(8px);pointer-events:none}
+#cmp .cmp-head{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;padding:4px 0 18px;border-bottom:1px solid var(--line);margin-bottom:16px}
+#cmp h2{margin:3px 0 6px;font-size:28px;font-weight:900;letter-spacing:-.7px}#cmp h2 span{color:var(--red)}#cmp .cmp-industry{font-size:13px;font-weight:800;color:var(--muted);overflow-wrap:anywhere}
+#cmp .cmp-head-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+#cmp .cmp-status{border-left:4px solid var(--navy2);background:#fff;padding:11px 14px;border-radius:8px;font-size:12px;font-weight:800;margin-bottom:10px;box-shadow:0 3px 12px rgba(11,39,66,.04)}
+#cmp .cmp-warning{font-size:12px;font-weight:700;color:#93610a;margin:0 0 10px;line-height:1.45}#cmp .cmp-warning:empty{display:none}
+#cmp .cmp-chart-card,#cmp .cmp-table-card{margin-top:14px;padding:20px}
+#cmp .cmp-chart-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+#cmp .cmp-trend{font-size:12px;font-weight:900;background:#f1f5f9;border-radius:8px;padding:9px 12px;color:var(--navy)}#cmp .cmp-trend.up{background:#e4f6ee;color:#13724b}#cmp .cmp-trend.down{background:#fff1d8;color:#95650b}#cmp .cmp-trend.flat{background:#f1f5f9;color:var(--muted)}
+#cmp .cmp-switch{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0 5px}#cmp .cmp-switch button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:9px 12px;font-size:11px;font-weight:900;color:var(--navy);cursor:pointer;transition:background .18s,color .18s,transform .18s}
+#cmp .cmp-switch button.active{background:var(--navy);border-color:var(--navy);color:#fff}#cmp .cmp-switch button:active{transform:scale(.98)}
+#cmp .cmp-chart{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:end;padding:18px 8px 0;min-height:280px}
+#cmp .cmp-month{min-width:0;display:flex;flex-direction:column;align-items:stretch;text-align:center;animation:rise .35s cubic-bezier(.2,.8,.2,1) both}
+#cmp .cmp-value{font-size:13px;font-weight:900;color:var(--navy);min-height:23px;overflow-wrap:anywhere}
+#cmp .cmp-barslot{height:205px;display:flex;align-items:flex-end;justify-content:center;padding:0 10px;background:repeating-linear-gradient(to top,transparent 0,transparent 49px,#e9edf1 50px,#e9edf1 51px);border-bottom:1px solid #cfd8e2}
+#cmp .cmp-bar{width:min(64%,110px);min-width:18px;background:linear-gradient(180deg,#456b8c,#123b5f);border-radius:7px 7px 0 0;transform-origin:bottom;animation:cmpGrowY .72s cubic-bezier(.2,.8,.2,1) both;box-shadow:0 4px 12px rgba(11,39,66,.1)}
+#cmp .cmp-bar.latest{background:linear-gradient(180deg,#f04b54,#e30613)}#cmp .cmp-bar.nodata{background:#e0e6ec;box-shadow:none;animation:none}
+#cmp .cmp-month-label{font-size:12px;font-weight:900;color:var(--navy);margin-top:11px;text-transform:uppercase}
+#cmp .cmp-chart-foot{display:flex;gap:18px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:13px;font-size:10px;font-weight:800;color:var(--muted)}#cmp .cmp-chart-foot span{display:flex;align-items:center;gap:6px}#cmp .cmp-dot{width:9px;height:9px;border-radius:3px;background:#123b5f;display:inline-block}#cmp .cmp-dot.latest{background:var(--red)}
+#cmp .cmp-table-wrap{overflow:auto;border:1px solid var(--line);border-radius:9px;margin-top:10px}#cmp .cmp-table{width:100%;min-width:640px;border-collapse:collapse;font-size:12px}#cmp .cmp-table th{position:static;cursor:default;background:var(--navy);color:#fff;padding:11px 10px;font-size:10px}#cmp .cmp-table td{padding:12px 10px;border-bottom:1px solid var(--line);font-weight:700;white-space:nowrap}#cmp .cmp-table tbody tr:last-child td{border-bottom:0}#cmp .cmp-table tbody tr:last-child td:first-child{color:var(--red);font-weight:900}#cmp .cmp-no-data{color:var(--muted);font-weight:700!important}
+#cmp .cmp-note{margin-top:13px;line-height:1.5}
+@keyframes cmpGrowY{from{transform:scaleY(0);opacity:.45}to{transform:scaleY(1);opacity:1}}
+.exported-view #comparativoBtn,.exported-view #cmp{display:none!important}
+@media(max-width:900px){#cmp{padding:18px}#cmp .cmp-head{align-items:flex-start}#cmp h2{font-size:24px}#cmp .cmp-chart{gap:8px;padding-left:0;padding-right:0}#cmp .cmp-barslot{height:175px;padding:0 4px}#cmp .cmp-chart-card,#cmp .cmp-table-card{padding:15px}}
+@media(max-width:520px){#cmp .cmp-head-actions{width:100%}#cmp .cmp-head-actions .btn{flex:1;padding:10px 9px;font-size:10px}#cmp .cmp-switch button{flex:1;min-width:42%;padding:9px 6px;font-size:10px}#cmp .cmp-chart{min-height:225px}#cmp .cmp-barslot{height:145px}#cmp .cmp-value{font-size:11px}#cmp .cmp-month-label{font-size:10px}}
+@media(prefers-reduced-motion:reduce){#cmp *,#cmp *:before,#cmp *:after{animation:none!important;transition:none!important}}
+@media print{#cmp{display:none!important}}
+</style>
+<style id="cmp-inline-style">
+.cmp-card{margin-top:4px}.cmp-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}.cmp-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}.cmp-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.cmp-actions .btn{padding:8px 12px;font-size:11px}
+.cmp-industry{font-size:12px;font-weight:800;color:var(--muted);overflow-wrap:anywhere}
+.cmp-trend{font-size:12px;font-weight:900;background:#f1f5f9;border-radius:8px;padding:9px 12px;color:var(--navy)}.cmp-trend.up{background:#e4f6ee;color:#13724b}.cmp-trend.down{background:#fff1d8;color:#95650b}.cmp-trend.flat{background:#f1f5f9;color:var(--muted)}
+.cmp-switch{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0 4px}.cmp-switch button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:9px 12px;font-size:11px;font-weight:900;color:var(--navy);cursor:pointer}.cmp-switch button.active{background:var(--navy);border-color:var(--navy);color:#fff}
+.cmp-chart{margin-top:6px}.cmp-svg{width:100%;height:auto;display:block;overflow:visible}.cmp-empty{padding:46px 10px;text-align:center;color:var(--muted);font-size:13px;font-weight:800}
+.cmp-line{fill:none;stroke-width:4.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:cmpDraw 1.1s cubic-bezier(.3,.7,.2,1) .1s forwards}.cmp-area{opacity:0;animation:cmpFade .9s ease .5s forwards}.cmp-pt{transform-box:fill-box;transform-origin:center;animation:cmpPop .45s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes cmpDraw{to{stroke-dashoffset:0}}@keyframes cmpFade{to{opacity:1}}@keyframes cmpPop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.cmp-foot{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:6px;font-size:10px;font-weight:800;color:var(--muted)}.cmp-foot span{display:flex;align-items:center;gap:6px}.cmp-dot{width:10px;height:10px;border-radius:50%;background:#123b5f;display:inline-block}.cmp-dot.latest{background:var(--red)}.cmp-dot.none{background:#fff;border:2px dashed #aab4bf}
+.cmp-status{font-size:11px;font-weight:800;color:var(--muted);margin-top:12px}.cmp-warning{font-size:12px;font-weight:700;color:#93610a;margin-top:6px;line-height:1.45}.cmp-warning:empty{display:none}
+.cmp-table-wrap{overflow:auto;border:1px solid var(--line);border-radius:9px;margin-top:12px}.cmp-table{width:100%;min-width:520px;border-collapse:collapse;font-size:12px}.cmp-table th{position:static;cursor:default;font-size:10px;padding:11px 10px}.cmp-table td{padding:11px 10px;font-weight:700}.cmp-table tbody tr:last-child td:first-child{color:var(--red);font-weight:900}
+.exported-view .cmp-actions{display:none!important}@media print{.cmp-actions,.cmp-switch{display:none!important}.cmp-line{animation:none;stroke-dashoffset:0}.cmp-area{animation:none;opacity:1}.cmp-pt{animation:none}}
+@media(prefers-reduced-motion:reduce){.cmp-line{animation:none;stroke-dashoffset:0}.cmp-area{animation:none;opacity:1}.cmp-pt{animation:none}}
+@media(max-width:700px){.cmp-right{align-items:stretch;width:100%}.cmp-actions{justify-content:flex-start}}
+</style></head><body><div id="busyOverlay" role="status" aria-live="polite" aria-label="Carregando"><div class="busy-card"><div class="busy-spin"></div><div id="busyText">Atualizando informações…</div><small>Aguarde a conclusão antes de continuar.</small></div></div>
 <div id="login"><div class="box"><h2>ColetorPRO</h2><p>Acesso restrito. Entre com o e-mail e a senha cadastrados pelo administrador.</p>
 <form id="loginForm" onsubmit="return false"><label for="lgEmail">E-mail</label><input id="lgEmail" type="email" autocomplete="username" required><label for="lgPass">Senha</label><input id="lgPass" type="password" autocomplete="current-password" required><button class="btn" id="loginBtn" type="submit">Entrar</button><div id="loginErr" role="alert"></div></form></div></div>
 <div id="force" class="hidden"><div class="box"><h2>Crie a sua senha</h2><p>Este é o seu primeiro acesso, ou a sua senha foi redefinida pelo administrador. Escolha uma senha pessoal para continuar.</p>
@@ -267,6 +311,17 @@ html:not(.is-admin) .admin-only{display:none!important}
 <div class="grid3"><section class="card"><div class="card-title">Tempo médio de atendimento</div><div class="card-sub">Por visita realizada</div><div class="score"><div><div class="score-num" id="at"></div><div class="score-max">por visita</div></div><div><div class="small-note">Menor atendimento</div><div class="score-num" style="font-size:32px" id="mt"></div><div class="score-max">minutos</div></div></div></section>
 <section class="card"><div class="card-title">Nota média do repositor</div><div class="card-sub">Escala máxima = 5,0</div><div class="score"><div class="score-num" id="as"></div><div><div class="stars">★★★★★</div><div class="small-note">média das avaliações registradas</div></div></div></section>
 <section class="card"><div class="card-title" id="rkTitle"></div><div class="card-sub" id="rkSub"></div><div class="rank-switch" id="rankSwitch"><button class="active" data-rank="more">Mais horas</button><button data-rank="less">Menos horas</button><button data-rank="none">Sem visitas</button></div><div class="rank-count" id="rankCount"></div><div class="rank-list" id="rank"></div></section></div>
+<div class="section-title">Evolução da marca na rede</div>
+<section class="card cmp-card" id="cmpSection">
+<div class="cmp-top"><div><div class="card-title" id="cmpMetricTitle">% de execução</div><div class="card-sub" id="cmpMetricSub">Evolução nos últimos três meses</div></div><div class="cmp-right"><div class="cmp-trend" id="cmpTrend">Compare os meses disponíveis</div><div class="cmp-actions"><button class="btn btn-out" id="cmpReloadBtn" type="button">Atualizar histórico</button><button class="btn btn-up" id="cmpImportBtn" type="button" style="display:none">Importar base histórica</button><button class="btn btn-up" id="cmpSaveBtn" type="button" style="display:none">Registrar base atual</button><input type="file" id="cmpHistoryFile" accept=".csv,.xlsx,.xls,.json,text/csv,application/csv,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden></div></div></div>
+<div class="cmp-industry" id="cmpIndustry"></div>
+<div class="cmp-switch" id="cmpMetricSwitch"><button type="button" class="active" data-metric="pct">% de execução</button><button type="button" data-metric="util">% horas contratadas</button><button type="button" data-metric="avg">Tempo médio</button><button type="button" data-metric="nota">Nota média</button></div>
+<div class="cmp-chart" id="cmpChart" aria-label="Evolução da marca na rede nos últimos três meses"></div>
+<div class="cmp-foot"><span><i class="cmp-dot"></i> Meses anteriores</span><span><i class="cmp-dot latest"></i> Mês atual</span><span><i class="cmp-dot none"></i> Sem base salva</span></div>
+<div class="cmp-status" id="cmpStatus" role="status"></div><div class="cmp-warning" id="cmpWarning" role="status"></div>
+<div class="cmp-table-wrap"><table class="cmp-table"><thead><tr><th>Mês</th><th>% de execução</th><th>% horas contratadas</th><th>Tempo médio</th><th>Nota média</th></tr></thead><tbody id="cmpTableBody"></tbody></table></div>
+<div class="small-note" style="margin-top:10px">O histórico é mantido automaticamente: cada upload substitui o resumo daquele mês e o sistema conserva só o mês atual e os dois anteriores.</div>
+</section>
 <div class="section-title">Detalhamento completo</div>
 <section class="card"><div class="tabs" id="tabs"></div><div class="table-tools"><div><div class="card-title" id="tbTitle"></div><div class="card-sub" id="tbSub"></div></div><input class="search" id="q" placeholder="Buscar..."></div><div class="table-wrap"><table id="tb"><thead></thead><tbody></tbody></table></div><button type="button" class="btn btn-out" id="tableMoreBtn" style="display:none">Mostrar mais registros</button></section>
 <div id="pdfDetail" class="pdf-detail">
@@ -333,32 +388,13 @@ const auxStoreCanonical=v=>auxStoreMatchKey(v).split(' ').filter(Boolean).sort()
 const auxKey=(forn,loja)=>auxCanonical(forn)+'|'+String(loja).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/\s+/g,' ').trim();
 // Identidade do fornecedor: ignora a ordem das palavras e qualificadores jurídicos, sem
 // tentar aproximar empresas diferentes pela semelhança parcial dos nomes.
-// Identificação genérica de fornecedores: normaliza grafia e cria aliases
-// automaticamente a partir dos nomes presentes nas duas bases. Variações que
-// apenas acrescentam/removem palavras no nome (ex.: nome comercial/prefixo)
-// podem ser relacionadas quando compartilham pelo menos dois tokens distintivos.
 const supplierTokens=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/\bS\s*\/?\s*A\b/g,' ').replace(/[^A-Z0-9]+/g,' ').trim().split(/\s+/).filter(t=>t&&!['LTDA','EIRELI','ME','S','A','SA'].includes(t));
 const supplierKey=v=>supplierTokens(v).sort((a,b)=>a.localeCompare(b)).join(' ');
 const auxPairMatches=(a,b)=>!!supplierKey(a)&&supplierKey(a)===supplierKey(b);
+// Não confundir fornecedores diferentes quando há uma abreviação: somente
+// relacionar aliases manuais explícitos, editáveis abaixo se necessário.
 const SUPPLIER_ALIASES={};
-let supplierAliasMap=new Map();
-function rebuildSupplierAliases(){
- const names=[...new Set([...(Array.isArray(ALL)?ALL.map(r=>r?.forn):[]),...(Array.isArray(REVENUE_DB)?REVENUE_DB.map(r=>r?.forn):[])].filter(Boolean))];
- const keys=[...new Set(names.map(supplierKey).filter(Boolean))];
- const parent=new Map(keys.map(k=>[k,k]));
- const find=k=>{let p=parent.get(k);if(p!==k){p=find(p);parent.set(k,p)}return p};
- const join=(a,b)=>{a=find(a);b=find(b);if(a!==b){const first=a.localeCompare(b)<=0?a:b,second=first===a?b:a;parent.set(second,first)}};
- const sets=keys.map(k=>({key:k,tokens:new Set(k.split(' ').filter(Boolean))}));
- for(let i=0;i<sets.length;i++){
-  for(let j=i+1;j<sets.length;j++){
-   const a=sets[i],b=sets[j],small=a.tokens.size<=b.tokens.size?a:b,large=small===a?b:a;
-   if(small.tokens.size>=2&&[...small.tokens].every(t=>large.tokens.has(t)))join(a.key,b.key);
-  }
- }
- supplierAliasMap=new Map();
- for(const k of keys)supplierAliasMap.set(k,find(k));
-}
-const supplierId=v=>{const k=supplierKey(v);return SUPPLIER_ALIASES[k]||supplierAliasMap.get(k)||k};
+const supplierId=v=>{const k=supplierKey(v);return SUPPLIER_ALIASES[k]||k};
 const sameSupplier=(a,b)=>!!supplierId(a)&&supplierId(a)===supplierId(b);
 // A loja é vinculada pelo número identificador, nunca por texto parcial.
 // Ex.: 55-STOK 55 = STOK LOJA 55; 5 não pode corresponder a 55.
@@ -382,7 +418,6 @@ function auxStoreMatches(a,b){
 }
 let revenueIndex=new Map(),revenueTotalIndex=new Map(),revenueStoreIndex=new Map();
 function rebuildRevenueIndex(){
- rebuildSupplierAliases();
  revenueIndex=new Map();revenueTotalIndex=new Map();revenueStoreIndex=new Map();revenueMatchCache.clear();
  for(const r of REVENUE_DB){if(isExcludedStore(r.loja))continue;const id=supplierId(r.forn),entry=revenueIndex.get(id)||[];entry.push(r);revenueIndex.set(id,entry);revenueTotalIndex.set(id,(revenueTotalIndex.get(id)||0)+(Number(r.faturamento)||0));}
 }
@@ -665,7 +700,69 @@ async function loadPublishedData(){
 let searchTimer;$('q').addEventListener('input',()=>{clearTimeout(searchTimer);searchTimer=setTimeout(renderTable,180)});
 /* ===== Supabase: login, perfis e upload (somente admin) ===== */
 const SUPABASE_URL='https://nduabnxombkgwmlzzsjg.supabase.co',SUPABASE_ANON_KEY='sb_publishable_UgW5UpjaJNqtTm8aUoHakA_KdMz7bQ9',BUCKET='dashboard-data',FILE='dados.json';
+const COMPARATIVO_FILE='comparativo.json';let COMPARATIVO_CACHE=[];
 let sb=null,ME=null,idleT,fails=0;const IDLE=30*60e3;
+function comparativoMonthKey(date){const m=String(date||'').match(/^\d{2}\/(\d{2})\/(\d{4})$/);return m?`${m[2]}-${m[1]}`:''}
+function comparativoKey(mes,forn){return String(mes||'')+'|'+String(forn||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('pt-BR').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ')}
+function comparativoSummaries(rows){
+ const by=new Map();
+ for(const original of (Array.isArray(rows)?rows:[])){
+  const r={...original,date:normalizarData(original?.date),tempo:Number(original?.tempo)||0,nota:Number(original?.nota)||0,contr:Number(original?.contr)||0,status:normSt(String(original?.status||'')),forn:String(original?.forn||'').trim()};
+  const mes=comparativoMonthKey(r.date);if(!mes||!r.forn)continue;
+  const key=comparativoKey(mes,r.forn);if(!by.has(key))by.set(key,{mes,forn:r.forn,rows:[]});by.get(key).rows.push(r);
+ }
+ const updatedAt=new Date().toISOString();
+ return [...by.values()].map(g=>{const o=agg(g.rows);return{mes:g.mes,forn:g.forn,real:o.real,exec:o.exec,avg:o.avg,nota:o.nota,ag:o.ag,contr:o.contr,pct:o.ag?o.real/o.ag*100:null,util:o.contr?o.exec/o.contr*100:null,registros:g.rows.length,atualizadoEm:updatedAt}});
+}
+function comparativoMerge(history,rows){
+ // Janela móvel: somente o mês corrente e os dois meses imediatamente anteriores.
+ const keepMonths=new Set(comparativoWindow().map(m=>m.mes));
+ const incoming=comparativoSummaries(rows),incomingMonths=new Set(incoming.map(x=>x.mes));
+ const map=new Map();
+ for(const x of (Array.isArray(history)?history:[])){
+  const mes=String(x?.mes||'');
+  if(!x||!/\d{4}-\d{2}$/.test(mes)||!keepMonths.has(mes)||incomingMonths.has(mes)||!String(x.forn||'').trim())continue;
+  const item={mes,forn:String(x.forn),real:Number(x.real)||0,exec:Number(x.exec)||0,avg:Number(x.avg)||0,nota:Number(x.nota)||0,ag:Number(x.ag)||0,contr:Number(x.contr)||0,pct:x.pct==null?null:Number(x.pct),util:x.util==null?null:Number(x.util),registros:Number(x.registros)||0,atualizadoEm:String(x.atualizadoEm||'')};map.set(comparativoKey(item.mes,item.forn),item);
+ }
+ // Cada upload substitui o mês inteiro, evitando manter fornecedores removidos/corrigidos com valores antigos.
+ for(const x of incoming){if(keepMonths.has(x.mes))map.set(comparativoKey(x.mes,x.forn),x)}
+ return [...map.values()].sort((a,b)=>a.mes.localeCompare(b.mes,'en')||a.forn.localeCompare(b.forn,'pt-BR'));
+}
+async function readComparativoHistory(){
+ if(!sb)throw new Error('Sessão do Supabase não disponível.');
+ const {data:list,error:listError}=await sb.storage.from(BUCKET).list('',{search:COMPARATIVO_FILE,limit:100});
+ if(listError)throw listError;
+ if(!(list||[]).some(x=>x.name===COMPARATIVO_FILE))return[];
+ const {data:signed,error:signedError}=await sb.storage.from(BUCKET).createSignedUrl(COMPARATIVO_FILE,60);
+ if(signedError||!signed?.signedUrl)throw(signedError||new Error('Não foi possível abrir o histórico comparativo.'));
+ const res=await fetch(signed.signedUrl,{cache:'no-store'});if(!res.ok)throw new Error('Falha ao baixar comparativo.json ('+res.status+').');
+ const json=await res.json();if(!Array.isArray(json))throw new Error('O arquivo comparativo.json não contém uma lista válida.');return json;
+}
+async function saveComparativoHistory(rows){
+ const old=await readComparativoHistory(),merged=comparativoMerge(old,rows),blob=new Blob([JSON.stringify(merged)],{type:'application/json'});
+ const {error}=await sb.storage.from(BUCKET).upload(COMPARATIVO_FILE,blob,{upsert:true,contentType:'application/json',cacheControl:'0'});
+ if(error)throw error;COMPARATIVO_CACHE=merged;return merged;
+}
+async function parseComparativoImportFile(file){
+ if(file.size>50*1048576)throw new Error('Arquivo acima de 50 MB.');
+ let rows;
+ if(/\.json$/i.test(file.name))rows=JSON.parse(await file.text());
+ else{
+  if(!window.XLSX)throw new Error('Leitor de planilhas não carregou. Recarregue a página e tente novamente.');
+  let wb;
+  if(/\.csv$/i.test(file.name)||/csv/i.test(file.type)){const text=(await file.text()).replace(/^\uFEFF/,'');wb=XLSX.read(text,{type:'string',cellNF:true,raw:false})}
+  else wb=XLSX.read(await file.arrayBuffer(),{type:'array',cellNF:true});
+  if(!wb.SheetNames||!wb.SheetNames.length)throw new Error('Não foi possível ler a planilha/CSV.');
+  rows=parse(xlsxToCsv(wb.Sheets[wb.SheetNames[0]]));
+ }
+ const S=['loja','forn','comp','prom','status','date'],N=['tempo','nota','contr'];
+ if(!Array.isArray(rows)||!rows.length)throw new Error('O arquivo não contém uma lista válida de visitas.');
+ const bad=rows.findIndex(r=>!r||typeof r!=='object'||S.some(k=>typeof r[k]!=='string')||N.some(k=>typeof r[k]!=='number'||!isFinite(r[k])));
+ if(bad>=0)throw new Error('Registro '+(bad+1)+' fora do padrão esperado para a base de visitas.');
+ if(!comparativoSummaries(rows).length)throw new Error('Não encontrei datas válidas para gerar resumos mensais.');
+ return rows;
+}
+
 function idleReset(){clearTimeout(idleT);if(ME)idleT=setTimeout(()=>sb.auth.signOut(),IDLE)}
 ['click','keydown','mousemove','touchstart','scroll'].forEach(ev=>addEventListener(ev,idleReset,{passive:true}));
 const showLogin=m=>{$('login').classList.remove('hidden');$('loginErr').textContent=m||''};
@@ -689,6 +786,7 @@ function applyPermissionUI(){
  const isAdmin=!!(ME&&ME.role==='admin'),hasMain=canPerm('dashboard')||canPerm('consult_industries')||canPerm('visit_details');
  document.documentElement.classList.toggle('is-admin',isAdmin);
  $('upBtn').style.display='none';$('storeDbBtn').style.display='none';$('revenueDbBtn').style.display='none';$('upStatus').style.display='';$('basesOpenBtn').style.display=(canPerm('update_data')||canPerm('manage_bases'))?'':'none';$('visitBaseCard').classList.toggle('bases-hidden',!canPerm('update_data'));$('storeBaseCard').classList.toggle('bases-hidden',!canPerm('manage_bases'));$('revenueBaseCard').classList.toggle('bases-hidden',!canPerm('manage_bases'));$('storeEditSaveBtn').style.display=canPerm('manage_bases')?'':'none';$('storeAddRowBtn').style.display=canPerm('manage_bases')?'':'none';$('storeImportOpenBtn').style.display=canPerm('manage_bases')?'':'none';$('revenueImportOpenBtn').style.display=canPerm('manage_bases')?'':'none';$('storeEditOpenBtn').style.display=canPerm('manage_bases')?'':'none';
+ $('cmpImportBtn').style.display=canPerm('update_data')?'':'none';$('cmpSaveBtn').style.display='none';
  $('ctrBtn').style.display=canPerm('contracts_access')?'':'none';document.querySelectorAll('.contracts-edit-only').forEach(el=>el.style.display=canPerm('contracts_access')?'':'none');
  $('accBtn').style.display='';
  $('pdfBtn').style.display=canPerm('export_pdf')?'':'none';
@@ -789,7 +887,8 @@ $('upFile').onchange=async e=>{
   st.textContent='Enviando '+(body.size/1048576).toFixed(1)+' MB…';
   const{error}=await sb.storage.from(BUCKET).upload(FILE,body,{upsert:true,contentType:'application/json',cacheControl:'0'});
   if(error)throw error;
-  const loaded=await loadPublishedData();if(!loaded)throw new Error('O arquivo foi enviado, mas o dashboard não conseguiu carregar a base. Confira o formato dos registros e o acesso ao arquivo dados.json.');await setUpdated();st.textContent='Base atualizada: '+fI(rows.length)+' registros.';
+  let compareMessage='';try{await saveComparativoHistory(rows);compareMessage=' Histórico mensal do Comparativo salvo.'}catch(historyErr){console.error('Falha ao salvar histórico do Comparativo:',historyErr);compareMessage=' Atenção: a base principal foi atualizada, mas o histórico do Comparativo não pôde ser salvo: '+(historyErr?.message||historyErr)}
+  const loaded=await loadPublishedData();if(!loaded)throw new Error('O arquivo foi enviado, mas o dashboard não conseguiu carregar a base. Confira o formato dos registros e o acesso ao arquivo dados.json.');await setUpdated();st.textContent='Base atualizada: '+fI(rows.length)+' registros.'+compareMessage;
  }catch(err){st.textContent='Erro: '+(err.message||err)}
 };
 /* ===== Conta e gestão de usuários ===== */
@@ -903,6 +1002,69 @@ function ctrGrid(){
 }
 function ctrRender(){ctrDash();ctrGrid()}
 async function openContractsView(){if(!await requireServerPerm('contracts_access'))return;const app=$('app'),view=$('ctr');app.classList.add('view-leave');setTimeout(()=>{app.classList.add('hidden');app.classList.remove('view-leave');view.classList.remove('hidden');view.classList.add('view-enter');requestAnimationFrame(()=>requestAnimationFrame(()=>view.classList.remove('view-enter')))},130);ctrSt('Carregando…');await loadContratos();ctrSt('');ctrRender()}
+const COMP_MONTHS=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+function comparativoWindow(){const now=new Date(),out=[];for(let offset=2;offset>=0;offset--){const d=new Date(now.getFullYear(),now.getMonth()-offset,1),mes=String(d.getFullYear())+'-'+String(d.getMonth()+1).padStart(2,'0');out.push({mes,label:COMP_MONTHS[d.getMonth()].toUpperCase()+'/'+d.getFullYear(),fullLabel:COMP_MONTHS[d.getMonth()].toUpperCase()+'/'+d.getFullYear()})}return out}
+function comparativoFormat(metric,value,hasRecord=true){if(!hasRecord||value==null)return'—';if(metric==='pct'||metric==='util')return fP(value);if(metric==='real')return fI(value);if(metric==='exec')return fH(value);if(metric==='avg')return Number(value)>0?Math.round(Number(value))+' min':'—';if(metric==='nota')return Number(value)>0?fN(Number(value)):'—';return'—'}
+function comparativoValue(row,metric){if(!row)return null;if(metric==='pct'||metric==='util')return row[metric]==null||!isFinite(Number(row[metric]))?null:Number(row[metric]);return Number(row[metric])||0}
+function renderComparativo(history,industry,warning=''){
+ const months=comparativoWindow(),key=String(industry||'');
+ const byMonth=months.map(m=>{const row=(history||[]).find(x=>x.mes===m.mes&&sameSupplier(x.forn,key));return{...m,row:row||null}});
+ window.__comparativoRows=byMonth;window.__comparativoIndustry=key;
+ $('cmpIndustry').textContent='Indústria: '+key;
+ const available=byMonth.filter(x=>x.row).length;
+ $('cmpStatus').textContent=available===3?'Histórico disponível nos três meses.':`Histórico disponível em ${available} de 3 meses. Os meses sem base salva precisam ser carregados a partir dos arquivos históricos.`;
+ $('cmpWarning').textContent=warning;
+ const table=$('cmpTableBody');table.innerHTML=byMonth.map(m=>{
+  const r=m.row;
+  return `<tr><td>${esc(m.fullLabel)}</td><td>${comparativoFormat('pct',r?.pct,!!r)}</td><td>${comparativoFormat('util',r?.util,!!r)}</td><td>${comparativoFormat('avg',r?.avg,!!r)}</td><td>${comparativoFormat('nota',r?.nota,!!r)}${r&&Number(r.nota)>0?' / 5':''}</td></tr>`;
+ }).join('');
+ renderComparativoChart(window.compMetric||'pct');
+}
+function renderComparativoChart(metric){
+ window.compMetric=metric;
+ const defs={pct:{title:'% de execução',sub:'Visitas realizadas ÷ visitas agendadas no mês',axis:'%'},util:{title:'% de horas contratadas',sub:'Horas executadas ÷ horas contratadas no mês',axis:'%'},avg:{title:'Tempo médio',sub:'Média de minutos por visita concluída',axis:'minutos'},nota:{title:'Nota média',sub:'Média das avaliações registradas (escala de 0 a 5)',axis:'nota'}};
+ const def=defs[metric]||defs.pct;const items=window.__comparativoRows||[];
+ $('cmpMetricTitle').textContent=def.title;$('cmpMetricSub').textContent=def.sub;
+ $('cmpMetricSwitch').querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.metric===metric));
+  const vals=items.map(m=>m.row?comparativoValue(m.row,metric):null);
+  $('cmpChart').innerHTML=compLineSVG(items,vals,metric,def);
+ const previous=items[1]?.row?comparativoValue(items[1].row,metric):null,current=items[2]?.row?comparativoValue(items[2].row,metric):null;
+ const trend=$('cmpTrend');trend.className='cmp-trend flat';
+ if(previous===null||current===null){trend.textContent='Variação indisponível: falta base de um dos meses';}
+ else if(metric==='nota'||metric==='pct'||metric==='util'){
+  const delta=current-previous,sign=delta>0?'+':'';trend.textContent=(delta>0?'▲ ':delta<0?'▼ ':'')+sign+delta.toFixed(metric==='nota'?2:1).replace('.',',')+(metric==='nota'?' ponto(s)':' p.p.')+' vs. mês anterior';trend.className='cmp-trend '+(delta>0?'up':delta<0?'down':'flat');
+ }else if(previous===0){trend.textContent=current===0?'Sem variação numérica vs. mês anterior':'Variação percentual indisponível (mês anterior igual a zero)';}
+ else{const delta=(current-previous)/Math.abs(previous)*100,sign=delta>0?'+':'';trend.textContent=(delta>0?'▲ ':delta<0?'▼ ':'')+sign+delta.toFixed(1).replace('.',',')+'% vs. mês anterior';trend.className='cmp-trend '+(delta>0?'up':delta<0?'down':'flat');}
+}
+async function refreshComparativo(){
+ $('cmpStatus').textContent='Atualizando…';$('cmpWarning').textContent='';
+ try{
+  const saved=await readComparativoHistory();let current=saved;
+  // Ao abrir/atualizar o comparativo, administradores também removem do arquivo persistido
+  // os meses que saíram da janela móvel, mesmo que ainda não tenham feito upload no mês novo.
+  if(canPerm('update_data'))current=await saveComparativoHistory([]);
+  COMPARATIVO_CACHE=current;renderComparativo(comparativoMerge(current,ALL),curInd)
+ }catch(err){renderComparativo(comparativoMerge([],ALL),curInd,'Não foi possível atualizar o histórico. '+(err?.message||err))}
+}
+async function registerCurrentComparativoBase(){
+ if(!await requireServerPerm('update_data'))return;
+ const b=$('cmpSaveBtn');b.disabled=true;$('cmpStatus').textContent='Registrando os meses da base atual…';$('cmpWarning').textContent='';
+ try{const saved=await saveComparativoHistory(ALL);renderComparativo(comparativoMerge(saved,ALL),curInd);$('cmpStatus').textContent='Base atual registrada no histórico comparativo ('+fI(saved.length)+' combinações de indústria/mês).'}catch(err){$('cmpWarning').textContent='Não foi possível gravar o histórico: '+(err?.message||err);$('cmpStatus').textContent='O histórico não foi alterado.'}finally{b.disabled=false}
+}
+$('cmpReloadBtn').onclick=refreshComparativo;
+$('cmpSaveBtn').onclick=registerCurrentComparativoBase;
+$('cmpImportBtn').onclick=async()=>{if(await requireServerPerm('update_data'))$('cmpHistoryFile').click()};
+$('cmpHistoryFile').onchange=async e=>{
+ const file=e.target.files[0];e.target.value='';if(!file||!await requireServerPerm('update_data'))return;
+ const btn=$('cmpImportBtn');btn.disabled=true;$('cmpStatus').textContent='Lendo base histórica…';$('cmpWarning').textContent='';
+ try{
+  const rows=await parseComparativoImportFile(file),summaries=comparativoSummaries(rows),monthList=[...new Set(summaries.map(x=>x.mes))].sort();
+  if(!confirm('Importar '+summaries.length+' combinações de indústria/mês ('+monthList.join(', ')+') para o histórico? A base operacional dados.json não será alterada.')){$('cmpStatus').textContent='Importação cancelada.';return}
+  const saved=await saveComparativoHistory(rows);renderComparativo(comparativoMerge(saved,ALL),curInd);$('cmpWarning').textContent='';$('cmpStatus').textContent='Base histórica importada ('+summaries.length+' combinações de indústria/mês). A base operacional não foi alterada.';
+ }catch(err){$('cmpStatus').textContent='Não foi possível importar a base histórica.';$('cmpWarning').textContent=err?.message||String(err)}finally{btn.disabled=false}
+};
+$('cmpMetricSwitch').addEventListener('click',e=>{const b=e.target.closest('button[data-metric]');if(b)renderComparativoChart(b.dataset.metric)});
+
 $('ctrBtn').onclick=openContractsView;
 $('ctrClose').onclick=()=>{const view=$('ctr');view.classList.add('view-leave');setTimeout(()=>{view.classList.add('hidden');view.classList.remove('view-leave');if(canPerm('dashboard')||canPerm('consult_industries')||canPerm('visit_details')){const app=$('app');app.classList.remove('hidden');app.classList.add('view-enter');requestAnimationFrame(()=>requestAnimationFrame(()=>app.classList.remove('view-enter')));applyPermissionUI();render()}else $('app').classList.add('hidden')},180)};
 function histFmt(v){if(!v)return '—';try{return new Date(v).toLocaleString('pt-BR')}catch(e){return String(v)}}
@@ -962,5 +1124,37 @@ $('ctrAddBtn').onclick=async()=>{
  if(error)return ctrSt(/duplicate|unique/i.test(error.message)?'Esse fornecedor já existe.':'Erro: '+error.message,1);
  CTR.push(data);CTR.sort((a,b)=>a.fornecedor.localeCompare(b.fornecedor));$('ctrNewAg').value=$('ctrNewForn').value='';ctrRender();ctrSt('Fornecedor adicionado.');
 };
+
+/* ===== Comparativo mensal inline (grafico de linha) ===== */
+function compSmooth(p){if(p.length<2)return '';const f=n=>n.toFixed(1);let d='M'+f(p[0].x)+','+f(p[0].y);for(let k=0;k<p.length-1;k++){const a=p[k],b=p[k+1],pa=p[k-1]||a,pb=p[k+2]||b,t=.22;let c1x=a.x+(b.x-pa.x)*t,c1y=a.y+(b.y-pa.y)*t,c2x=b.x-(pb.x-a.x)*t,c2y=b.y-(pb.y-a.y)*t;const lo=Math.min(a.y,b.y),hi=Math.max(a.y,b.y);c1y=Math.min(hi,Math.max(lo,c1y));c2y=Math.min(hi,Math.max(lo,c2y));d+=' C'+f(c1x)+','+f(c1y)+' '+f(c2x)+','+f(c2y)+' '+f(b.x)+','+f(b.y)}return d}
+function compLineSVG(items,vals,metric,def){
+ const mob=window.innerWidth<700,W=mob?420:800,H=mob?310:330,pl=mob?46:62,pr=mob?30:62,pt=48,pb=46,iw=W-pl-pr,ih=H-pt-pb,n=metric==='nota'?5:4;
+ const valid=vals.filter(v=>v!=null&&isFinite(v));let max=metric==='nota'?5:Math.max(1,...valid)*1.18;if(metric==='pct'||metric==='util')max=Math.max(100,Math.max(0,...valid)*1.1);
+ if(metric!=='nota')max=Math.max(n,Math.ceil(max/n)*n);if(metric==='pct'||metric==='util')max=Math.ceil(max/20)*20;
+ const X=i=>pl+iw*(.15+.35*i),Y=v=>pt+ih-(v/max)*ih,base=pt+ih;
+ const tick=v=>v===0?'0':(metric==='pct'||metric==='util')?Math.round(v)+'%':comparativoFormat(metric,v,true);
+ let g='';for(let k=0;k<=n;k++){const v=max*k/n,y=Y(v);g+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y+'" y2="'+y+'" stroke="'+(k?'#e9edf1':'#cfd8e2')+'" stroke-width="1"/><text x="'+(pl-12)+'" y="'+(y+4)+'" text-anchor="end" font-size="12" font-weight="700" fill="#6c7783">'+esc(tick(v))+'</text>'}
+ const pts=items.map((m,i)=>vals[i]!=null&&isFinite(vals[i])?{x:X(i),y:Y(vals[i]),i,v:vals[i]}:null).filter(Boolean);
+ let body='';
+ if(pts.length>=2){const d=compSmooth(pts);body+='<path class="cmp-area" d="'+d+' L'+pts[pts.length-1].x+','+base+' L'+pts[0].x+','+base+' Z" fill="url(#cmpArea)"/><path class="cmp-line" pathLength="1" d="'+d+'" stroke="url(#cmpStroke)"/>'}
+ items.forEach((m,i)=>{const x=X(i),has=!!m.row&&vals[i]!=null,latest=i===items.length-1,lab=esc(m.label);
+  body+='<text x="'+x+'" y="'+(H-14)+'" text-anchor="middle" font-size="13" font-weight="900" fill="#0b2742">'+lab+'</text>';
+  if(!has){body+='<g><title>'+lab+': sem base salva para este mês</title><circle cx="'+x+'" cy="'+base+'" r="8" fill="#fff" stroke="#aab4bf" stroke-width="2.5" stroke-dasharray="4 3"/><text x="'+x+'" y="'+(base-18)+'" text-anchor="middle" font-size="11" font-weight="800" fill="#8a949e">sem base</text></g>';return}
+  const y=Y(vals[i]),disp=comparativoFormat(metric,vals[i],true),w=Math.max(46,disp.length*8.4+18),col=latest?'#e30613':'#123b5f',ty=Math.max(6,y-44);
+  body+='<g class="cmp-pt" style="animation-delay:'+(.5+i*.18)+'s"><title>'+lab+' — '+esc(def.title)+': '+esc(disp)+'</title>'+(latest?'<circle cx="'+x+'" cy="'+y+'" r="17" fill="#e30613" opacity=".14"/>':'')+'<circle cx="'+x+'" cy="'+y+'" r="'+(latest?9:7.5)+'" fill="'+(latest?'#e30613':'#fff')+'" stroke="'+(latest?'#fff':col)+'" stroke-width="'+(latest?3.5:4)+'"/><rect x="'+(x-w/2)+'" y="'+ty+'" width="'+w+'" height="26" rx="8" fill="'+col+'"/><text x="'+x+'" y="'+(ty+17.5)+'" text-anchor="middle" font-size="13" font-weight="900" fill="#fff">'+esc(disp)+'</text></g>'});
+ return '<svg class="cmp-svg" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(def.title)+' nos últimos três meses"><defs><linearGradient id="cmpStroke" gradientUnits="userSpaceOnUse" x1="'+pl+'" x2="'+(W-pr)+'" y1="0" y2="0"><stop offset="0" stop-color="#123b5f"/><stop offset="1" stop-color="#e30613"/></linearGradient><linearGradient id="cmpArea" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#123b5f" stop-opacity=".22"/><stop offset="1" stop-color="#123b5f" stop-opacity="0"/></linearGradient></defs>'+g+body+'</svg>'}
+let COMP_STATE='idle',COMP_WARN='',COMP_KEY={a:null,c:null},COMP_MERGED=[];
+function compShowEmpty(msg){$('cmpIndustry').textContent='';$('cmpChart').innerHTML='<div class="cmp-empty">'+esc(msg)+'</div>';$('cmpTableBody').innerHTML='<tr><td colspan="5" style="color:var(--muted)">—</td></tr>';$('cmpStatus').textContent='';$('cmpWarning').textContent='';const t=$('cmpTrend');t.className='cmp-trend flat';t.textContent='Selecione uma indústria'}
+async function updateComparativoInline(){
+ const sec=$('cmpSection');if(!sec)return;
+ if(ME&&!canPerm('consult_industries')){sec.style.display='none';return}
+ sec.style.display='';
+ if(curInd==='__all__'){compShowEmpty('Selecione uma indústria no campo superior para ver o comparativo dos últimos três meses.');return}
+ if(COMP_STATE==='idle'){COMP_STATE='loading';if(sb&&ME){try{COMPARATIVO_CACHE=await readComparativoHistory();COMP_WARN=''}catch(err){COMP_WARN='Não foi possível ler comparativo.json no Supabase. O gráfico mostra somente os dados da base atual. Detalhe: '+(err?.message||err)}}COMP_STATE='done'}
+ if(COMP_STATE!=='done'||curInd==='__all__')return;
+ if(COMP_KEY.a!==ALL||COMP_KEY.c!==COMPARATIVO_CACHE){COMP_MERGED=comparativoMerge(COMPARATIVO_CACHE,ALL);COMP_KEY={a:ALL,c:COMPARATIVO_CACHE}}
+ renderComparativo(COMP_MERGED,curInd,COMP_WARN)
+}
+{const __render0=render;render=function(...a){const r=__render0.apply(this,a);try{updateComparativoInline()}catch(e){console.error(e)}return r}}
 boot();
 </script></body></html>
