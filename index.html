@@ -265,6 +265,8 @@ html:not(.is-admin) .admin-only{display:none!important}
 <div class="grid3"><section class="card"><div class="card-title">Tempo médio de atendimento</div><div class="card-sub">Por visita realizada</div><div class="score"><div><div class="score-num" id="at"></div><div class="score-max">por visita</div></div><div><div class="small-note">Menor atendimento</div><div class="score-num" style="font-size:32px" id="mt"></div><div class="score-max">minutos</div></div></div></section>
 <section class="card"><div class="card-title">Nota média do repositor</div><div class="card-sub">Escala máxima = 5,0</div><div class="score"><div class="score-num" id="as"></div><div><div class="stars">★★★★★</div><div class="small-note">média das avaliações registradas</div></div></div></section>
 <section class="card"><div class="card-title" id="rkTitle"></div><div class="card-sub" id="rkSub"></div><div class="rank-switch" id="rankSwitch"><button class="active" data-rank="more">Mais horas</button><button data-rank="less">Menos horas</button><button data-rank="none">Sem visitas</button></div><div class="rank-count" id="rankCount"></div><div class="rank-list" id="rank"></div></section></div>
+<div class="section-title">Faturamento detalhado</div>
+<section class="card" id="revenueStores"><div class="table-tools"><div><div class="card-title" id="revenueStoresTitle">Faturamento por loja</div><div class="card-sub" id="revenueStoresSub"></div></div><input class="search" id="revenueStoresSearch" placeholder="Buscar loja ou indústria..." oninput="renderRevenueStores()"></div><div class="table-wrap"><table><thead id="revenueStoresHead"></thead><tbody id="revenueStoresBody"></tbody></table></div></section>
 <div class="section-title">Detalhamento completo</div>
 <section class="card"><div class="tabs" id="tabs"></div><div class="table-tools"><div><div class="card-title" id="tbTitle"></div><div class="card-sub" id="tbSub"></div></div><input class="search" id="q" placeholder="Buscar..."></div><div class="table-wrap"><table id="tb"><thead></thead><tbody></tbody></table></div></section>
 <div id="pdfDetail" class="pdf-detail">
@@ -329,10 +331,39 @@ const auxCanonical=v=>auxMatchKey(v).split(' ').filter(Boolean).sort().join(' ')
 const auxStoreMatchKey=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\b(comercial\s+zaffari|stok\s*center|stok|center)\b/g,' ').replace(/\b(loja|regiao|reg|filial|unidade)\b/g,' ').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');
 const auxStoreCanonical=v=>auxStoreMatchKey(v).split(' ').filter(Boolean).sort().join(' ');
 const auxKey=(forn,loja)=>auxCanonical(forn)+'|'+auxStoreCanonical(loja);
-const auxPairMatches=(a,b)=>auxMatchKeys(a).some(k=>auxMatchKeys(b).includes(k));
+const auxPairMatches=(a,b)=>{
+ const ka=auxMatchKey(a),kb=auxMatchKey(b);if(!ka||!kb)return false;
+ if(auxMatchKeys(a).some(k=>auxMatchKeys(b).includes(k)))return true;
+ // Visit records sometimes have legal suffixes after the supplier name. Only allow whole-token prefixes.
+ const aTokens=ka.split(' '),bTokens=kb.split(' ');
+ const short=aTokens.length<=bTokens.length?aTokens:bTokens,long=aTokens.length<=bTokens.length?bTokens:aTokens;
+ return short.length>=2&&short.every((word,i)=>long[i]===word)&&long.length-short.length<=2;
+};
 function auxStoreMatches(a,b){const ka=auxStoreMatchKey(a),kb=auxStoreMatchKey(b);if(!ka||!kb)return false;if(ka===kb||auxStoreCanonical(a)===auxStoreCanonical(b))return true;const ta=ka.split(' ').filter(Boolean),tb=kb.split(' ').filter(Boolean);const na=ta.filter(t=>/\d+/.test(t)),nb=tb.filter(t=>/\d+/.test(t));if(!na.length||!nb.length||!na.some(t=>nb.includes(t)))return false;const short=ta.length<=tb.length?ta:tb,long=ta.length<=tb.length?tb:ta;return short.every(t=>long.includes(t));}
 function revenueFor(forn,loja){const xs=REVENUE_DB.filter(r=>auxPairMatches(r.forn,forn)&&auxStoreMatches(r.loja,loja));return xs.length?xs.reduce((s,r)=>s+(Number(r.faturamento)||0),0):null}
 function revenueTotal(forn=null){return REVENUE_DB.reduce((s,r)=>s+(forn===null||auxPairMatches(r.forn,forn)?(Number(r.faturamento)||0):0),0)}
+// A base financeira é independente das visitas: todas as lojas importadas entram no detalhamento.
+function revenueByStore(forn){
+ const rs=REVENUE_DB.filter(r=>forn==='__all__'||auxPairMatches(r.forn,forn));
+ const grouped=new Map();
+ for(const r of rs){
+  const key=auxKey(r.forn,r.loja),old=grouped.get(key);
+  if(old)old.faturamento+=Number(r.faturamento)||0;
+  else grouped.set(key,{forn:r.forn,loja:r.loja,faturamento:Number(r.faturamento)||0});
+ }
+ return [...grouped.values()].sort((a,b)=>b.faturamento-a.faturamento||a.loja.localeCompare(b.loja,'pt-BR'));
+}
+function renderRevenueStores(){
+ const root=$('revenueStores');if(!root)return;
+ const rows=revenueByStore(curInd),all=curInd==='__all__';
+ $('revenueStoresTitle').textContent=all?'Faturamento por indústria e loja':'Faturamento por loja — '+curInd;
+ $('revenueStoresSub').textContent=rows.length+' lojas/combinações da base de faturamento • '+(all?'todas as indústrias':'somente a indústria selecionada')+' • Total: '+(revenueVisible?fBRL(rows.reduce((s,r)=>s+r.faturamento,0)):'••••••');
+ const term=($('revenueStoresSearch')?.value||'').toLocaleLowerCase('pt-BR');
+ const visible=rows.filter(r=>(r.forn+' '+r.loja).toLocaleLowerCase('pt-BR').includes(term));
+ $('revenueStoresHead').innerHTML='<tr>'+(all?'<th>Indústria / fornecedor</th>':'')+'<th>Loja / empresa da base</th><th style="text-align:right">Faturamento</th></tr>';
+ $('revenueStoresBody').innerHTML=visible.map(r=>'<tr>'+(all?'<td>'+esc(r.forn)+'</td>':'')+'<td>'+esc(r.loja)+'</td><td style="text-align:right">'+(revenueVisible?fBRL(r.faturamento):'••••••')+'</td></tr>').join('')||'<tr><td colspan="3">Nenhum faturamento encontrado para este filtro. Confira se o nome da indústria na base de faturamento corresponde ao cadastro de visitas.</td></tr>';
+}
+
 function storesWithoutVisits(){const visited=new Set(ALL.map(r=>auxKey(r.forn,r.loja)));return STORE_DB.filter(r=>(curInd==='__all__'||nk(r.forn)===nk(curInd))&&!visited.has(auxKey(r.forn,r.loja))).sort((a,b)=>a.loja.localeCompare(b.loja)||a.forn.localeCompare(b.forn))}
 
 function parse(txt){
@@ -370,6 +401,7 @@ function render(){
  const k=[];
  if(all){k.push(['Indústrias',suppliers.length,'na base']);k.push(['Lojas',O.lojas,'com registros'])}
  k.push(['Visitas agendadas',fI(O.ag),'programadas'],['Visitas realizadas',fI(O.real),fP(O.pct)+' de execução'],['Faturamento <button type="button" class="revenue-eye" onclick="toggleRevenueVisibility()" title="'+(revenueVisible?'Ocultar faturamento':'Mostrar faturamento')+'" aria-label="'+(revenueVisible?'Ocultar faturamento':'Mostrar faturamento')+'">'+(revenueVisible?'◉':'◎')+'</button>',revenueVisible?fBRL(revenueTotal(all?null:sel)):'••••••',all?'todas as indústrias':'indústria selecionada'],['Horas contratadas',fH(O.contr),'base registrada',1],['Horas executadas',fH(O.exec),O.util==null?'sem horas contratadas':fP(O.util)+' das contratadas',1],['Tempo médio',fH(O.avg),'por visita realizada'],['Nota média',fN(O.nota),'escala máxima 5,0']);
+ renderRevenueStores();
  $('kpis').className='grid-kpi'+(k.length===6?' k6':k.length===7?' k7':k.length===9?' k9':'');
  $('kpis').innerHTML=k.map(x=>`<div class="kpi ${x[3]?'dark':''}"><div class="label">${x[0]}</div><div class="value">${x[1]}</div><div class="note">${x[2]}</div></div>`).join('');
  $('vp').textContent=fP(O.pct);$('hp').textContent=O.util==null?'—':fP(O.util);$('vb').style.width=Math.min(O.pct,100)+'%';$('hb').style.width=Math.min(O.util||0,100)+'%';
@@ -416,9 +448,16 @@ function renderTable(){
   data=data.filter(x=>(x.loja+x.prom+x.comp+x.status).toLowerCase().includes(q));sub=fI(data.length)+' visitas';
  }else{
   const key=tab==='forn'?'forn':tab==='lojas'?'loja':'prom';const lab=tab==='forn'?'Indústria':tab==='lojas'?'Loja':'Promotor';
-  data=group(cur,key).filter(x=>x.name.toLowerCase().includes(q));cols=[['name',lab,x=>esc(x.name)],...(tab==='lojas'&&curInd!=='__all__'?[[ 'faturamento','Faturamento',x=>{const v=revenueFor(curInd,x.name);return v==null?'—':(revenueVisible?fBRL(v):'••••••')}]]:[['lojas','Lojas',x=>x.lojas]]),...std];
+  data=group(cur,key);
+  if(tab==='lojas'&&curInd!=='__all__'){
+   for(const fin of revenueByStore(curInd)){
+    if(!data.some(x=>auxStoreMatches(x.name,fin.loja))){data.push({name:fin.loja,ag:0,real:0,pct:0,nc:0,ea:0,sc:0,contr:0,exec:0,util:null,avg:0,min:null,nota:0,lojas:1});}
+   }
+  }
+  data=data.filter(x=>x.name.toLowerCase().includes(q));cols=[['name',lab,x=>esc(x.name)],...(tab==='lojas'&&curInd!=='__all__'?[[ 'faturamento','Faturamento',x=>{const v=revenueFor(curInd,x.name);return v==null?'—':(revenueVisible?fBRL(v):'••••••')}]]:[['lojas','Lojas',x=>x.lojas]]),...std];
   title='Todas as '+(tab==='forn'?'indústrias':tab==='lojas'?'lojas':'promotores');sub=fI(data.length)+' registros • busca e ordenação';
  }
+ if(tab==='lojas'&&curInd!=='__all__')data.forEach(x=>x.faturamento=revenueFor(curInd,x.name)??0);
  const s=sortS;data.sort((a,b)=>{let A=a[s.key],B=b[s.key];if(key_isStr(A))return String(A).localeCompare(String(B))*s.dir;return((A??-Infinity)-(B??-Infinity))*s.dir});
  $('tbTitle').textContent=title;$('tbSub').textContent=sub;
  $('tb').querySelector('thead').innerHTML='<tr>'+cols.map(c=>`<th data-k="${c[0]}">${c[1]}</th>`).join('');$('tb').querySelectorAll('th').forEach(th=>th.onclick=()=>{sortS.dir=sortS.key===th.dataset.k?-sortS.dir:-1;sortS.key=th.dataset.k;renderTable()});
@@ -492,9 +531,13 @@ async function parseAuxFile(file,kind){
   let wb;if(/\.csv$/i.test(file.name)||/csv/i.test(file.type))wb=XLSX.read((await file.text()).replace(/^\uFEFF/,''),{type:'string',raw:false});else wb=XLSX.read(await file.arrayBuffer(),{type:'array',raw:false});
   if(!wb.SheetNames?.length)throw new Error('Não foi possível ler a planilha/CSV.');
   const matrix=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:'',raw:true});if(matrix.length<2)throw new Error('O arquivo precisa ter cabeçalho e ao menos um registro.');
-  const headers=matrix[0].map(normAuxHeader);const pick=names=>headers.findIndex(h=>names.some(n=>h===n||h.includes(n)));
+  const headers=matrix[0].map(normAuxHeader);const pick=names=>{
+   for(const n of names){const idx=headers.findIndex(h=>h===n);if(idx>=0)return idx;}
+   for(const n of names){const idx=headers.findIndex(h=>h.startsWith(n)&&!/(geral|totalgeral|consolidado)/.test(h));if(idx>=0)return idx;}
+   return -1;
+  };
   // No faturamento mensal, Empresa identifica a loja, Fornecedor identifica a indústria e Venda é o valor.
-  const fi=kind==='revenue'?pick(['fornecedor','industria']):pick(['bandeira']);
+  const fi=kind==='revenue'?pick(['industria','fornecedor']):pick(['bandeira']);
   const li=kind==='revenue'?pick(['empresa','loja','nomedaloja','nomefantasia']):pick(['loja','nomedaloja','nomefantasia']);
   const vi=kind==='revenue'?pick(['venda','faturamento','valorfaturamento','valorvenda','vendas']):-1;
   if(fi<0||li<0||(kind==='revenue'&&vi<0))throw new Error(kind==='stores'?'Colunas necessárias: Bandeira e Loja.':'Colunas necessárias no faturamento: Empresa, Fornecedor e Venda.');
