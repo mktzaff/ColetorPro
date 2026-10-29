@@ -31,8 +31,10 @@
 .csvlink{position:absolute;top:5px;right:12px;font-size:9px;color:#aab2bb;cursor:pointer;opacity:.55;text-align:right;max-width:140px;line-height:1.2}
 .csvlink:hover{opacity:1;color:var(--navy)}
 .grid-kpi.k6{grid-template-columns:repeat(6,1fr)}
-@media(max-width:1200px){.grid-kpi.k6{grid-template-columns:repeat(3,1fr)}.topbar{padding-right:18px;padding-top:24px}}
-@media(max-width:700px){.grid-kpi.k6{grid-template-columns:repeat(2,1fr)}}
+.grid-kpi.k7{grid-template-columns:repeat(7,1fr)}
+.grid-kpi.k9{grid-template-columns:repeat(9,1fr)}
+@media(max-width:1200px){.grid-kpi.k6{grid-template-columns:repeat(3,1fr)}.grid-kpi.k7,.grid-kpi.k9{grid-template-columns:repeat(4,1fr)}.topbar{padding-right:18px;padding-top:24px}}
+@media(max-width:700px){.grid-kpi.k6,.grid-kpi.k7,.grid-kpi.k9{grid-template-columns:repeat(2,1fr)}}
 @media print{
  @page{size:A4 landscape;margin:8mm}
  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -123,7 +125,7 @@ body{background:#fff!important}
 .pdf-detail thead{display:table-header-group!important}
 }
 
-.top-actions{display:flex;gap:8px;align-items:center;margin-top:15px}.top-actions .btn{margin-top:0}.btn-html{background:#123b5f}.exported-view .top-actions #htmlBtn,.exported-view .top-actions #upBtn,.exported-view .top-actions #ctrBtn,.exported-view .top-actions #upStatus,.exported-view .top-actions #accBtn,.exported-view .top-actions #logoutBtn,.exported-view .top-actions .who{display:none!important}.exported-view .upd-mini{display:none!important}.exported-view #ctr{display:none!important}.exported-view #ctrMsg{display:flex!important} .exported-view .combo input{cursor:default}.exported-view .topbar{position:relative}
+.top-actions{display:flex;gap:8px;align-items:center;margin-top:15px}.top-actions .btn{margin-top:0}.btn-html{background:#123b5f}.exported-view .top-actions #htmlBtn,.exported-view .top-actions #upBtn,.exported-view .top-actions #storeDbBtn,.exported-view .top-actions #revenueDbBtn,.exported-view .top-actions #ctrBtn,.exported-view .top-actions #upStatus,.exported-view .top-actions #accBtn,.exported-view .top-actions #logoutBtn,.exported-view .top-actions .who{display:none!important}.exported-view .upd-mini{display:none!important}.exported-view #ctr{display:none!important}.exported-view #ctrMsg{display:flex!important} .exported-view .combo input{cursor:default}.exported-view .topbar{position:relative}
 .ctr-msg{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;margin:0 0 16px;padding:12px 16px;border:1px solid #dbe5ef;border-left:4px solid var(--red);border-radius:12px;background:linear-gradient(110deg,#fff,#f4f8fc);color:var(--navy);font-size:12px;font-weight:800;box-shadow:0 5px 16px rgba(12,40,68,.06);animation:rise .42s cubic-bezier(.2,.8,.2,1) both}.ctr-msg span{color:#9aabba}.ctr-msg.hidden{display:none!important}
 /* Movimento mais suave e consistente, sem exagero */
 .card,.kpi,.section-title,.topbar,.tabs,.table-tools{animation:rise .48s cubic-bezier(.2,.8,.2,1) both}
@@ -216,6 +218,9 @@ html:not(.is-admin) .admin-only{display:none!important}
 .confidential-footer .conf-icon{display:inline-grid;place-items:center;flex:0 0 20px;width:20px;height:20px;border-radius:50%;background:#fbe0e3;color:#8f1d2a;font-size:12px}
 #ctr .confidential-footer{display:none!important;margin-top:18px}
 @media(max-width:700px){.confidential-footer{font-size:10px;padding:10px;align-items:flex-start}}
+
+#basesModal{position:fixed;inset:0;z-index:1100;background:rgba(8,24,40,.68);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:16px}#basesModal.hidden{display:none}#basesModal .bases-box{background:#fff;border-radius:16px;width:100%;max-width:1100px;max-height:92vh;overflow:auto;padding:22px;box-shadow:0 24px 70px rgba(0,0,0,.3);border-top:5px solid var(--navy2)}#basesModal .bases-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:18px}#basesModal h2{margin:0;font-size:23px;color:var(--navy)}#basesModal .bases-intro{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.5}#basesModal .bases-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}#basesModal .bases-card{border:1px solid var(--line);border-radius:12px;padding:15px;min-width:0}#basesModal .bases-card h3{font-size:15px;margin:0 0 5px;color:var(--navy)}#basesModal .bases-card p{font-size:12px;line-height:1.5;color:var(--muted);margin:0 0 12px}#basesModal .bases-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}#basesModal .bases-editor{margin-top:16px;border:1px solid var(--line);border-radius:12px;padding:15px}#basesModal .bases-editor-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}#basesModal .bases-editor-head h3{margin:0;font-size:15px}#basesModal .bases-add{display:grid;grid-template-columns:minmax(150px,1fr) minmax(150px,1fr) auto;gap:8px;margin:10px 0}#basesModal input,#basesModal select{border:1px solid var(--line);border-radius:8px;padding:9px 10px;font-size:12px;min-width:0;width:100%;box-sizing:border-box}#basesModal .bases-table-wrap{overflow:auto;max-height:330px;border:1px solid var(--line);border-radius:9px}#basesModal table{width:100%;border-collapse:collapse;font-size:12px}#basesModal th{position:sticky;top:0;background:#f1f5f9;text-align:left;padding:9px;z-index:1}#basesModal td{padding:6px;border-top:1px solid var(--line)}#basesModal td input{min-width:140px}#basesModal .bases-delete{border:0;background:#fff0f0;color:#b4232f;border-radius:7px;padding:8px 10px;font-weight:800;cursor:pointer}#basesModal .bases-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px}#basesModal #storeEditStatus{font-size:12px;font-weight:700;color:var(--muted)}#basesModal .bases-hidden{display:none!important}@media(max-width:700px){#basesModal .bases-box{padding:15px}#basesModal .bases-grid{grid-template-columns:1fr}#basesModal .bases-add{grid-template-columns:1fr}#basesModal h2{font-size:20px}}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
@@ -245,8 +250,9 @@ html:not(.is-admin) .admin-only{display:none!important}
 <header class="header"><div class="brand"><div class="eyebrow">Resultados em campo • ColetorPRO</div><h1 id="ttl">EXECUÇÃO POR INDÚSTRIA <span>| Dashboard</span></h1><div class="subtitle" id="sub">Acesso restrito • dados carregados após o login</div></div><div class="period" id="period">CARREGANDO DADOS</div><div class="upd-mini" id="updMini"></div></header>
 <main class="wrap">
 <div class="topbar"><div class="combo"><label>Indústria (fornecedor)</label><input id="indIn" placeholder="Carregando dados publicados..." autocomplete="off" disabled><div class="combo-list hidden" id="indList"></div></div>
-<div class="top-actions"><button class="btn btn-pdf" id="pdfBtn" disabled onclick="exportPDF()">Exportar PDF</button><button class="btn btn-up" id="upBtn" type="button">Atualizar base (.csv, .xlsx)</button><button class="btn" id="ctrBtn" type="button" style="background:var(--navy2);display:none">Contratos realizados</button><input type="file" id="upFile" accept=".csv,.xlsx,.xls,.json,text/csv,application/csv,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden><span class="up-status" id="upStatus" role="status"></span><span class="who" id="who"></span><button class="btn btn-out" id="accBtn" type="button">Conta</button><button class="btn btn-out" id="logoutBtn" type="button">Sair</button></div>
+<div class="top-actions"><button class="btn btn-pdf" id="pdfBtn" disabled onclick="exportPDF()">Exportar PDF</button><button class="btn btn-out" id="basesOpenBtn" type="button" style="display:none" title="Gerenciar as bases do dashboard">Gerenciar bases</button><button class="btn btn-up" id="upBtn" type="button" style="display:none">Atualizar base (.csv, .xlsx)</button><button class="btn btn-out" id="storeDbBtn" type="button" style="display:none" title="Importar cadastro de lojas por indústria">Base de lojas</button><button class="btn btn-out" id="revenueDbBtn" type="button" style="display:none" title="Importar faturamento mensal por loja">Base de faturamento</button><button class="btn" id="ctrBtn" type="button" style="background:var(--navy2);display:none">Contratos realizados</button><input type="file" id="upFile" accept=".csv,.xlsx,.xls,.json,text/csv,application/csv,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden><input type="file" id="storeDbFile" accept=".csv,.xlsx,.xls,.json,text/csv,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden><input type="file" id="revenueDbFile" accept=".csv,.xlsx,.xls,.json,text/csv,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden><span class="who" id="who"></span><button class="btn btn-out" id="accBtn" type="button">Conta</button><button class="btn btn-out" id="logoutBtn" type="button">Sair</button></div>
 </div>
+<div id="basesModal" class="hidden" role="dialog" aria-modal="true" aria-labelledby="basesTitle"><div class="bases-box"><div class="bases-head"><div><h2 id="basesTitle">Gerenciamento de bases</h2><div class="bases-intro">Cada base é independente. Atualize as visitas, mantenha o cadastro de lojas editável e importe o faturamento mensal sem alterar os registros de visitas.</div></div><button class="btn btn-out" id="basesCloseBtn" type="button">Fechar</button></div><div class="bases-grid"><section class="bases-card" id="visitBaseCard"><h3>Base de visitas</h3><p>Atualiza os registros de visitas usados no dashboard. Não altera o cadastro independente de lojas.</p><div class="bases-actions"><button class="btn btn-up" id="visitBaseOpenBtn" type="button">Importar base de visitas</button></div></section><section class="bases-card" id="storeBaseCard"><h3>Cadastro de lojas</h3><p>Base independente por indústria. Você pode adicionar, editar e excluir lojas individualmente, sem precisar importar tudo novamente.</p><div class="bases-actions"><button class="btn" id="storeEditOpenBtn" type="button">Editar cadastro de lojas</button><button class="btn btn-out" id="storeImportOpenBtn" type="button">Importar arquivo</button></div></section><section class="bases-card" id="revenueBaseCard"><h3>Faturamento mensal</h3><p>Importe o arquivo do mês atual. A base de faturamento é separada das visitas e do cadastro de lojas.</p><div class="bases-actions"><button class="btn btn-out" id="revenueImportOpenBtn" type="button">Importar faturamento</button></div></section><section class="bases-card"><h3>Estado das bases</h3><p id="basesSummary">Carregando informações das bases...</p><div class="bases-actions"><button class="btn btn-out" id="basesRefreshBtn" type="button">Atualizar informações</button></div></section></div><section class="bases-editor bases-hidden" id="storeEditor"><div class="bases-editor-head"><div><h3>Editar cadastro de lojas</h3><div class="bases-intro">Edite os campos diretamente na tabela. As alterações só entram na base após clicar em “Salvar cadastro”.</div></div><input id="storeEditSearch" placeholder="Buscar indústria ou loja..." style="max-width:280px"></div><div class="bases-add"><input id="storeNewIndustry" placeholder="Indústria / fornecedor"><input id="storeNewName" placeholder="Nome da loja"><button class="btn" id="storeAddRowBtn" type="button">+ Adicionar loja</button></div><div class="bases-table-wrap"><table><thead><tr><th>Indústria / fornecedor</th><th>Loja</th><th>Ação</th></tr></thead><tbody id="storeEditRows"></tbody></table></div><div class="bases-foot"><span id="storeEditStatus" role="status">Cadastro não alterado.</span><div class="bases-actions"><button class="btn btn-out" id="storeEditCancelBtn" type="button">Descartar alterações</button><button class="btn" id="storeEditSaveBtn" type="button">Salvar cadastro</button></div></div></section><div id="basesStatus" role="status" class="small-note" style="margin-top:12px"></div><span class="up-status" id="upStatus" role="status"></span></div></div>
 <div id="empty">Carregando dados publicados...</div>
 <div id="app" class="hidden">
 <div class="ctr-msg hidden" id="ctrMsg"></div>
@@ -310,6 +316,14 @@ const dataOrdenavel=d=>{
 
 const badge=p=>p==null?'—':`<span class="badge ${p>=90?'ok':p>=60?'warn':'bad'}">${fP(p)}</span>`;
 let ALL=[],cur=[],tab='lojas',sortS={key:'real',dir:-1},suppliers=[];
+let STORE_DB=[],REVENUE_DB=[];
+const STORE_FILE='lojas.json',REVENUE_FILE='faturamento.json';
+const fBRL=n=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(Number(n)||0);
+const auxKey=(forn,loja)=>nk(forn)+'|'+nk(loja);
+function revenueFor(forn,loja){const x=REVENUE_DB.find(r=>auxKey(r.forn,r.loja)===auxKey(forn,loja));return x?x.faturamento:null}
+function revenueTotal(forn=null){return REVENUE_DB.reduce((s,r)=>s+(forn===null||nk(r.forn)===nk(forn)?r.faturamento:0),0)}
+function storesWithoutVisits(){const visited=new Set(ALL.map(r=>auxKey(r.forn,r.loja)));return STORE_DB.filter(r=>(curInd==='__all__'||nk(r.forn)===nk(curInd))&&!visited.has(auxKey(r.forn,r.loja))).sort((a,b)=>a.loja.localeCompare(b.loja)||a.forn.localeCompare(b.forn))}
+
 function parse(txt){
  const lines=String(txt||'').replace(/^\uFEFF/,'').split(/\r?\n/);const out=[];
  if(!lines.length)return out;
@@ -344,8 +358,8 @@ function render(){
  ctrMsg();
  const k=[];
  if(all){k.push(['Indústrias',suppliers.length,'na base']);k.push(['Lojas',O.lojas,'com registros'])}
- k.push(['Visitas agendadas',fI(O.ag),'programadas'],['Visitas realizadas',fI(O.real),fP(O.pct)+' de execução'],['Horas contratadas',fH(O.contr),'base registrada',1],['Horas executadas',fH(O.exec),O.util==null?'sem horas contratadas':fP(O.util)+' das contratadas',1],['Tempo médio',fH(O.avg),'por visita realizada'],['Nota média',fN(O.nota),'escala máxima 5,0']);
- $('kpis').className='grid-kpi'+(k.length===6?' k6':'');
+ k.push(['Visitas agendadas',fI(O.ag),'programadas'],['Visitas realizadas',fI(O.real),fP(O.pct)+' de execução'],['Faturamento',fBRL(revenueTotal(all?null:sel)),all?'todas as indústrias':'indústria selecionada'],['Horas contratadas',fH(O.contr),'base registrada',1],['Horas executadas',fH(O.exec),O.util==null?'sem horas contratadas':fP(O.util)+' das contratadas',1],['Tempo médio',fH(O.avg),'por visita realizada'],['Nota média',fN(O.nota),'escala máxima 5,0']);
+ $('kpis').className='grid-kpi'+(k.length===6?' k6':k.length===7?' k7':k.length===9?' k9':'');
  $('kpis').innerHTML=k.map(x=>`<div class="kpi ${x[3]?'dark':''}"><div class="label">${x[0]}</div><div class="value">${x[1]}</div><div class="note">${x[2]}</div></div>`).join('');
  $('vp').textContent=fP(O.pct);$('hp').textContent=O.util==null?'—':fP(O.util);$('vb').style.width=Math.min(O.pct,100)+'%';$('hb').style.width=Math.min(O.util||0,100)+'%';
  $('vg').textContent=fI(O.real-O.ag)+' visitas';$('hg').textContent=fH(O.exec-O.contr);$('nc').textContent=fI(O.nc);$('ea').textContent=fI(O.ea);$('sc').textContent=fI(O.sc);
@@ -362,18 +376,19 @@ function render(){
  $('storeChSub').textContent=all?'Top 20 lojas por visitas realizadas • agendadas x realizadas':'Agendadas x realizadas por loja';
  $('storeChart').innerHTML=sg.map(x=>`<div class="bar-group" style="min-width:42px"><div class="bars"><div class="bar navy" style="height:${x.ag/smx*245}px"><span>${x.ag}</span></div><div class="bar red" style="height:${x.real/smx*245}px"><span>${x.real}</span></div></div><div class="bar-label" title="${esc(x.name)}">${esc(x.name)}</div></div>`).join('');
  const rankMode=window.rankMode||'more';
- const rg=rankMode==='none'?group(cur,'loja'):(all?group(cur,'forn'):group(cur,'loja'));
+ const rg=all?group(cur,'forn'):group(cur,'loja');
+ const noVisitList=rankMode==='none'?storesWithoutVisits():[];
  $('rkTitle').textContent=all?'Concentração de execução':'Visão de horas e visitas';
  $('rkSub').textContent=all?'Indústrias com maior volume de horas executadas':'Indicadores das lojas selecionadas';
  $('rankSwitch').querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.rank===rankMode));
  let list=[],rankLabel='';
  if(rankMode==='more'){list=[...rg].sort((a,b)=>b.exec-a.exec).slice(0,6);rankLabel=all?'Top 6 indústrias por horas executadas':'Top 6 lojas por horas executadas'}
  else if(rankMode==='less'){list=[...rg].filter(x=>x.exec>0).sort((a,b)=>a.exec-b.exec).slice(0,6);rankLabel=all?'Indústrias com menos horas executadas':'Lojas com menos horas executadas'}
- else{list=[...rg].filter(x=>x.real===0).sort((a,b)=>a.name.localeCompare(b.name));rankLabel=all?'Indústrias sem visitas realizadas':'Lojas sem visitas realizadas'}
- $('rankCount').textContent=rankMode==='none'?`${fI(rg.filter(x=>x.real===0).length)} lojas sem visitas realizadas`:rankLabel;
+ else{list=noVisitList.map(x=>({name:all?(x.loja+' — '+x.forn):x.loja,forn:x.forn,loja:x.loja,exec:0,real:0}));rankLabel='Lojas sem visitas agendadas na base atual'}
+ $('rankCount').textContent=rankMode==='none'?`${fI(noVisitList.length)} lojas sem visitas agendadas${STORE_DB.length?'':' • importe a base de lojas'}`:rankLabel;
  const mh=rankMode==='less'?(list[list.length-1]?.exec||1):(list[0]?.exec||1);
  $('rank').className='rank-list'+(rankMode==='none'?' all-none':'');
- $('rank').innerHTML=list.length?list.map((x,i)=>{const width=rankMode==='none'?100:x.exec/mh*100;return `<div class="rank-item"><div class="rank-num">${i+1}</div><div><div class="rank-name" title="${esc(x.name)}">${esc(x.name)}</div><div class="rank-bar"><div style="width:${Math.max(width,2)}%"></div></div></div><div class="rank-val">${rankMode==='none'?'0 visitas':fH(x.exec)}</div></div>`}).join(''):`<div class="rank-empty">${rankMode==='none'?'Nenhuma loja sem visitas realizadas.':'Nenhum registro disponível.'}`;
+ $('rank').innerHTML=list.length?list.map((x,i)=>{const width=rankMode==='none'?100:x.exec/mh*100;return `<div class="rank-item"><div class="rank-num">${i+1}</div><div><div class="rank-name" title="${esc(x.name)}">${esc(x.name)}</div><div class="rank-bar"><div style="width:${Math.max(width,2)}%"></div></div></div><div class="rank-val">${rankMode==='none'?'Sem visitas':fH(x.exec)}</div></div>`}).join(''):`<div class="rank-empty">${rankMode==='none'?(STORE_DB.length?'Nenhuma loja sem visitas agendadas na base atual.':'Importe a base de lojas para identificar lojas sem visitas.'):'Nenhum registro disponível.'}`;
  $('rankSwitch').querySelectorAll('button').forEach(b=>b.onclick=()=>{window.rankMode=b.dataset.rank;render()});
  const tabs=all?[['forn','Indústrias'],['lojas','Lojas'],['prom','Promotores']]:[['lojas','Lojas'],['prom','Promotores'],['visitas','Visitas']];
  if(!tabs.find(t=>t[0]===tab))tab=tabs[0][0];
@@ -390,7 +405,7 @@ function renderTable(){
   data=data.filter(x=>(x.loja+x.prom+x.comp+x.status).toLowerCase().includes(q));sub=fI(data.length)+' visitas';
  }else{
   const key=tab==='forn'?'forn':tab==='lojas'?'loja':'prom';const lab=tab==='forn'?'Indústria':tab==='lojas'?'Loja':'Promotor';
-  data=group(cur,key).filter(x=>x.name.toLowerCase().includes(q));cols=[['name',lab,x=>esc(x.name)],['lojas','Lojas',x=>x.lojas],...std];
+  data=group(cur,key).filter(x=>x.name.toLowerCase().includes(q));cols=[['name',lab,x=>esc(x.name)],...(tab==='lojas'&&curInd!=='__all__'?[[ 'faturamento','Faturamento',x=>{const v=revenueFor(curInd,x.name);return v==null?'—':fBRL(v)}]]:[['lojas','Lojas',x=>x.lojas]]),...std];
   title='Todas as '+(tab==='forn'?'indústrias':tab==='lojas'?'lojas':'promotores');sub=fI(data.length)+' registros • busca e ordenação';
  }
  const s=sortS;data.sort((a,b)=>{let A=a[s.key],B=b[s.key];if(key_isStr(A))return String(A).localeCompare(String(B))*s.dir;return((A??-Infinity)-(B??-Infinity))*s.dir});
@@ -447,6 +462,64 @@ function buildPdfDetail(){
  $('pdfDetail').dataset.industry=selectedIndustry;
 }
 async function exportPDF(){if(!window.__COLETOR_EXPORTED_DATA__&&!await requireServerPerm('export_pdf'))return;closeIndustryList();buildPdfDetail();const old=document.title,nm=curInd==='__all__'?'Geral':curInd.split(' - ')[0].trim();document.title='ColetorPRO - '+nm+' - '+$('period').textContent;window.onafterprint=()=>{document.title=old;window.onafterprint=null};requestAnimationFrame(()=>requestAnimationFrame(()=>window.print()))}
+async function readAuxPublished(file){
+ try{const {data,error}=await sb.storage.from(BUCKET).createSignedUrl(file,60);if(error||!data)return [];const res=await fetch(data.signedUrl,{cache:'no-store'});if(!res.ok)return [];const j=await res.json();return Array.isArray(j)?j:[]}catch(e){console.warn('Base auxiliar indisponível:',file,e);return []}
+}
+async function loadAuxBases(){
+ if(!sb||window.__COLETOR_EXPORTED_DATA__)return;
+ const [stores,revenue]=await Promise.all([readAuxPublished(STORE_FILE),readAuxPublished(REVENUE_FILE)]);
+ STORE_DB=stores.filter(x=>x&&typeof x.forn==='string'&&typeof x.loja==='string').map(x=>({forn:x.forn.trim(),loja:x.loja.trim()}));
+ REVENUE_DB=revenue.filter(x=>x&&typeof x.forn==='string'&&typeof x.loja==='string').map(x=>({forn:x.forn.trim(),loja:x.loja.trim(),faturamento:Number(x.faturamento)||0}));
+}
+function normAuxHeader(v){return String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'')}
+function parseMoney(v){if(typeof v==='number')return v;let s=String(v??'').trim().replace(/R\$/gi,'').replace(/\s/g,'');if(!s)return NaN;const comma=s.lastIndexOf(','),dot=s.lastIndexOf('.');if(comma>=0&&dot>=0){if(comma>dot)s=s.replace(/\./g,'').replace(',','.');else s=s.replace(/,/g,'')}else if(comma>=0)s=s.replace(/\./g,'').replace(',','.');const n=Number(s);return Number.isFinite(n)?n:NaN}
+async function parseAuxFile(file,kind){
+ let raw;
+ if(/\.json$/i.test(file.name)){raw=JSON.parse(await file.text());if(!Array.isArray(raw))throw new Error('O JSON precisa conter uma lista de registros.');}
+ else{
+  if(!window.XLSX)throw new Error('Leitor de planilhas não carregou. Confira a conexão e recarregue a página.');
+  let wb;if(/\.csv$/i.test(file.name)||/csv/i.test(file.type))wb=XLSX.read((await file.text()).replace(/^\uFEFF/,''),{type:'string',raw:false});else wb=XLSX.read(await file.arrayBuffer(),{type:'array',raw:false});
+  if(!wb.SheetNames?.length)throw new Error('Não foi possível ler a planilha/CSV.');
+  const matrix=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:'',raw:false});if(matrix.length<2)throw new Error('O arquivo precisa ter cabeçalho e ao menos um registro.');
+  const headers=matrix[0].map(normAuxHeader);const pick=names=>headers.findIndex(h=>names.some(n=>h===n||h.includes(n)));
+  const fi=pick(['industria','fornecedor','bandeira']),li=pick(['loja','nomedaloja','nomefantasia']),vi=pick(['faturamento','valorfaturamento','valorvenda','vendas']);
+  if(fi<0||li<0||(kind==='revenue'&&vi<0))throw new Error(kind==='stores'?'Colunas necessárias: Indústria/Fornecedor e Loja.':'Colunas necessárias: Indústria/Fornecedor, Loja e Faturamento.');
+  raw=matrix.slice(1).filter(row=>row.some(v=>String(v??'').trim())).map(row=>({forn:row[fi],loja:row[li],...(kind==='revenue'?{faturamento:row[vi]}:{})}));
+ }
+ const result=[];for(let i=0;i<raw.length;i++){const r=raw[i]||{};const keys=Object.keys(r).reduce((m,k)=>(m[normAuxHeader(k)]=r[k],m),{});const forn=r.forn??keys.industria??keys.fornecedor??keys.bandeira,loja=r.loja??keys.loja??keys.nomedaloja;const item={forn:String(forn??'').trim(),loja:String(loja??'').trim()};if(!item.forn||!item.loja)continue;if(kind==='revenue'){const val=parseMoney(r.faturamento??keys.faturamento??keys.valorfaturamento??keys.valorvenda??keys.vendas);if(!Number.isFinite(val))throw new Error('Faturamento inválido na linha '+(i+2)+'.');item.faturamento=val;}result.push(item)}
+ if(!result.length)throw new Error('Nenhum registro válido encontrado. Confira os cabeçalhos e o conteúdo do arquivo.');
+ const unique=new Map();for(const r of result)unique.set(auxKey(r.forn,r.loja),r);return [...unique.values()];
+}
+async function uploadAuxBase(kind,file){
+ const st=$('upStatus'),isRevenue=kind==='revenue',path=isRevenue?REVENUE_FILE:STORE_FILE;
+ try{if(file.size>50*1048576)throw new Error('Arquivo acima de 50 MB.');st.textContent='Validando '+(isRevenue?'faturamento':'cadastro de lojas')+'…';const rows=await parseAuxFile(file,kind);
+  const msg=isRevenue?'Substituir a base mensal de faturamento por '+fI(rows.length)+' registros?':'Substituir o cadastro de lojas por '+fI(rows.length)+' registros?';if(!confirm(msg)){st.textContent='';return}
+  const blob=new Blob([JSON.stringify(rows)],{type:'application/json'});st.textContent='Enviando '+(blob.size/1048576).toFixed(1)+' MB…';const {error}=await sb.storage.from(BUCKET).upload(path,blob,{upsert:true,contentType:'application/json',cacheControl:'0'});if(error)throw error;
+  await loadAuxBases();render();updateBasesSummary();$('basesStatus').textContent=(isRevenue?'Faturamento':'Cadastro de lojas')+' atualizado: '+fI(rows.length)+' registros.';st.textContent=(isRevenue?'Faturamento':'Cadastro de lojas')+' atualizado: '+fI(rows.length)+' registros.';
+ }catch(err){st.textContent='Erro: '+(err?.message||err)}
+}
+let STORE_DRAFT=[];
+async function saveAuxRows(kind,rows){const path=kind==='revenue'?REVENUE_FILE:STORE_FILE;const blob=new Blob([JSON.stringify(rows)],{type:'application/json'});const{error}=await sb.storage.from(BUCKET).upload(path,blob,{upsert:true,contentType:'application/json',cacheControl:'0'});if(error)throw error;await loadAuxBases();render();updateBasesSummary()}
+function updateBasesSummary(){$('basesSummary').textContent=`Cadastro de lojas: ${STORE_DB.length.toLocaleString('pt-BR')} registros. Faturamento mensal: ${REVENUE_DB.length.toLocaleString('pt-BR')} registros. A base de visitas continua independente.`}
+function renderStoreEditor(){const q=normAuxHeader($('storeEditSearch').value);const rows=STORE_DRAFT.map((r,i)=>({...r,_i:i})).filter(r=>!q||normAuxHeader(r.forn+' '+r.loja).includes(q));$('storeEditRows').innerHTML=rows.length?rows.map(r=>`<tr data-row="${r._i}"><td><input data-store-field="forn" data-row="${r._i}" value="${esc(r.forn)}" aria-label="Indústria da loja"></td><td><input data-store-field="loja" data-row="${r._i}" value="${esc(r.loja)}" aria-label="Nome da loja"></td><td><button type="button" class="bases-delete" data-store-delete="${r._i}">Excluir</button></td></tr>`).join(''):'<tr><td colspan="3" style="padding:18px;text-align:center;color:var(--muted)">Nenhuma loja encontrada.</td></tr>';}
+function openStoreEditor(){if(!requirePerm('manage_bases'))return;STORE_DRAFT=STORE_DB.map(r=>({...r}));$('storeEditSearch').value='';$('storeEditStatus').textContent='Cadastro carregado. As alterações ainda não foram salvas.';$('storeEditor').classList.remove('bases-hidden');renderStoreEditor()}
+$('basesOpenBtn').onclick=async()=>{if(!(canPerm('manage_bases')||canPerm('update_data')))return alert('Seu perfil não tem permissão para gerenciar bases.');$('basesModal').classList.remove('hidden');$('basesStatus').textContent='';await loadAuxBases();updateBasesSummary();};
+$('basesCloseBtn').onclick=()=>$('basesModal').classList.add('hidden');$('basesModal').addEventListener('click',e=>{if(e.target===$('basesModal'))$('basesModal').classList.add('hidden')});
+$('basesRefreshBtn').onclick=async()=>{await loadAuxBases();updateBasesSummary();$('basesStatus').textContent='Informações atualizadas.'};
+$('visitBaseOpenBtn').onclick=async()=>{if(!canPerm('update_data')||!await requireServerPerm('update_data'))return;$('upFile').click()};
+$('storeEditOpenBtn').onclick=async()=>{if(!await requireServerPerm('manage_bases'))return;openStoreEditor()};
+$('storeImportOpenBtn').onclick=async()=>{if(await requireServerPerm('manage_bases'))$('storeDbFile').click()};
+$('revenueImportOpenBtn').onclick=async()=>{if(await requireServerPerm('manage_bases'))$('revenueDbFile').click()};
+$('storeAddRowBtn').onclick=()=>{if(!requirePerm('manage_bases'))return;const forn=$('storeNewIndustry').value.trim(),loja=$('storeNewName').value.trim();if(!forn||!loja){$('storeEditStatus').textContent='Preencha indústria e loja para adicionar.';return}if(STORE_DRAFT.some(r=>auxKey(r.forn,r.loja)===auxKey(forn,loja))){$('storeEditStatus').textContent='Essa loja já existe para essa indústria.';return}STORE_DRAFT.push({forn,loja});$('storeNewIndustry').value='';$('storeNewName').value='';$('storeEditStatus').textContent='Nova loja adicionada. Clique em Salvar cadastro para gravar.';renderStoreEditor()};
+$('storeEditRows').addEventListener('input',e=>{const el=e.target.closest('[data-store-field]');if(!el)return;const i=Number(el.dataset.row);if(!STORE_DRAFT[i])return;STORE_DRAFT[i][el.dataset.storeField]=el.value;$('storeEditStatus').textContent='Há alterações não salvas.'});
+$('storeEditRows').addEventListener('click',e=>{const b=e.target.closest('[data-store-delete]');if(!b||!requirePerm('manage_bases'))return;const i=Number(b.dataset.storeDelete);if(!STORE_DRAFT[i])return;STORE_DRAFT.splice(i,1);renderStoreEditor();$('storeEditStatus').textContent='Loja removida da edição. Clique em Salvar cadastro para confirmar.'});
+$('storeEditSearch').addEventListener('input',renderStoreEditor);
+$('storeEditCancelBtn').onclick=()=>{if(!confirm('Descartar todas as alterações não salvas?'))return;openStoreEditor()};
+$('storeEditSaveBtn').onclick=async()=>{if(!await requireServerPerm('manage_bases'))return;const rows=STORE_DRAFT.map(r=>({forn:String(r.forn||'').trim(),loja:String(r.loja||'').trim()}));if(rows.some(r=>!r.forn||!r.loja))return $('storeEditStatus').textContent='Cada registro precisa ter indústria e loja preenchidas.';const unique=new Map();for(const r of rows)unique.set(auxKey(r.forn,r.loja),r);if(unique.size!==rows.length&&!confirm('Existem lojas duplicadas para a mesma indústria. Salvar removendo duplicatas?'))return;const clean=[...unique.values()];const b=$('storeEditSaveBtn');b.disabled=true;$('storeEditStatus').textContent='Salvando cadastro independente...';try{await saveAuxRows('stores',clean);STORE_DRAFT=STORE_DB.map(r=>({...r}));renderStoreEditor();$('storeEditStatus').textContent='Cadastro salvo: '+clean.length.toLocaleString('pt-BR')+' lojas.';$('basesStatus').textContent='Cadastro de lojas salvo com sucesso.'}catch(e){$('storeEditStatus').textContent='Erro ao salvar: '+(e.message||e)}finally{b.disabled=false}};
+$('storeDbBtn').onclick=async()=>{if(await requireServerPerm('manage_bases'))$('storeDbFile').click()};
+$('revenueDbBtn').onclick=async()=>{if(await requireServerPerm('manage_bases'))$('revenueDbFile').click()};
+$('storeDbFile').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(f&&await requireServerPerm('manage_bases')){await uploadAuxBase('stores',f);await loadAuxBases();updateBasesSummary()}};
+$('revenueDbFile').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(f&&await requireServerPerm('manage_bases')){await uploadAuxBase('revenue',f);await loadAuxBases();updateBasesSummary()}};
 async function loadPublishedData(){
  try{
   $('empty').innerHTML='Carregando dados publicados...';
@@ -465,6 +538,7 @@ async function loadPublishedData(){
   }
   /* Segurança extra para HTMLs exportados: normaliza também os registros já incorporados. */
   ALL=ALL.map(r=>({...r,date:normalizarData(r.date),tempo:+r.tempo||0,nota:+r.nota||0,contr:+r.contr||0}));
+  await loadAuxBases();
   $('empty').classList.add('hidden');render();if(ME)applyPermissionUI();else $('app').classList.remove('hidden');return true;
  }catch(err){console.error(err);$('empty').classList.remove('hidden');$('empty').innerHTML='<strong>Não foi possível carregar o dashboard.</strong><br><span style="font-size:12px">'+esc(err?.message||'Confira a base publicada e as permissões de acesso.')+'</span>';if(ME&&!(canPerm('dashboard')||canPerm('consult_industries')||canPerm('visit_details'))) $('app').classList.add('hidden');return false}
 }
@@ -481,11 +555,12 @@ const PERMISSION_DEFS=[
  {key:'consult_industries',label:'Consultar indústrias e lojas'},
  {key:'visit_details',label:'Detalhamento das visitas'},
  {key:'export_pdf',label:'Exportar PDF'},
- {key:'update_data',label:'Atualizar a base de dados'},
+ {key:'update_data',label:'Atualizar a base de visitas'},
+ {key:'manage_bases',label:'Gerenciar cadastro de lojas e faturamento'},
  {key:'contracts_access',label:'Acessar e atualizar contratos realizados'},
  {key:'manage_users',label:'Gerenciar usuários e permissões'}
 ];
-const CONSULTA_DEFAULT={dashboard:false,consult_industries:false,visit_details:false,export_pdf:false,update_data:false,contracts_access:true,manage_users:false};
+const CONSULTA_DEFAULT={dashboard:false,consult_industries:false,visit_details:false,export_pdf:false,update_data:false,manage_bases:false,contracts_access:true,manage_users:false};
 let USER_PERMISSIONS={},PERMISSION_PROFILES=[],USER_PROFILE_MAP={};
 function canPerm(k){return !!(ME&&(ME.role==='admin'||USER_PERMISSIONS[k]===true))}
 function requirePerm(k){if(canPerm(k))return true;alert('Seu perfil não tem permissão para realizar esta ação.');return false}
@@ -493,7 +568,7 @@ async function requireServerPerm(k){if(!sb||!ME)return false;try{const {data,err
 function applyPermissionUI(){
  const isAdmin=!!(ME&&ME.role==='admin'),hasMain=canPerm('dashboard')||canPerm('consult_industries')||canPerm('visit_details');
  document.documentElement.classList.toggle('is-admin',isAdmin);
- $('upBtn').style.display=canPerm('update_data')?'':'none';$('upStatus').style.display=canPerm('update_data')?'':'none';
+ $('upBtn').style.display='none';$('storeDbBtn').style.display='none';$('revenueDbBtn').style.display='none';$('upStatus').style.display='';$('basesOpenBtn').style.display=(canPerm('update_data')||canPerm('manage_bases'))?'':'none';$('visitBaseCard').classList.toggle('bases-hidden',!canPerm('update_data'));$('storeBaseCard').classList.toggle('bases-hidden',!canPerm('manage_bases'));$('revenueBaseCard').classList.toggle('bases-hidden',!canPerm('manage_bases'));$('storeEditSaveBtn').style.display=canPerm('manage_bases')?'':'none';$('storeAddRowBtn').style.display=canPerm('manage_bases')?'':'none';$('storeImportOpenBtn').style.display=canPerm('manage_bases')?'':'none';$('revenueImportOpenBtn').style.display=canPerm('manage_bases')?'':'none';$('storeEditOpenBtn').style.display=canPerm('manage_bases')?'':'none';
  $('ctrBtn').style.display=canPerm('contracts_access')?'':'none';document.querySelectorAll('.contracts-edit-only').forEach(el=>el.style.display=canPerm('contracts_access')?'':'none');
  $('accBtn').style.display='';
  $('pdfBtn').style.display=canPerm('export_pdf')?'':'none';
@@ -599,7 +674,7 @@ $('upFile').onchange=async e=>{
 };
 /* ===== Conta e gestão de usuários ===== */
 let USERS=[];
-const PERMISSION_PROFILE_DEFAULTS={consulta:CONSULTA_DEFAULT,completo:{dashboard:true,consult_industries:true,visit_details:true,export_pdf:true,update_data:false,contracts_access:true,manage_users:false}};
+const PERMISSION_PROFILE_DEFAULTS={consulta:CONSULTA_DEFAULT,completo:{dashboard:true,consult_industries:true,visit_details:true,export_pdf:true,update_data:false,manage_bases:false,contracts_access:true,manage_users:false}};
 function renderPermissionChecks(perms={}){$('permChecks').innerHTML=PERMISSION_DEFS.map(p=>`<div class="perm-item"><div><label for="perm-${p.key}">${p.label}</label><span class="perm-state" id="perm-state-${p.key}">${perms[p.key]?'Permitido':'Bloqueado'}</span></div><input id="perm-${p.key}" type="checkbox" data-permission="${p.key}" ${perms[p.key]?'checked':''} aria-label="${p.label}"></div>`).join('');$('permChecks').querySelectorAll('[data-permission]').forEach(c=>c.addEventListener('change',()=>{$('perm-state-'+c.dataset.permission).textContent=c.checked?'Permitido':'Bloqueado'}))}
 async function loadPermissionProfiles(){
  const {data,error}=await sb.from('coletor_permission_profiles').select('profile_name,permissions').order('profile_name');
@@ -737,7 +812,7 @@ async function loadCtrHistory(){
 $('ctrHistoryBtn').onclick=async()=>{if(!ME||ME.role!=='admin')return;$('ctrHistoryModal').classList.remove('hidden');await loadCtrHistory()};
 $('ctrHistoryClose').onclick=()=>$('ctrHistoryModal').classList.add('hidden');
 $('ctrHistoryModal').addEventListener('click',e=>{if(e.target===$('ctrHistoryModal'))$('ctrHistoryModal').classList.add('hidden')});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')$('ctrHistoryModal').classList.add('hidden')});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('ctrHistoryModal').classList.add('hidden');$('basesModal')?.classList.add('hidden')}});
 ['ctrQ','ctrFAg','ctrFSt'].forEach(i=>$(i).addEventListener('input',ctrGrid));
 $('ctrTb').addEventListener('change',async e=>{
  const i=e.target.closest('input[data-id]');if(!i||!canPerm('contracts_access'))return;
