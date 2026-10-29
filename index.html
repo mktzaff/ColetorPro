@@ -64,6 +64,14 @@
 .pdf-detail table{width:100%;border-collapse:collapse}
 .pdf-detail th{background:var(--navy);color:#fff;text-align:left}
 .pdf-detail td,.pdf-detail th{border-bottom:1px solid var(--line)}
+
+/* Contratos realizados: rolagem horizontal dentro do próprio gráfico */
+#ctr .grid3>section{min-width:0}
+#ctrChart{display:flex;align-items:flex-end;width:100%;max-width:100%;min-width:0;overflow-x:scroll!important;overflow-y:hidden!important;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:var(--red) #e6eaf0;padding-bottom:95px}
+#ctrChart .bar-group{position:relative;flex:0 0 120px;min-width:120px}
+#ctrChart::-webkit-scrollbar{height:10px}
+#ctrChart::-webkit-scrollbar-track{background:#e6eaf0;border-radius:8px}
+#ctrChart::-webkit-scrollbar-thumb{background:var(--red);border-radius:8px}
 </style>
 <style id="pdf-completo-fix">
 @media print{
@@ -701,7 +709,32 @@ $('ctrBtn').onclick=openContractsView;
 $('ctrClose').onclick=()=>{const view=$('ctr');view.classList.add('view-leave');setTimeout(()=>{view.classList.add('hidden');view.classList.remove('view-leave');if(canPerm('dashboard')||canPerm('consult_industries')||canPerm('visit_details')){const app=$('app');app.classList.remove('hidden');app.classList.add('view-enter');requestAnimationFrame(()=>requestAnimationFrame(()=>app.classList.remove('view-enter')));applyPermissionUI();render()}else $('app').classList.add('hidden')},180)};
 function histFmt(v){if(!v)return '—';try{return new Date(v).toLocaleString('pt-BR')}catch(e){return String(v)}}
 function histDetails(row){const old=row.old_data||{},neu=row.new_data||{};const keys=['agencia','fornecedor','recebido','atualizado','obs'];const labels={agencia:'Agência',fornecedor:'Fornecedor',recebido:'Recebido',atualizado:'Atualizado',obs:'Observação'};const parts=[];for(const k of keys){const a=old[k]??'',b=neu[k]??'';if(String(a)!==String(b))parts.push(`<b>${labels[k]}:</b> ${esc(a||'—')} → ${esc(b||'—')}`)}if(row.action==='DELETE')return 'Registro removido. '+parts.join(' • ');if(row.action==='INSERT')return 'Novo fornecedor cadastrado. '+parts.join(' • ');return parts.join('<br>')||'Alteração registrada.'}
-async function loadCtrHistory(){if(!ME||ME.role!=='admin')return;const status=$('ctrHistoryStatus'),tb=$('ctrHistoryTb');status.textContent='Carregando histórico…';tb.innerHTML='';try{const{data,error}=await sb.from('contratos_historico').select('*').order('changed_at',{ascending:false}).limit(500);if(error)throw error;tb.innerHTML=(data||[]).map(r=>`<tr><td>${esc(histFmt(r.changed_at))}</td><td>${esc(r.changed_by_email||r.changed_by||'Sistema')}</td><td>${esc(({INSERT:'Cadastro',UPDATE:'Alteração',DELETE:'Exclusão'})[r.action]||r.action||'—')}</td><td>${esc(r.fornecedor||'—')}</td><td class="hist-data">${histDetails(r)}</td></tr>`).join('')||'<tr><td colspan="5">Nenhuma alteração registrada ainda.</td></tr>';status.textContent=`Exibindo ${(data||[]).length} registro(s), no máximo os 500 mais recentes.`}catch(e){console.error('histórico contratos:',e);status.textContent='Não foi possível carregar o histórico. Confirme se a migração SQL do histórico foi aplicada no Supabase.';status.style.color='var(--danger)'}}
+async function loadCtrHistory(){
+ if(!ME||ME.role!=='admin')return;
+ const status=$('ctrHistoryStatus'),tb=$('ctrHistoryTb');
+ status.style.color='';status.textContent='Carregando histórico…';tb.innerHTML='';
+ try{
+  let res=await sb.from('contratos_historico').select('*').order('changed_at',{ascending:false}).limit(500);
+  if(res.error){ // coluna de ordenação pode ter outro nome: busca sem ordenar e ordena no navegador
+   console.warn('histórico: ordenação falhou, tentando sem order',res.error);
+   res=await sb.from('contratos_historico').select('*').limit(500);
+  }
+  if(res.error)throw res.error;
+  const dt=r=>r.changed_at||r.created_at||r.at||r.data_hora||'';
+  const rows=(res.data||[]).slice().sort((x,y)=>new Date(dt(y))-new Date(dt(x)));
+  const act={INSERT:'Cadastro',UPDATE:'Alteração',DELETE:'Exclusão'};
+  tb.innerHTML=rows.map(r=>{
+   let det;try{det=histDetails(r)}catch(e){det='Alteração registrada.'}
+   return `<tr><td>${esc(histFmt(dt(r)))}</td><td>${esc(r.changed_by_email||r.changed_by||'Sistema')}</td><td>${esc(act[String(r.action||'').toUpperCase()]||r.action||'—')}</td><td>${esc(r.fornecedor||'—')}</td><td class="hist-data">${det}</td></tr>`}).join('')||'<tr><td colspan="5">Nenhuma alteração registrada ainda.</td></tr>';
+  status.textContent=`Exibindo ${rows.length} registro(s), no máximo os 500 mais recentes.`;
+ }catch(e){
+  console.error('histórico contratos:',e);
+  const code=e&&(e.code||e.status)||'';
+  const hint=(code==='42P01'||/does not exist|not found/i.test(e&&e.message||''))?'A tabela contratos_historico não existe: aplique a migração SQL no Supabase.':(code==='42501'||/permission|policy|RLS/i.test(e&&e.message||''))?'Sem permissão de leitura: crie a policy de SELECT para administradores na tabela contratos_historico.':'Verifique a tabela contratos_historico e suas policies no Supabase.';
+  status.style.color='var(--danger)';
+  status.textContent='Não foi possível carregar o histórico. '+hint+(e&&e.message?' (Detalhe: '+e.message+')':'');
+ }
+}
 $('ctrHistoryBtn').onclick=async()=>{if(!ME||ME.role!=='admin')return;$('ctrHistoryModal').classList.remove('hidden');await loadCtrHistory()};
 $('ctrHistoryClose').onclick=()=>$('ctrHistoryModal').classList.add('hidden');
 $('ctrHistoryModal').addEventListener('click',e=>{if(e.target===$('ctrHistoryModal'))$('ctrHistoryModal').classList.add('hidden')});
