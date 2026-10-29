@@ -266,7 +266,7 @@ html:not(.is-admin) .admin-only{display:none!important}
 <section class="card"><div class="card-title">Nota média do repositor</div><div class="card-sub">Escala máxima = 5,0</div><div class="score"><div class="score-num" id="as"></div><div><div class="stars">★★★★★</div><div class="small-note">média das avaliações registradas</div></div></div></section>
 <section class="card"><div class="card-title" id="rkTitle"></div><div class="card-sub" id="rkSub"></div><div class="rank-switch" id="rankSwitch"><button class="active" data-rank="more">Mais horas</button><button data-rank="less">Menos horas</button><button data-rank="none">Sem visitas</button></div><div class="rank-count" id="rankCount"></div><div class="rank-list" id="rank"></div></section></div>
 <div class="section-title">Faturamento detalhado</div>
-<section class="card" id="revenueStores"><div class="table-tools"><div><div class="card-title" id="revenueStoresTitle">Faturamento por loja</div><div class="card-sub" id="revenueStoresSub"></div></div><input class="search" id="revenueStoresSearch" placeholder="Buscar loja ou indústria..." oninput="renderRevenueStores()"></div><div class="table-wrap"><table><thead id="revenueStoresHead"></thead><tbody id="revenueStoresBody"></tbody></table></div></section>
+<section class="card" id="revenueStores" style="display:none!important"><div class="table-tools"><div><div class="card-title" id="revenueStoresTitle">Faturamento por loja</div><div class="card-sub" id="revenueStoresSub"></div></div><input class="search" id="revenueStoresSearch" placeholder="Buscar loja ou indústria..." oninput="renderRevenueStores()"></div><div class="table-wrap"><table><thead id="revenueStoresHead"></thead><tbody id="revenueStoresBody"></tbody></table></div></section>
 <div class="section-title">Detalhamento completo</div>
 <section class="card"><div class="tabs" id="tabs"></div><div class="table-tools"><div><div class="card-title" id="tbTitle"></div><div class="card-sub" id="tbSub"></div></div><input class="search" id="q" placeholder="Buscar..."></div><div class="table-wrap"><table id="tb"><thead></thead><tbody></tbody></table></div></section>
 <div id="pdfDetail" class="pdf-detail">
@@ -331,10 +331,16 @@ const auxCanonical=v=>auxMatchKey(v).split(' ').filter(Boolean).sort().join(' ')
 const auxStoreMatchKey=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\b(comercial\s+zaffari|stok\s*center|stok|center)\b/g,' ').replace(/\b(loja|regiao|reg|filial|unidade)\b/g,' ').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');
 const auxStoreCanonical=v=>auxStoreMatchKey(v).split(' ').filter(Boolean).sort().join(' ');
 const auxKey=(forn,loja)=>auxCanonical(forn)+'|'+String(loja).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/\s+/g,' ').trim();
-const auxPairMatches=(a,b)=>{
- const clean=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/\b(S\/?A|LTDA|EIRELI|ME)\b/g,' ').replace(/[^A-Z0-9]+/g,' ').trim().replace(/\s+/g,' ');
- return !!clean(a)&&clean(a)===clean(b);
-};
+// Identidade do fornecedor: remove apenas qualificadores jurídicos, sem
+// tentar aproximar empresas diferentes pela semelhança parcial dos nomes.
+const supplierTokens=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/\bS\s*\/?\s*A\b/g,' ').replace(/[^A-Z0-9]+/g,' ').trim().split(/\s+/).filter(t=>t&&!['LTDA','EIRELI','ME','S','A','SA'].includes(t));
+const supplierKey=v=>supplierTokens(v).join(' ');
+const auxPairMatches=(a,b)=>!!supplierKey(a)&&supplierKey(a)===supplierKey(b);
+// Não confundir fornecedores diferentes quando há uma abreviação: somente
+// relacionar aliases manuais explícitos, editáveis abaixo se necessário.
+const SUPPLIER_ALIASES={};
+const supplierId=v=>{const k=supplierKey(v);return SUPPLIER_ALIASES[k]||k};
+const sameSupplier=(a,b)=>!!supplierId(a)&&supplierId(a)===supplierId(b);
 // A loja é vinculada pelo número identificador, nunca por texto parcial.
 // Ex.: 55-STOK 55 = STOK LOJA 55; 5 não pode corresponder a 55.
 function storeIdentity(v){
@@ -343,19 +349,30 @@ function storeIdentity(v){
  const m=t.match(/\b(?:LOJA|STOK|FILIAL)\s*[-#:]?\s*(\d+)\b/)||t.match(/^\s*(\d+)\s*[-–]/);
  return m?{number:String(Number(m[1])),brand}:null;
 }
+function revenueStoreId(r){
+ const x=storeIdentity(r.loja),d=String(r.divisao||'').toUpperCase();
+ const brand=x?.brand||(/STOK/.test(d)?'STOK':/ZAFFARI/.test(d)?'ZAFFARI':'');
+ return supplierId(r.forn)+'|'+(brand||'?')+'|'+(x?.number||auxStoreCanonical(r.loja));
+}
 function auxStoreMatches(a,b){
  const x=storeIdentity(a),y=storeIdentity(b);
  if(x&&y)return x.number===y.number&&(!x.brand||!y.brand||x.brand===y.brand);
  return auxStoreCanonical(a)!==''&&auxStoreCanonical(a)===auxStoreCanonical(b);
 }
-function revenueFor(forn,loja){const xs=REVENUE_DB.filter(r=>auxPairMatches(r.forn,forn)&&auxStoreMatches(r.loja,loja));return xs.length?xs.reduce((s,r)=>s+(Number(r.faturamento)||0),0):null}
-function revenueTotal(forn=null){return REVENUE_DB.reduce((s,r)=>s+(forn===null||auxPairMatches(r.forn,forn)?(Number(r.faturamento)||0):0),0)}
+function revenueFor(forn,loja){
+ const xs=REVENUE_DB.filter(r=>sameSupplier(r.forn,forn)&&auxStoreMatches(r.loja,loja));
+ const uniqueBrands=new Set(xs.map(r=>storeIdentity(r.loja)?.brand||(/STOK/i.test(r.divisao||'')?'STOK':/ZAFFARI/i.test(r.divisao||'')?'ZAFFARI':'')));
+ if(uniqueBrands.size>1&&!storeIdentity(loja)?.brand)return null;
+ const match=xs.filter(r=>{const brand=storeIdentity(r.loja)?.brand||(/STOK/i.test(r.divisao||'')?'STOK':/ZAFFARI/i.test(r.divisao||'')?'ZAFFARI':'');const target=storeIdentity(loja)?.brand;return !target||!brand||target===brand;});
+ return match.length?match.reduce((s,r)=>s+(Number(r.faturamento)||0),0):null;
+}
+function revenueTotal(forn=null){return REVENUE_DB.reduce((s,r)=>s+(forn===null||sameSupplier(r.forn,forn)?(Number(r.faturamento)||0):0),0)}
 // A base financeira é independente das visitas: todas as lojas importadas entram no detalhamento.
 function revenueByStore(forn){
- const rs=REVENUE_DB.filter(r=>forn==='__all__'||auxPairMatches(r.forn,forn));
+ const rs=REVENUE_DB.filter(r=>forn==='__all__'||sameSupplier(r.forn,forn));
  const grouped=new Map();
  for(const r of rs){
-  const key=auxKey(r.forn,r.loja),old=grouped.get(key);
+  const key=revenueStoreId(r),old=grouped.get(key);
   if(old)old.faturamento+=Number(r.faturamento)||0;
   else grouped.set(key,{forn:r.forn,loja:r.loja,faturamento:Number(r.faturamento)||0});
  }
@@ -408,7 +425,7 @@ function render(){
  ctrMsg();
  const k=[];
  if(all){k.push(['Indústrias',suppliers.length,'na base']);k.push(['Lojas',O.lojas,'com registros'])}
- k.push(['Visitas agendadas',fI(O.ag),'programadas'],['Visitas realizadas',fI(O.real),fP(O.pct)+' de execução'],['Faturamento <button type="button" class="revenue-eye" onclick="toggleRevenueVisibility()" title="'+(revenueVisible?'Ocultar faturamento':'Mostrar faturamento')+'" aria-label="'+(revenueVisible?'Ocultar faturamento':'Mostrar faturamento')+'">'+(revenueVisible?'◉':'◎')+'</button>',revenueVisible?fBRL(revenueTotal(all?null:sel)):'••••••',all?'todas as indústrias':'indústria selecionada'],['Horas contratadas',fH(O.contr),'base registrada',1],['Horas executadas',fH(O.exec),O.util==null?'sem horas contratadas':fP(O.util)+' das contratadas',1],['Tempo médio',fH(O.avg),'por visita realizada'],['Nota média',fN(O.nota),'escala máxima 5,0']);
+ k.push(['Visitas agendadas',fI(O.ag),'programadas'],['Visitas realizadas',fI(O.real),fP(O.pct)+' de execução'],['Faturamento <button type="button" class="revenue-eye" onclick="toggleRevenueVisibility()" title="'+(revenueVisible?'Ocultar faturamento':'Mostrar faturamento')+'" aria-label="'+(revenueVisible?'Ocultar faturamento':'Mostrar faturamento')+'">'+(revenueVisible?'◉':'◎')+'</button>',revenueVisible?fBRL(revenueTotal(all?null:sel)):'••••••',all?'todas as indústrias':(REVENUE_DB.length&&!REVENUE_DB.some(r=>sameSupplier(r.forn,sel))?'não localizado na base financeira':'indústria selecionada')],['Horas contratadas',fH(O.contr),'base registrada',1],['Horas executadas',fH(O.exec),O.util==null?'sem horas contratadas':fP(O.util)+' das contratadas',1],['Tempo médio',fH(O.avg),'por visita realizada'],['Nota média',fN(O.nota),'escala máxima 5,0']);
  if(!all)renderRevenueStores();else if($('revenueStores'))$('revenueStores').style.display='none';
  $('kpis').className='grid-kpi'+(k.length===6?' k6':k.length===7?' k7':k.length===9?' k9':'');
  $('kpis').innerHTML=k.map(x=>`<div class="kpi ${x[3]?'dark':''}"><div class="label">${x[0]}</div><div class="value">${x[1]}</div><div class="note">${x[2]}</div></div>`).join('');
@@ -459,7 +476,7 @@ function renderTable(){
   data=group(cur,key);
   if(tab==='lojas'&&curInd!=='__all__'){
    for(const fin of revenueByStore(curInd)){
-    if(!data.some(x=>auxStoreMatches(x.name,fin.loja))){data.push({name:fin.loja,ag:0,real:0,pct:0,nc:0,ea:0,sc:0,contr:0,exec:0,util:null,avg:0,min:null,nota:0,lojas:1});}
+    if(!data.some(x=>auxStoreMatches(x.name,fin.loja)&&(!(storeIdentity(x.name)?.brand&&storeIdentity(fin.loja)?.brand)||storeIdentity(x.name).brand===storeIdentity(fin.loja).brand))){data.push({name:fin.loja,ag:0,real:0,pct:0,nc:0,ea:0,sc:0,contr:0,exec:0,util:null,avg:0,min:null,nota:0,lojas:1});}
    }
   }
   data=data.filter(x=>x.name.toLowerCase().includes(q));cols=[['name',lab,x=>esc(x.name)],...(tab==='lojas'&&curInd!=='__all__'?[[ 'faturamento','Faturamento',x=>{const v=revenueFor(curInd,x.name);return v==null?'—':(revenueVisible?fBRL(v):'••••••')}]]:[['lojas','Lojas',x=>x.lojas]]),...std];
@@ -527,7 +544,7 @@ async function loadAuxBases(){
  if(!sb||window.__COLETOR_EXPORTED_DATA__)return;
  const [stores,revenue]=await Promise.all([readAuxPublished(STORE_FILE),readAuxPublished(REVENUE_FILE)]);
  STORE_DB=stores.filter(x=>x&&typeof x.forn==='string'&&typeof x.loja==='string').map(x=>({forn:x.forn.trim(),loja:x.loja.trim()}));
- const revMap=new Map();for(const x of revenue.filter(x=>x&&typeof x.forn==='string'&&typeof x.loja==='string')){const row={forn:x.forn.trim(),loja:x.loja.trim(),faturamento:Number(x.faturamento)||0},key=auxKey(row.forn,row.loja);if(revMap.has(key))revMap.get(key).faturamento+=row.faturamento;else revMap.set(key,row)}REVENUE_DB=[...revMap.values()];
+ const revMap=new Map();for(const x of revenue.filter(x=>x&&typeof x.forn==='string'&&typeof x.loja==='string')){const row={forn:x.forn.trim(),loja:x.loja.trim(),faturamento:Number(x.faturamento)||0,divisao:String(x.divisao||'')},key=revenueStoreId(row);if(revMap.has(key))revMap.get(key).faturamento+=row.faturamento;else revMap.set(key,row)}REVENUE_DB=[...revMap.values()];
 }
 function normAuxHeader(v){return String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'')}
 function parseMoney(v){if(typeof v==='number')return Number.isFinite(v)?v:NaN;let s=String(v??'').trim();if(!s)return NaN;let neg=false;if(/^\(.*\)$/.test(s)){neg=true;s=s.slice(1,-1)}s=s.replace(/R\$/gi,'').replace(/BRL/gi,'').replace(/[\s\u00a0]/g,'').replace(/[^0-9,.-]/g,'');if(!s||!/[0-9]/.test(s))return NaN;const comma=s.lastIndexOf(','),dot=s.lastIndexOf('.');if(comma>=0&&dot>=0){if(comma>dot)s=s.replace(/\./g,'').replace(',','.');else s=s.replace(/,/g,'')}else if(comma>=0){const dec=s.length-comma-1;if(dec===2||dec===1)s=s.replace(/\./g,'').replace(',','.');else s=s.replace(/,/g,'')}else if(dot>=0){const dec=s.length-dot-1;if(dec===3&&/^[-+]?\d{1,3}(\.\d{3})+$/.test(s))s=s.replace(/\./g,'')}const n=Number(s);return Number.isFinite(n)?(neg?-n:n):NaN}
@@ -547,14 +564,15 @@ async function parseAuxFile(file,kind){
   // No faturamento mensal, Empresa identifica a loja, Fornecedor identifica a indústria e Venda é o valor.
   const fi=kind==='revenue'?pick(['industria','fornecedor']):pick(['bandeira']);
   const li=kind==='revenue'?pick(['empresa','loja','nomedaloja','nomefantasia']):pick(['loja','nomedaloja','nomefantasia']);
+  const di=kind==='revenue'?pick(['divisao']):-1;
   const vi=kind==='revenue'?pick(['venda','vendar2026','vendar','faturamento','valorfaturamento','valorvenda','vendas']):-1;
   if(fi<0||li<0||(kind==='revenue'&&vi<0))throw new Error(kind==='stores'?'Colunas necessárias: Bandeira e Loja.':'Colunas necessárias no faturamento: Empresa, Fornecedor e Venda.');
-  raw=matrix.slice(1).filter(row=>row.some(v=>String(v??'').trim())).map(row=>({forn:row[fi],loja:row[li],...(kind==='revenue'?{faturamento:row[vi]}:{})}));
+  raw=matrix.slice(1).filter(row=>row.some(v=>String(v??'').trim())).map(row=>({forn:row[fi],loja:row[li],...(kind==='revenue'?{faturamento:row[vi],divisao:di>=0?row[di]:''}:{})}));
  }
- const result=[];for(let i=0;i<raw.length;i++){const r=raw[i]||{};const keys=Object.keys(r).reduce((m,k)=>(m[normAuxHeader(k)]=r[k],m),{});const forn=r.forn??keys.industria??keys.fornecedor??keys.bandeira,loja=r.loja??keys.empresa??keys.loja??keys.nomedaloja??keys.nomefantasia;const item={forn:String(forn??'').trim(),loja:String(loja??'').trim()};if(!item.forn||!item.loja)continue;if(kind==='revenue'){const val=parseMoney(r.faturamento??keys.venda??keys.vendar2026??keys.vendar??keys.faturamento??keys.valorfaturamento??keys.valorvenda??keys.vendas);if(!Number.isFinite(val))throw new Error('Venda/faturamento inválido na linha '+(i+2)+'.');item.faturamento=val;}result.push(item)}
+ const result=[];for(let i=0;i<raw.length;i++){const r=raw[i]||{};const keys=Object.keys(r).reduce((m,k)=>(m[normAuxHeader(k)]=r[k],m),{});const forn=r.forn??keys.industria??keys.fornecedor??keys.bandeira,loja=r.loja??keys.empresa??keys.loja??keys.nomedaloja??keys.nomefantasia;const item={forn:String(forn??'').trim(),loja:String(loja??'').trim()};if(kind==='revenue')item.divisao=String(r.divisao??keys.divisao??'').trim();if(!item.forn||!item.loja)continue;if(kind==='revenue'){const val=parseMoney(r.faturamento??keys.venda??keys.vendar2026??keys.vendar??keys.faturamento??keys.valorfaturamento??keys.valorvenda??keys.vendas);if(!Number.isFinite(val))throw new Error('Venda/faturamento inválido na linha '+(i+2)+'.');item.faturamento=val;}result.push(item)}
  if(!result.length)throw new Error('Nenhum registro válido encontrado. Confira os cabeçalhos e o conteúdo do arquivo.');
  // A planilha de faturamento pode ter várias linhas para a mesma indústria e empresa. Somar essas linhas evita perder vendas por sobrescrita.
- const unique=new Map();for(const r of result){const key=auxKey(r.forn,r.loja);if(kind==='revenue'&&unique.has(key)){const prev=unique.get(key);prev.faturamento+=r.faturamento;}else unique.set(key,{...r});}return [...unique.values()];
+ const unique=new Map();for(const r of result){const key=kind==='revenue'?revenueStoreId(r):auxKey(r.forn,r.loja);if(kind==='revenue'&&unique.has(key)){const prev=unique.get(key);prev.faturamento+=r.faturamento;}else unique.set(key,{...r});}return [...unique.values()];
 }
 async function uploadAuxBase(kind,file){
  const st=$('upStatus'),isRevenue=kind==='revenue',path=isRevenue?REVENUE_FILE:STORE_FILE;
