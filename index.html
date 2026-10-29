@@ -226,7 +226,37 @@ html:not(.is-admin) .admin-only{display:none!important}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<style id="performance-ui">#busyOverlay{position:fixed;inset:0;z-index:3000;background:rgba(10,30,50,.78);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:20px;cursor:progress}#busyOverlay.active{display:flex}#busyOverlay .busy-card{background:white;border-radius:16px;padding:28px 32px;max-width:350px;width:100%;text-align:center;box-shadow:0 20px 55px #0004;color:#123b5f;font-weight:800}#busyOverlay .busy-spin{height:43px;width:43px;border:5px solid #e5ebf1;border-top-color:#e30613;border-radius:50%;animation:busySpin .7s linear infinite;margin:0 auto 17px}#busyOverlay small{display:block;margin-top:7px;color:#667788;font-weight:500}@keyframes busySpin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){#busyOverlay .busy-spin{animation:none;border-top-color:#e30613}}#tableMoreBtn{margin-top:12px}</style></head><body><div id="busyOverlay" role="status" aria-live="polite" aria-label="Carregando"><div class="busy-card"><div class="busy-spin"></div><div id="busyText">Atualizando informações…</div><small>Aguarde a conclusão antes de continuar.</small></div></div>
+<style id="performance-ui">#busyOverlay{position:fixed;inset:0;z-index:3000;background:rgba(10,30,50,.78);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:20px;cursor:progress}#busyOverlay.active{display:flex}#busyOverlay .busy-card{background:white;border-radius:16px;padding:28px 32px;max-width:350px;width:100%;text-align:center;box-shadow:0 20px 55px #0004;color:#123b5f;font-weight:800}#busyOverlay .busy-spin{height:43px;width:43px;border:5px solid #e5ebf1;border-top-color:#e30613;border-radius:50%;animation:busySpin .7s linear infinite;margin:0 auto 17px}#busyOverlay small{display:block;margin-top:7px;color:#667788;font-weight:500}@keyframes busySpin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){#busyOverlay .busy-spin{animation:none;border-top-color:#e30613}}#tableMoreBtn{margin-top:12px}</style><style id="comparativo-style">
+#cmp{position:fixed;inset:0;z-index:850;background:var(--bg);overflow:auto;padding:24px 44px 44px;opacity:1;transform:translateY(0);transition:opacity .28s ease,transform .34s cubic-bezier(.2,.8,.2,1)}
+#cmp.hidden{display:none}#cmp.view-enter{opacity:0;transform:translateY(14px)}#cmp.view-leave{opacity:0;transform:translateY(8px);pointer-events:none}
+#cmp .cmp-head{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;padding:4px 0 18px;border-bottom:1px solid var(--line);margin-bottom:16px}
+#cmp h2{margin:3px 0 6px;font-size:28px;font-weight:900;letter-spacing:-.7px}#cmp h2 span{color:var(--red)}#cmp .cmp-industry{font-size:13px;font-weight:800;color:var(--muted);overflow-wrap:anywhere}
+#cmp .cmp-head-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+#cmp .cmp-status{border-left:4px solid var(--navy2);background:#fff;padding:11px 14px;border-radius:8px;font-size:12px;font-weight:800;margin-bottom:10px;box-shadow:0 3px 12px rgba(11,39,66,.04)}
+#cmp .cmp-warning{font-size:12px;font-weight:700;color:#93610a;margin:0 0 10px;line-height:1.45}#cmp .cmp-warning:empty{display:none}
+#cmp .cmp-chart-card,#cmp .cmp-table-card{margin-top:14px;padding:20px}
+#cmp .cmp-chart-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+#cmp .cmp-trend{font-size:12px;font-weight:900;background:#f1f5f9;border-radius:8px;padding:9px 12px;color:var(--navy)}#cmp .cmp-trend.up{background:#e4f6ee;color:#13724b}#cmp .cmp-trend.down{background:#fff1d8;color:#95650b}#cmp .cmp-trend.flat{background:#f1f5f9;color:var(--muted)}
+#cmp .cmp-switch{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0 5px}#cmp .cmp-switch button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:9px 12px;font-size:11px;font-weight:900;color:var(--navy);cursor:pointer;transition:background .18s,color .18s,transform .18s}
+#cmp .cmp-switch button.active{background:var(--navy);border-color:var(--navy);color:#fff}#cmp .cmp-switch button:active{transform:scale(.98)}
+#cmp .cmp-chart{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:end;padding:18px 8px 0;min-height:280px}
+#cmp .cmp-month{min-width:0;display:flex;flex-direction:column;align-items:stretch;text-align:center;animation:rise .35s cubic-bezier(.2,.8,.2,1) both}
+#cmp .cmp-value{font-size:13px;font-weight:900;color:var(--navy);min-height:23px;overflow-wrap:anywhere}
+#cmp .cmp-barslot{height:205px;display:flex;align-items:flex-end;justify-content:center;padding:0 10px;background:repeating-linear-gradient(to top,transparent 0,transparent 49px,#e9edf1 50px,#e9edf1 51px);border-bottom:1px solid #cfd8e2}
+#cmp .cmp-bar{width:min(64%,110px);min-width:18px;background:linear-gradient(180deg,#456b8c,#123b5f);border-radius:7px 7px 0 0;transform-origin:bottom;animation:cmpGrowY .72s cubic-bezier(.2,.8,.2,1) both;box-shadow:0 4px 12px rgba(11,39,66,.1)}
+#cmp .cmp-bar.latest{background:linear-gradient(180deg,#f04b54,#e30613)}#cmp .cmp-bar.nodata{background:#e0e6ec;box-shadow:none;animation:none}
+#cmp .cmp-month-label{font-size:12px;font-weight:900;color:var(--navy);margin-top:11px;text-transform:uppercase}
+#cmp .cmp-chart-foot{display:flex;gap:18px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:13px;font-size:10px;font-weight:800;color:var(--muted)}#cmp .cmp-chart-foot span{display:flex;align-items:center;gap:6px}#cmp .cmp-dot{width:9px;height:9px;border-radius:3px;background:#123b5f;display:inline-block}#cmp .cmp-dot.latest{background:var(--red)}
+#cmp .cmp-table-wrap{overflow:auto;border:1px solid var(--line);border-radius:9px;margin-top:10px}#cmp .cmp-table{width:100%;min-width:640px;border-collapse:collapse;font-size:12px}#cmp .cmp-table th{position:static;cursor:default;background:var(--navy);color:#fff;padding:11px 10px;font-size:10px}#cmp .cmp-table td{padding:12px 10px;border-bottom:1px solid var(--line);font-weight:700;white-space:nowrap}#cmp .cmp-table tbody tr:last-child td{border-bottom:0}#cmp .cmp-table tbody tr:last-child td:first-child{color:var(--red);font-weight:900}#cmp .cmp-no-data{color:var(--muted);font-weight:700!important}
+#cmp .cmp-note{margin-top:13px;line-height:1.5}
+@keyframes cmpGrowY{from{transform:scaleY(0);opacity:.45}to{transform:scaleY(1);opacity:1}}
+.exported-view #comparativoBtn,.exported-view #cmp{display:none!important}
+@media(max-width:900px){#cmp{padding:18px}#cmp .cmp-head{align-items:flex-start}#cmp h2{font-size:24px}#cmp .cmp-chart{gap:8px;padding-left:0;padding-right:0}#cmp .cmp-barslot{height:175px;padding:0 4px}#cmp .cmp-chart-card,#cmp .cmp-table-card{padding:15px}}
+@media(max-width:520px){#cmp .cmp-head-actions{width:100%}#cmp .cmp-head-actions .btn{flex:1;padding:10px 9px;font-size:10px}#cmp .cmp-switch button{flex:1;min-width:42%;padding:9px 6px;font-size:10px}#cmp .cmp-chart{min-height:225px}#cmp .cmp-barslot{height:145px}#cmp .cmp-value{font-size:11px}#cmp .cmp-month-label{font-size:10px}}
+@media(prefers-reduced-motion:reduce){#cmp *,#cmp *:before,#cmp *:after{animation:none!important;transition:none!important}}
+@media print{#cmp{display:none!important}}
+</style>
+</head><body><div id="busyOverlay" role="status" aria-live="polite" aria-label="Carregando"><div class="busy-card"><div class="busy-spin"></div><div id="busyText">Atualizando informações…</div><small>Aguarde a conclusão antes de continuar.</small></div></div>
 <div id="login"><div class="box"><h2>ColetorPRO</h2><p>Acesso restrito. Entre com o e-mail e a senha cadastrados pelo administrador.</p>
 <form id="loginForm" onsubmit="return false"><label for="lgEmail">E-mail</label><input id="lgEmail" type="email" autocomplete="username" required><label for="lgPass">Senha</label><input id="lgPass" type="password" autocomplete="current-password" required><button class="btn" id="loginBtn" type="submit">Entrar</button><div id="loginErr" role="alert"></div></form></div></div>
 <div id="force" class="hidden"><div class="box"><h2>Crie a sua senha</h2><p>Este é o seu primeiro acesso, ou a sua senha foi redefinida pelo administrador. Escolha uma senha pessoal para continuar.</p>
@@ -248,11 +278,16 @@ html:not(.is-admin) .admin-only{display:none!important}
 <div class="ctr-tools"><input class="search" id="ctrQ" placeholder="Buscar fornecedor..."><select id="ctrFAg"></select><select id="ctrFSt"><option value="">Todos os status</option><option value="pr">Pendente de recebimento</option><option value="pa">Pendente de atualização</option><option value="ok">Recebido e atualizado</option></select><span id="ctrStatus" role="status"></span></div>
 <div class="ctr-grid"><table id="ctrTb"><thead><tr><th>#</th><th>Agência</th><th>Fornecedor</th><th>Recebido</th><th>Atualizado</th><th>Observação</th><th></th></tr></thead><tbody></tbody></table></div>
 <div class="small-note contracts-edit-only" style="margin-top:8px">Dica: edite os campos diretamente na tabela; as alterações são salvas automaticamente. Para apagar uma data, limpe o campo e confirme a alteração.</div><div class="confidential-footer"><span class="conf-icon" aria-hidden="true">!</span><span>* Informações de consulta interna, proibido compartilhar</span></div></div>
+<div id="cmp" class="hidden"><div class="cmp-head"><div><div class="eyebrow">Resultados em campo • ColetorPRO</div><h2>COMPARATIVO <span>MENSAL</span></h2><div class="cmp-industry" id="cmpIndustry">Indústria selecionada</div></div><div class="cmp-head-actions"><button class="btn btn-out" id="cmpReloadBtn" type="button">Atualizar histórico</button><button class="btn btn-up" id="cmpImportBtn" type="button" style="display:none">Importar base histórica</button><button class="btn btn-up" id="cmpSaveBtn" type="button" style="display:none">Registrar base atual</button><button class="btn btn-out" id="cmpCloseBtn" type="button">Voltar ao dashboard</button><input type="file" id="cmpHistoryFile" accept=".csv,.xlsx,.xls,.json,text/csv,application/csv,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden></div></div>
+<div class="cmp-status" id="cmpStatus" role="status">Carregando histórico mensal…</div><div class="cmp-warning" id="cmpWarning" role="status"></div>
+<section class="card cmp-chart-card"><div class="cmp-chart-head"><div><div class="card-title" id="cmpMetricTitle">Visitas realizadas</div><div class="card-sub" id="cmpMetricSub">Evolução nos últimos três meses</div></div><div class="cmp-trend" id="cmpTrend">Compare os meses disponíveis</div></div><div class="cmp-switch" id="cmpMetricSwitch"><button type="button" class="active" data-metric="real">Visitas realizadas</button><button type="button" data-metric="exec">Horas executadas</button><button type="button" data-metric="avg">Tempo médio</button><button type="button" data-metric="nota">Nota média</button></div><div class="cmp-chart" id="cmpChart" aria-label="Gráfico comparativo de três meses"></div><div class="cmp-chart-foot"><span><i class="cmp-dot"></i> Meses anteriores</span><span><i class="cmp-dot latest"></i> Mês atual</span></div></section>
+<section class="card cmp-table-card"><div class="card-title">Resumo dos três meses</div><div class="card-sub">Os valores usam somente registros da indústria selecionada.</div><div class="cmp-table-wrap"><table class="cmp-table"><thead><tr><th>Mês</th><th>Visitas realizadas</th><th>Horas executadas</th><th>Tempo médio</th><th>Nota média</th></tr></thead><tbody id="cmpTableBody"></tbody></table></div></section>
+<div class="small-note cmp-note">O histórico comparativo é mantido automaticamente: cada upload substitui o resumo daquele mês. O sistema conserva somente o mês atual e os dois anteriores; meses mais antigos são removidos automaticamente.</div></div>
 <div id="ctrHistoryModal" class="hidden" role="dialog" aria-modal="true" aria-labelledby="ctrHistoryTitle"><div class="history-box"><div class="history-head"><h3 id="ctrHistoryTitle">Histórico de alterações</h3><button class="btn btn-out" id="ctrHistoryClose" type="button">Fechar</button></div><div class="history-sub">Registro de quem alterou contratos, quando e quais informações mudaram. Visível somente para administradores.</div><div id="ctrHistoryStatus" class="small-note" role="status" style="margin-bottom:10px"></div><div class="table-wrap"><table><thead><tr><th>Data e hora</th><th>Usuário</th><th>Ação</th><th>Fornecedor</th><th>Detalhes</th></tr></thead><tbody id="ctrHistoryTb"></tbody></table></div></div></div>
 <header class="header"><div class="brand"><div class="eyebrow">Resultados em campo • ColetorPRO</div><h1 id="ttl">EXECUÇÃO POR INDÚSTRIA <span>| Dashboard</span></h1><div class="subtitle" id="sub">Acesso restrito • dados carregados após o login</div></div><div class="period" id="period">CARREGANDO DADOS</div><div class="upd-mini" id="updMini"></div></header>
 <main class="wrap">
 <div class="topbar"><div class="combo"><label>Indústria (fornecedor)</label><input id="indIn" placeholder="Carregando dados publicados..." autocomplete="off" disabled><div class="combo-list hidden" id="indList"></div></div>
-<div class="top-actions"><button class="btn btn-pdf" id="pdfBtn" disabled onclick="exportPDF()">Exportar PDF</button><button class="btn btn-out" id="basesOpenBtn" type="button" style="display:none" title="Gerenciar as bases do dashboard">Gerenciar bases</button><button class="btn btn-up" id="upBtn" type="button" style="display:none">Atualizar base (.csv, .xlsx)</button><button class="btn btn-out" id="storeDbBtn" type="button" style="display:none" title="Importar cadastro de lojas por indústria">Base de lojas</button><button class="btn btn-out" id="revenueDbBtn" type="button" style="display:none" title="Importar faturamento mensal por loja">Base de faturamento</button><button class="btn" id="ctrBtn" type="button" style="background:var(--navy2);display:none">Contratos realizados</button><input type="file" id="upFile" accept=".csv,.xlsx,.xls,.json,text/csv,application/csv,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden><input type="file" id="storeDbFile" accept=".csv,.xlsx,.xls,.json,text/csv,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden><input type="file" id="revenueDbFile" accept=".csv,.xlsx,.xls,.json,text/csv,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden><span class="who" id="who"></span><button class="btn btn-out" id="accBtn" type="button">Conta</button><button class="btn btn-out" id="logoutBtn" type="button">Sair</button></div>
+<div class="top-actions"><button class="btn btn-pdf" id="pdfBtn" disabled onclick="exportPDF()">Exportar PDF</button><button class="btn btn-out" id="basesOpenBtn" type="button" style="display:none" title="Gerenciar as bases do dashboard">Gerenciar bases</button><button class="btn btn-up" id="upBtn" type="button" style="display:none">Atualizar base (.csv, .xlsx)</button><button class="btn btn-out" id="storeDbBtn" type="button" style="display:none" title="Importar cadastro de lojas por indústria">Base de lojas</button><button class="btn btn-out" id="revenueDbBtn" type="button" style="display:none" title="Importar faturamento mensal por loja">Base de faturamento</button><button class="btn" id="comparativoBtn" type="button" style="background:var(--red);display:none">Comparativo</button><button class="btn" id="ctrBtn" type="button" style="background:var(--navy2);display:none">Contratos realizados</button><input type="file" id="upFile" accept=".csv,.xlsx,.xls,.json,text/csv,application/csv,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden><input type="file" id="storeDbFile" accept=".csv,.xlsx,.xls,.json,text/csv,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden><input type="file" id="revenueDbFile" accept=".csv,.xlsx,.xls,.json,text/csv,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden><span class="who" id="who"></span><button class="btn btn-out" id="accBtn" type="button">Conta</button><button class="btn btn-out" id="logoutBtn" type="button">Sair</button></div>
 </div>
 <div id="basesModal" class="hidden" role="dialog" aria-modal="true" aria-labelledby="basesTitle"><div class="bases-box"><div class="bases-head"><div><h2 id="basesTitle">Gerenciamento de bases</h2><div class="bases-intro">Atualize as visitas e o faturamento mensal. As lojas são identificadas automaticamente pelo faturamento, sem cadastro separado.</div></div><button class="btn btn-out" id="basesCloseBtn" type="button">Fechar</button></div><div class="bases-grid"><section class="bases-card" id="visitBaseCard"><h3>Base de visitas</h3><p>Atualiza os registros de visitas usados no dashboard. Não altera o cadastro independente de lojas.</p><div class="bases-actions"><button class="btn btn-up" id="visitBaseOpenBtn" type="button">Importar base de visitas</button></div></section><section class="bases-card" id="storeBaseCard"><h3>Cadastro de lojas</h3><p>Cadastro de lojas por bandeira, no padrão “STOK LOJA X - REG X” ou “COMERCIAL ZAFFARI LOJA X - REG X”. Não utiliza indústria nem fornecedor.</p><div class="bases-actions"><button class="btn" id="storeEditOpenBtn" type="button">Editar cadastro de lojas</button><button class="btn btn-out" id="storeImportOpenBtn" type="button">Importar arquivo</button></div></section><section class="bases-card" id="revenueBaseCard"><h3>Faturamento mensal</h3><p>Importe o arquivo do mês atual com as colunas Empresa, Fornecedor e Venda R$ 2026 (ou Venda). Se aparecer R$ 0,00, importe novamente a planilha aqui. A base é independente das visitas.</p><div class="bases-actions"><button class="btn btn-out" id="revenueImportOpenBtn" type="button">Importar faturamento</button></div></section><section class="bases-card"><h3>Estado das bases</h3><p id="basesSummary">Carregando informações das bases...</p><div class="bases-actions"><button class="btn btn-out" id="basesRefreshBtn" type="button">Atualizar informações</button></div></section></div><section class="bases-editor bases-hidden" id="storeEditor"><div class="bases-editor-head"><div><h3>Editar cadastro de lojas</h3><div class="bases-intro">Cadastre cada unidade pela bandeira e identificação no formato “LOJA X - REG X”. Não preencha indústria ou fornecedor. As alterações só entram na base após clicar em “Salvar cadastro”.</div></div><input id="storeEditSearch" placeholder="Buscar bandeira ou loja..." style="max-width:280px"></div><div class="bases-add"><select id="storeNewBrand" aria-label="Bandeira"><option value="STOK">STOK</option><option value="COMERCIAL ZAFFARI">COMERCIAL ZAFFARI</option></select><input id="storeNewName" placeholder="LOJA X - REG X" aria-label="Identificação da loja"><button class="btn" id="storeAddRowBtn" type="button">+ Adicionar loja</button></div><div class="bases-table-wrap"><table><thead><tr><th>Bandeira</th><th>Identificação da loja</th><th>Ação</th></tr></thead><tbody id="storeEditRows"></tbody></table></div><div class="bases-foot"><span id="storeEditStatus" role="status">Cadastro não alterado.</span><div class="bases-actions"><button class="btn btn-out" id="storeEditCancelBtn" type="button">Descartar alterações</button><button class="btn" id="storeEditSaveBtn" type="button">Salvar cadastro</button></div></div></section><div id="basesStatus" role="status" class="small-note" style="margin-top:12px"></div><span class="up-status" id="upStatus" role="status"></span></div></div>
 <div id="empty">Carregando dados publicados...</div>
@@ -645,7 +680,69 @@ async function loadPublishedData(){
 let searchTimer;$('q').addEventListener('input',()=>{clearTimeout(searchTimer);searchTimer=setTimeout(renderTable,180)});
 /* ===== Supabase: login, perfis e upload (somente admin) ===== */
 const SUPABASE_URL='https://nduabnxombkgwmlzzsjg.supabase.co',SUPABASE_ANON_KEY='sb_publishable_UgW5UpjaJNqtTm8aUoHakA_KdMz7bQ9',BUCKET='dashboard-data',FILE='dados.json';
+const COMPARATIVO_FILE='comparativo.json';let COMPARATIVO_CACHE=[];
 let sb=null,ME=null,idleT,fails=0;const IDLE=30*60e3;
+function comparativoMonthKey(date){const m=String(date||'').match(/^\d{2}\/(\d{2})\/(\d{4})$/);return m?`${m[2]}-${m[1]}`:''}
+function comparativoKey(mes,forn){return String(mes||'')+'|'+String(forn||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('pt-BR').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ')}
+function comparativoSummaries(rows){
+ const by=new Map();
+ for(const original of (Array.isArray(rows)?rows:[])){
+  const r={...original,date:normalizarData(original?.date),tempo:Number(original?.tempo)||0,nota:Number(original?.nota)||0,contr:Number(original?.contr)||0,status:normSt(String(original?.status||'')),forn:String(original?.forn||'').trim()};
+  const mes=comparativoMonthKey(r.date);if(!mes||!r.forn)continue;
+  const key=comparativoKey(mes,r.forn);if(!by.has(key))by.set(key,{mes,forn:r.forn,rows:[]});by.get(key).rows.push(r);
+ }
+ const updatedAt=new Date().toISOString();
+ return [...by.values()].map(g=>{const o=agg(g.rows);return{mes:g.mes,forn:g.forn,real:o.real,exec:o.exec,avg:o.avg,nota:o.nota,registros:g.rows.length,atualizadoEm:updatedAt}});
+}
+function comparativoMerge(history,rows){
+ // Janela móvel: somente o mês corrente e os dois meses imediatamente anteriores.
+ const keepMonths=new Set(comparativoWindow().map(m=>m.mes));
+ const incoming=comparativoSummaries(rows),incomingMonths=new Set(incoming.map(x=>x.mes));
+ const map=new Map();
+ for(const x of (Array.isArray(history)?history:[])){
+  const mes=String(x?.mes||'');
+  if(!x||!/\d{4}-\d{2}$/.test(mes)||!keepMonths.has(mes)||incomingMonths.has(mes)||!String(x.forn||'').trim())continue;
+  const item={mes,forn:String(x.forn),real:Number(x.real)||0,exec:Number(x.exec)||0,avg:Number(x.avg)||0,nota:Number(x.nota)||0,registros:Number(x.registros)||0,atualizadoEm:String(x.atualizadoEm||'')};map.set(comparativoKey(item.mes,item.forn),item);
+ }
+ // Cada upload substitui o mês inteiro, evitando manter fornecedores removidos/corrigidos com valores antigos.
+ for(const x of incoming){if(keepMonths.has(x.mes))map.set(comparativoKey(x.mes,x.forn),x)}
+ return [...map.values()].sort((a,b)=>a.mes.localeCompare(b.mes,'en')||a.forn.localeCompare(b.forn,'pt-BR'));
+}
+async function readComparativoHistory(){
+ if(!sb)throw new Error('Sessão do Supabase não disponível.');
+ const {data:list,error:listError}=await sb.storage.from(BUCKET).list('',{search:COMPARATIVO_FILE,limit:100});
+ if(listError)throw listError;
+ if(!(list||[]).some(x=>x.name===COMPARATIVO_FILE))return[];
+ const {data:signed,error:signedError}=await sb.storage.from(BUCKET).createSignedUrl(COMPARATIVO_FILE,60);
+ if(signedError||!signed?.signedUrl)throw(signedError||new Error('Não foi possível abrir o histórico comparativo.'));
+ const res=await fetch(signed.signedUrl,{cache:'no-store'});if(!res.ok)throw new Error('Falha ao baixar comparativo.json ('+res.status+').');
+ const json=await res.json();if(!Array.isArray(json))throw new Error('O arquivo comparativo.json não contém uma lista válida.');return json;
+}
+async function saveComparativoHistory(rows){
+ const old=await readComparativoHistory(),merged=comparativoMerge(old,rows),blob=new Blob([JSON.stringify(merged)],{type:'application/json'});
+ const {error}=await sb.storage.from(BUCKET).upload(COMPARATIVO_FILE,blob,{upsert:true,contentType:'application/json',cacheControl:'0'});
+ if(error)throw error;COMPARATIVO_CACHE=merged;return merged;
+}
+async function parseComparativoImportFile(file){
+ if(file.size>50*1048576)throw new Error('Arquivo acima de 50 MB.');
+ let rows;
+ if(/\.json$/i.test(file.name))rows=JSON.parse(await file.text());
+ else{
+  if(!window.XLSX)throw new Error('Leitor de planilhas não carregou. Recarregue a página e tente novamente.');
+  let wb;
+  if(/\.csv$/i.test(file.name)||/csv/i.test(file.type)){const text=(await file.text()).replace(/^\uFEFF/,'');wb=XLSX.read(text,{type:'string',cellNF:true,raw:false})}
+  else wb=XLSX.read(await file.arrayBuffer(),{type:'array',cellNF:true});
+  if(!wb.SheetNames||!wb.SheetNames.length)throw new Error('Não foi possível ler a planilha/CSV.');
+  rows=parse(xlsxToCsv(wb.Sheets[wb.SheetNames[0]]));
+ }
+ const S=['loja','forn','comp','prom','status','date'],N=['tempo','nota','contr'];
+ if(!Array.isArray(rows)||!rows.length)throw new Error('O arquivo não contém uma lista válida de visitas.');
+ const bad=rows.findIndex(r=>!r||typeof r!=='object'||S.some(k=>typeof r[k]!=='string')||N.some(k=>typeof r[k]!=='number'||!isFinite(r[k])));
+ if(bad>=0)throw new Error('Registro '+(bad+1)+' fora do padrão esperado para a base de visitas.');
+ if(!comparativoSummaries(rows).length)throw new Error('Não encontrei datas válidas para gerar resumos mensais.');
+ return rows;
+}
+
 function idleReset(){clearTimeout(idleT);if(ME)idleT=setTimeout(()=>sb.auth.signOut(),IDLE)}
 ['click','keydown','mousemove','touchstart','scroll'].forEach(ev=>addEventListener(ev,idleReset,{passive:true}));
 const showLogin=m=>{$('login').classList.remove('hidden');$('loginErr').textContent=m||''};
@@ -669,6 +766,7 @@ function applyPermissionUI(){
  const isAdmin=!!(ME&&ME.role==='admin'),hasMain=canPerm('dashboard')||canPerm('consult_industries')||canPerm('visit_details');
  document.documentElement.classList.toggle('is-admin',isAdmin);
  $('upBtn').style.display='none';$('storeDbBtn').style.display='none';$('revenueDbBtn').style.display='none';$('upStatus').style.display='';$('basesOpenBtn').style.display=(canPerm('update_data')||canPerm('manage_bases'))?'':'none';$('visitBaseCard').classList.toggle('bases-hidden',!canPerm('update_data'));$('storeBaseCard').classList.toggle('bases-hidden',!canPerm('manage_bases'));$('revenueBaseCard').classList.toggle('bases-hidden',!canPerm('manage_bases'));$('storeEditSaveBtn').style.display=canPerm('manage_bases')?'':'none';$('storeAddRowBtn').style.display=canPerm('manage_bases')?'':'none';$('storeImportOpenBtn').style.display=canPerm('manage_bases')?'':'none';$('revenueImportOpenBtn').style.display=canPerm('manage_bases')?'':'none';$('storeEditOpenBtn').style.display=canPerm('manage_bases')?'':'none';
+ $('comparativoBtn').style.display=canPerm('consult_industries')?'':'none';$('cmpImportBtn').style.display=canPerm('update_data')?'':'none';$('cmpSaveBtn').style.display='none';
  $('ctrBtn').style.display=canPerm('contracts_access')?'':'none';document.querySelectorAll('.contracts-edit-only').forEach(el=>el.style.display=canPerm('contracts_access')?'':'none');
  $('accBtn').style.display='';
  $('pdfBtn').style.display=canPerm('export_pdf')?'':'none';
@@ -769,7 +867,8 @@ $('upFile').onchange=async e=>{
   st.textContent='Enviando '+(body.size/1048576).toFixed(1)+' MB…';
   const{error}=await sb.storage.from(BUCKET).upload(FILE,body,{upsert:true,contentType:'application/json',cacheControl:'0'});
   if(error)throw error;
-  const loaded=await loadPublishedData();if(!loaded)throw new Error('O arquivo foi enviado, mas o dashboard não conseguiu carregar a base. Confira o formato dos registros e o acesso ao arquivo dados.json.');await setUpdated();st.textContent='Base atualizada: '+fI(rows.length)+' registros.';
+  let compareMessage='';try{await saveComparativoHistory(rows);compareMessage=' Histórico mensal do Comparativo salvo.'}catch(historyErr){console.error('Falha ao salvar histórico do Comparativo:',historyErr);compareMessage=' Atenção: a base principal foi atualizada, mas o histórico do Comparativo não pôde ser salvo: '+(historyErr?.message||historyErr)}
+  const loaded=await loadPublishedData();if(!loaded)throw new Error('O arquivo foi enviado, mas o dashboard não conseguiu carregar a base. Confira o formato dos registros e o acesso ao arquivo dados.json.');await setUpdated();st.textContent='Base atualizada: '+fI(rows.length)+' registros.'+compareMessage;
  }catch(err){st.textContent='Erro: '+(err.message||err)}
 };
 /* ===== Conta e gestão de usuários ===== */
@@ -883,6 +982,84 @@ function ctrGrid(){
 }
 function ctrRender(){ctrDash();ctrGrid()}
 async function openContractsView(){if(!await requireServerPerm('contracts_access'))return;const app=$('app'),view=$('ctr');app.classList.add('view-leave');setTimeout(()=>{app.classList.add('hidden');app.classList.remove('view-leave');view.classList.remove('hidden');view.classList.add('view-enter');requestAnimationFrame(()=>requestAnimationFrame(()=>view.classList.remove('view-enter')))},130);ctrSt('Carregando…');await loadContratos();ctrSt('');ctrRender()}
+const COMP_MONTHS=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+function comparativoWindow(){const now=new Date(),out=[];for(let offset=2;offset>=0;offset--){const d=new Date(now.getFullYear(),now.getMonth()-offset,1),mes=String(d.getFullYear())+'-'+String(d.getMonth()+1).padStart(2,'0');out.push({mes,label:COMP_MONTHS[d.getMonth()].toUpperCase()+'/'+d.getFullYear(),fullLabel:COMP_MONTHS[d.getMonth()].toUpperCase()+'/'+d.getFullYear()})}return out}
+function comparativoFormat(metric,value,hasRecord=true){if(!hasRecord||value==null)return'—';if(metric==='real')return fI(value);if(metric==='exec')return fH(value);if(metric==='avg')return Number(value)>0?Math.round(Number(value))+' min':'—';if(metric==='nota')return Number(value)>0?fN(Number(value)):'—';return'—'}
+function comparativoValue(row,metric){if(!row)return null;return Number(row[metric])||0}
+function renderComparativo(history,industry,warning=''){
+ const months=comparativoWindow(),key=String(industry||'');
+ const byMonth=months.map(m=>{const row=(history||[]).find(x=>x.mes===m.mes&&sameSupplier(x.forn,key));return{...m,row:row||null}});
+ window.__comparativoRows=byMonth;window.__comparativoIndustry=key;
+ $('cmpIndustry').textContent='Indústria: '+key;
+ const available=byMonth.filter(x=>x.row).length;
+ $('cmpStatus').textContent=available===3?'Histórico disponível nos três meses.':`Histórico disponível em ${available} de 3 meses. Os meses sem base salva precisam ser carregados a partir dos arquivos históricos.`;
+ $('cmpWarning').textContent=warning;
+ const table=$('cmpTableBody');table.innerHTML=byMonth.map(m=>{
+  const r=m.row;
+  return `<tr><td>${esc(m.fullLabel)}</td><td>${comparativoFormat('real',r?.real,!!r)}</td><td>${comparativoFormat('exec',r?.exec,!!r)}</td><td>${comparativoFormat('avg',r?.avg,!!r)}</td><td>${comparativoFormat('nota',r?.nota,!!r)}${r&&Number(r.nota)>0?' / 5':''}</td></tr>`;
+ }).join('');
+ renderComparativoChart(window.compMetric||'real');
+}
+function renderComparativoChart(metric){
+ window.compMetric=metric;
+ const defs={real:{title:'Visitas realizadas',sub:'Quantidade de visitas concluídas no mês',axis:'visitas'},exec:{title:'Horas executadas',sub:'Soma do tempo de atendimento nas visitas concluídas',axis:'horas'},avg:{title:'Tempo médio',sub:'Média de minutos por visita concluída',axis:'minutos'},nota:{title:'Nota média',sub:'Média das avaliações registradas (escala de 0 a 5)',axis:'nota'}};
+ const def=defs[metric]||defs.real;const items=window.__comparativoRows||[];
+ $('cmpMetricTitle').textContent=def.title;$('cmpMetricSub').textContent=def.sub;
+ $('cmpMetricSwitch').querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.metric===metric));
+ const vals=items.map(m=>m.row?comparativoValue(m.row,metric):null),valid=vals.filter(v=>v!==null&&Number.isFinite(v)),max=Math.max(1,...valid);
+ $('cmpChart').innerHTML=items.map((m,i)=>{
+  const value=vals[i],has=!!m.row,display=comparativoFormat(metric,value,has);
+  const h=has&&value!==null&&value>0?Math.max(4,Math.round(value/max*178)):0;
+  const cls=(i===2?'latest ':'')+(!has?'nodata':'');
+  const title=has?def.title+': '+display:'Sem base salva para este mês';
+  return `<div class="cmp-month" style="animation-delay:${i*70}ms"><div class="cmp-value">${esc(display)}</div><div class="cmp-barslot"><div class="cmp-bar ${cls}" style="height:${h}px" title="${esc(title)}" aria-label="${esc(title)}"></div></div><div class="cmp-month-label">${esc(m.label)}</div></div>`;
+ }).join('');
+ const previous=items[1]?.row?comparativoValue(items[1].row,metric):null,current=items[2]?.row?comparativoValue(items[2].row,metric):null;
+ const trend=$('cmpTrend');trend.className='cmp-trend flat';
+ if(previous===null||current===null){trend.textContent='Variação indisponível: falta base de um dos meses';}
+ else if(metric==='nota'){
+  const delta=current-previous,sign=delta>0?'+':'';trend.textContent=(delta>0?'▲ ':delta<0?'▼ ':'')+sign+delta.toFixed(2).replace('.',',')+' ponto(s) vs. mês anterior';trend.className='cmp-trend '+(delta>0?'up':delta<0?'down':'flat');
+ }else if(previous===0){trend.textContent=current===0?'Sem variação numérica vs. mês anterior':'Variação percentual indisponível (mês anterior igual a zero)';}
+ else{const delta=(current-previous)/Math.abs(previous)*100,sign=delta>0?'+':'';trend.textContent=(delta>0?'▲ ':delta<0?'▼ ':'')+sign+delta.toFixed(1).replace('.',',')+'% vs. mês anterior';trend.className='cmp-trend '+(delta>0?'up':delta<0?'down':'flat');}
+}
+async function openComparativo(){
+ if(curInd==='__all__'){alert('Selecione uma indústria específica no campo superior antes de abrir o Comparativo.');return}
+ if(!await requireServerPerm('consult_industries'))return;
+ const app=$('app'),view=$('cmp');app.classList.add('view-leave');setTimeout(()=>{app.classList.add('hidden');app.classList.remove('view-leave');view.classList.remove('hidden');view.classList.add('view-enter');requestAnimationFrame(()=>requestAnimationFrame(()=>view.classList.remove('view-enter')))},130);
+ $('cmpStatus').textContent='Carregando histórico mensal…';$('cmpWarning').textContent='';$('cmpIndustry').textContent='Indústria: '+curInd;
+ let saved=[];try{saved=await readComparativoHistory();COMPARATIVO_CACHE=saved;renderComparativo(comparativoMerge(saved,ALL),curInd)}catch(err){renderComparativo(comparativoMerge([],ALL),curInd,'Não foi possível ler comparativo.json no Supabase. O gráfico mostra somente os dados presentes na base atual. Detalhe: '+(err?.message||err))}
+}
+async function refreshComparativo(){
+ $('cmpStatus').textContent='Atualizando…';$('cmpWarning').textContent='';
+ try{
+  const saved=await readComparativoHistory();let current=saved;
+  // Ao abrir/atualizar o comparativo, administradores também removem do arquivo persistido
+  // os meses que saíram da janela móvel, mesmo que ainda não tenham feito upload no mês novo.
+  if(canPerm('update_data'))current=await saveComparativoHistory([]);
+  COMPARATIVO_CACHE=current;renderComparativo(comparativoMerge(current,ALL),curInd)
+ }catch(err){renderComparativo(comparativoMerge([],ALL),curInd,'Não foi possível atualizar o histórico. '+(err?.message||err))}
+}
+async function registerCurrentComparativoBase(){
+ if(!await requireServerPerm('update_data'))return;
+ const b=$('cmpSaveBtn');b.disabled=true;$('cmpStatus').textContent='Registrando os meses da base atual…';$('cmpWarning').textContent='';
+ try{const saved=await saveComparativoHistory(ALL);renderComparativo(comparativoMerge(saved,ALL),curInd);$('cmpStatus').textContent='Base atual registrada no histórico comparativo ('+fI(saved.length)+' combinações de indústria/mês).'}catch(err){$('cmpWarning').textContent='Não foi possível gravar o histórico: '+(err?.message||err);$('cmpStatus').textContent='O histórico não foi alterado.'}finally{b.disabled=false}
+}
+$('comparativoBtn').onclick=openComparativo;
+$('cmpCloseBtn').onclick=()=>{const view=$('cmp');view.classList.add('view-leave');setTimeout(()=>{view.classList.add('hidden');view.classList.remove('view-leave');if(canPerm('dashboard')||canPerm('consult_industries')||canPerm('visit_details')){const app=$('app');app.classList.remove('hidden');app.classList.add('view-enter');requestAnimationFrame(()=>requestAnimationFrame(()=>app.classList.remove('view-enter')));applyPermissionUI();render()}else $('app').classList.add('hidden')},180)};
+$('cmpReloadBtn').onclick=refreshComparativo;
+$('cmpSaveBtn').onclick=registerCurrentComparativoBase;
+$('cmpImportBtn').onclick=async()=>{if(await requireServerPerm('update_data'))$('cmpHistoryFile').click()};
+$('cmpHistoryFile').onchange=async e=>{
+ const file=e.target.files[0];e.target.value='';if(!file||!await requireServerPerm('update_data'))return;
+ const btn=$('cmpImportBtn');btn.disabled=true;$('cmpStatus').textContent='Lendo base histórica…';$('cmpWarning').textContent='';
+ try{
+  const rows=await parseComparativoImportFile(file),summaries=comparativoSummaries(rows),monthList=[...new Set(summaries.map(x=>x.mes))].sort();
+  if(!confirm('Importar '+summaries.length+' combinações de indústria/mês ('+monthList.join(', ')+') para o histórico? A base operacional dados.json não será alterada.')){$('cmpStatus').textContent='Importação cancelada.';return}
+  const saved=await saveComparativoHistory(rows);renderComparativo(comparativoMerge(saved,ALL),curInd);$('cmpWarning').textContent='';$('cmpStatus').textContent='Base histórica importada ('+summaries.length+' combinações de indústria/mês). A base operacional não foi alterada.';
+ }catch(err){$('cmpStatus').textContent='Não foi possível importar a base histórica.';$('cmpWarning').textContent=err?.message||String(err)}finally{btn.disabled=false}
+};
+$('cmpMetricSwitch').addEventListener('click',e=>{const b=e.target.closest('button[data-metric]');if(b)renderComparativoChart(b.dataset.metric)});
+
 $('ctrBtn').onclick=openContractsView;
 $('ctrClose').onclick=()=>{const view=$('ctr');view.classList.add('view-leave');setTimeout(()=>{view.classList.add('hidden');view.classList.remove('view-leave');if(canPerm('dashboard')||canPerm('consult_industries')||canPerm('visit_details')){const app=$('app');app.classList.remove('hidden');app.classList.add('view-enter');requestAnimationFrame(()=>requestAnimationFrame(()=>app.classList.remove('view-enter')));applyPermissionUI();render()}else $('app').classList.add('hidden')},180)};
 function histFmt(v){if(!v)return '—';try{return new Date(v).toLocaleString('pt-BR')}catch(e){return String(v)}}
