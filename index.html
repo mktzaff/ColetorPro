@@ -125,7 +125,7 @@ body{background:#fff!important}
 .pdf-detail thead{display:table-header-group!important}
 }
 
-.top-actions{display:flex;gap:8px;align-items:center;margin-top:15px}.top-actions .btn{margin-top:0}.btn-html{background:#123b5f}.exported-view .top-actions #htmlBtn,.exported-view .top-actions #upBtn,.exported-view .top-actions #storeDbBtn,.exported-view .top-actions #revenueDbBtn,.exported-view .top-actions #ctrBtn,.exported-view .top-actions #upStatus,.exported-view .top-actions #accBtn,.exported-view .top-actions #logoutBtn,.exported-view .top-actions .who{display:none!important}.exported-view .upd-mini{display:none!important}.exported-view #ctr{display:none!important}.exported-view #ctrMsg{display:flex!important} .exported-view .combo input{cursor:default}.exported-view .topbar{position:relative}
+.revenue-eye{border:0;background:transparent;color:inherit;cursor:pointer;font-size:15px;margin-left:5px;padding:0 3px;vertical-align:middle}.revenue-eye:focus-visible{outline:2px solid currentColor;border-radius:4px}.top-actions{display:flex;gap:8px;align-items:center;margin-top:15px}.top-actions .btn{margin-top:0}.btn-html{background:#123b5f}.exported-view .top-actions #htmlBtn,.exported-view .top-actions #upBtn,.exported-view .top-actions #storeDbBtn,.exported-view .top-actions #revenueDbBtn,.exported-view .top-actions #ctrBtn,.exported-view .top-actions #upStatus,.exported-view .top-actions #accBtn,.exported-view .top-actions #logoutBtn,.exported-view .top-actions .who{display:none!important}.exported-view .upd-mini{display:none!important}.exported-view #ctr{display:none!important}.exported-view #ctrMsg{display:flex!important} .exported-view .combo input{cursor:default}.exported-view .topbar{position:relative}
 .ctr-msg{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;margin:0 0 16px;padding:12px 16px;border:1px solid #dbe5ef;border-left:4px solid var(--red);border-radius:12px;background:linear-gradient(110deg,#fff,#f4f8fc);color:var(--navy);font-size:12px;font-weight:800;box-shadow:0 5px 16px rgba(12,40,68,.06);animation:rise .42s cubic-bezier(.2,.8,.2,1) both}.ctr-msg span{color:#9aabba}.ctr-msg.hidden{display:none!important}
 /* Movimento mais suave e consistente, sem exagero */
 .card,.kpi,.section-title,.topbar,.tabs,.table-tools{animation:rise .48s cubic-bezier(.2,.8,.2,1) both}
@@ -317,6 +317,8 @@ const dataOrdenavel=d=>{
 const badge=p=>p==null?'—':`<span class="badge ${p>=90?'ok':p>=60?'warn':'bad'}">${fP(p)}</span>`;
 let ALL=[],cur=[],tab='lojas',sortS={key:'real',dir:-1},suppliers=[];
 let STORE_DB=[],REVENUE_DB=[];
+let revenueVisible=true;
+function toggleRevenueVisibility(){revenueVisible=!revenueVisible;render();}
 const STORE_FILE='lojas.json',REVENUE_FILE='faturamento.json';
 const fBRL=n=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(Number(n)||0);
 const auxMatchKey=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\b(stok|comercial\s+zaffari)\b/g,' ').replace(/\b(ltda|me|eireli|industria|industrias|comercio|distribuidora)\b/g,' ').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');
@@ -363,7 +365,7 @@ function render(){
  ctrMsg();
  const k=[];
  if(all){k.push(['Indústrias',suppliers.length,'na base']);k.push(['Lojas',O.lojas,'com registros'])}
- k.push(['Visitas agendadas',fI(O.ag),'programadas'],['Visitas realizadas',fI(O.real),fP(O.pct)+' de execução'],['Faturamento',fBRL(revenueTotal(all?null:sel)),all?'todas as indústrias':'indústria selecionada'],['Horas contratadas',fH(O.contr),'base registrada',1],['Horas executadas',fH(O.exec),O.util==null?'sem horas contratadas':fP(O.util)+' das contratadas',1],['Tempo médio',fH(O.avg),'por visita realizada'],['Nota média',fN(O.nota),'escala máxima 5,0']);
+ k.push(['Visitas agendadas',fI(O.ag),'programadas'],['Visitas realizadas',fI(O.real),fP(O.pct)+' de execução'],['Faturamento <button type="button" class="revenue-eye" onclick="toggleRevenueVisibility()" title="'+(revenueVisible?'Ocultar faturamento':'Mostrar faturamento')+'" aria-label="'+(revenueVisible?'Ocultar faturamento':'Mostrar faturamento')+'">'+(revenueVisible?'◉':'◎')+'</button>',revenueVisible?fBRL(revenueTotal(all?null:sel)):'••••••',all?'todas as indústrias':'indústria selecionada'],['Horas contratadas',fH(O.contr),'base registrada',1],['Horas executadas',fH(O.exec),O.util==null?'sem horas contratadas':fP(O.util)+' das contratadas',1],['Tempo médio',fH(O.avg),'por visita realizada'],['Nota média',fN(O.nota),'escala máxima 5,0']);
  $('kpis').className='grid-kpi'+(k.length===6?' k6':k.length===7?' k7':k.length===9?' k9':'');
  $('kpis').innerHTML=k.map(x=>`<div class="kpi ${x[3]?'dark':''}"><div class="label">${x[0]}</div><div class="value">${x[1]}</div><div class="note">${x[2]}</div></div>`).join('');
  $('vp').textContent=fP(O.pct);$('hp').textContent=O.util==null?'—':fP(O.util);$('vb').style.width=Math.min(O.pct,100)+'%';$('hb').style.width=Math.min(O.util||0,100)+'%';
@@ -410,7 +412,7 @@ function renderTable(){
   data=data.filter(x=>(x.loja+x.prom+x.comp+x.status).toLowerCase().includes(q));sub=fI(data.length)+' visitas';
  }else{
   const key=tab==='forn'?'forn':tab==='lojas'?'loja':'prom';const lab=tab==='forn'?'Indústria':tab==='lojas'?'Loja':'Promotor';
-  data=group(cur,key).filter(x=>x.name.toLowerCase().includes(q));cols=[['name',lab,x=>esc(x.name)],...(tab==='lojas'&&curInd!=='__all__'?[[ 'faturamento','Faturamento',x=>{const v=revenueFor(curInd,x.name);return v==null?'—':fBRL(v)}]]:[['lojas','Lojas',x=>x.lojas]]),...std];
+  data=group(cur,key).filter(x=>x.name.toLowerCase().includes(q));cols=[['name',lab,x=>esc(x.name)],...(tab==='lojas'&&curInd!=='__all__'?[[ 'faturamento','Faturamento',x=>{const v=revenueFor(curInd,x.name);return v==null?'—':(revenueVisible?fBRL(v):'••••••')}]]:[['lojas','Lojas',x=>x.lojas]]),...std];
   title='Todas as '+(tab==='forn'?'indústrias':tab==='lojas'?'lojas':'promotores');sub=fI(data.length)+' registros • busca e ordenação';
  }
  const s=sortS;data.sort((a,b)=>{let A=a[s.key],B=b[s.key];if(key_isStr(A))return String(A).localeCompare(String(B))*s.dir;return((A??-Infinity)-(B??-Infinity))*s.dir});
