@@ -325,9 +325,13 @@ const auxMatchKey=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'
 // Compara nomes também sem depender da ordem das palavras.
 const auxMatchKeys=v=>{const k=auxMatchKey(v);if(!k)return [''];const sorted=k.split(' ').filter(Boolean).sort().join(' ');return [...new Set([k,sorted,k.replace(/\s/g,''),sorted.replace(/\s/g,'')])];};
 const auxCanonical=v=>auxMatchKey(v).split(' ').filter(Boolean).sort().join(' ');
-const auxKey=(forn,loja)=>auxCanonical(forn)+'|'+auxCanonical(loja);
+// Normaliza nomes de lojas separadamente: a planilha pode trazer 'STOK CENTER LOJA 15 - REG 2', enquanto as visitas mostram 'LOJA 15'.
+const auxStoreMatchKey=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\b(comercial\s+zaffari|stok\s*center|stok|center)\b/g,' ').replace(/\b(loja|regiao|reg|filial|unidade)\b/g,' ').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');
+const auxStoreCanonical=v=>auxStoreMatchKey(v).split(' ').filter(Boolean).sort().join(' ');
+const auxKey=(forn,loja)=>auxCanonical(forn)+'|'+auxStoreCanonical(loja);
 const auxPairMatches=(a,b)=>auxMatchKeys(a).some(k=>auxMatchKeys(b).includes(k));
-function revenueFor(forn,loja){const xs=REVENUE_DB.filter(r=>auxPairMatches(r.forn,forn)&&auxPairMatches(r.loja,loja));return xs.length?xs.reduce((s,r)=>s+(Number(r.faturamento)||0),0):null}
+function auxStoreMatches(a,b){const ka=auxStoreMatchKey(a),kb=auxStoreMatchKey(b);if(!ka||!kb)return false;if(ka===kb||auxStoreCanonical(a)===auxStoreCanonical(b))return true;const ta=ka.split(' ').filter(Boolean),tb=kb.split(' ').filter(Boolean);const na=ta.filter(t=>/\d+/.test(t)),nb=tb.filter(t=>/\d+/.test(t));if(!na.length||!nb.length||!na.some(t=>nb.includes(t)))return false;const short=ta.length<=tb.length?ta:tb,long=ta.length<=tb.length?tb:ta;return short.every(t=>long.includes(t));}
+function revenueFor(forn,loja){const xs=REVENUE_DB.filter(r=>auxPairMatches(r.forn,forn)&&auxStoreMatches(r.loja,loja));return xs.length?xs.reduce((s,r)=>s+(Number(r.faturamento)||0),0):null}
 function revenueTotal(forn=null){return REVENUE_DB.reduce((s,r)=>s+(forn===null||auxPairMatches(r.forn,forn)?(Number(r.faturamento)||0):0),0)}
 function storesWithoutVisits(){const visited=new Set(ALL.map(r=>auxKey(r.forn,r.loja)));return STORE_DB.filter(r=>(curInd==='__all__'||nk(r.forn)===nk(curInd))&&!visited.has(auxKey(r.forn,r.loja))).sort((a,b)=>a.loja.localeCompare(b.loja)||a.forn.localeCompare(b.forn))}
 
