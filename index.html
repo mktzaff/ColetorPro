@@ -767,13 +767,22 @@ function renderTable(){
     data=[...storeMap.values()].filter(x=>x.name.toLowerCase().includes(q));
     data.forEach(x=>{x.faturamento=revenueFor(curInd,x.name)});
     cols=[['name',lab,x=>esc(x.name)],['faturamento','Faturamento',x=>x.faturamento==null?'—':`<span class="revenue-display" data-revenue-display="${esc(fBRL(x.faturamento))}">${revenueVisible?esc(fBRL(x.faturamento)):'••••••'}</span>`],...std];
+   }else if(tab==='forn'){
+    // Faturamento por indústria: soma todas as lojas da indústria na base de faturamento.
+    // Indústrias que só aparecem no faturamento (sem visitas) também entram na lista.
+    const empty={lojas:0,ag:0,real:0,pct:0,nc:0,ea:0,sc:0,contr:0,exec:0,util:null,avg:0,min:null,nota:0,rows:[]};
+    const seen=new Set(data.map(x=>auxIndustryCanonical(x.name)));
+    for(const r of REVENUE_DB){const k=auxIndustryCanonical(r.forn);if(!k||seen.has(k))continue;seen.add(k);data.push({...empty,name:r.forn})}
+    data=data.filter(x=>x.name.toLowerCase().includes(q));
+    data.forEach(x=>{const v=revenueTotal(x.name);x.faturamento=REVENUE_DB.length?v:null});
+    cols=[['name',lab,x=>esc(x.name)],['lojas','Lojas',x=>x.lojas],['faturamento','Faturamento',x=>x.faturamento==null?'—':`<span class="revenue-display" data-revenue-display="${esc(fBRL(x.faturamento))}">${revenueVisible?esc(fBRL(x.faturamento)):'••••••'}</span>`],...std]
    }else{data=data.filter(x=>x.name.toLowerCase().includes(q));cols=[['name',lab,x=>esc(x.name)],['lojas','Lojas',x=>x.lojas],...std]}
   title='Todas as '+(tab==='forn'?'indústrias':tab==='lojas'?'lojas':'promotores');sub=fI(data.length)+' registros • busca e ordenação';
  }
  const s=sortS;data.sort((a,b)=>{const A=a[s.key],B=b[s.key];if(A==null&&B==null)return 0;if(A==null)return 1;if(B==null)return -1;if(typeof A==='string'||typeof B==='string')return String(A).localeCompare(String(B),'pt-BR',{numeric:true,sensitivity:'base'})*s.dir;return (Number(A)-Number(B))*s.dir});
  $('tbTitle').textContent=title;$('tbSub').textContent=sub;
  $('tb').querySelector('thead').innerHTML='<tr>'+cols.map(c=>{const active=sortS.key===c[0],mark=active?(sortS.dir===1?'▲':'▼'):'↕';const label=c[0]==='faturamento'?'Faturamento '+revenueEyeMarkup():c[1];return `<th data-k="${c[0]}" aria-sort="${active?(sortS.dir===1?'ascending':'descending'):'none'}"><span>${label}</span><span class="sort-indicator" aria-hidden="true">${mark}</span></th>`}).join('')+'</tr>';
- $('tb').querySelectorAll('th').forEach(th=>th.onclick=()=>{const key=th.dataset.k;if(sortS.key===key)sortS.dir*=-1;else{sortS.key=key;sortS.dir=key==='faturamento'?1:-1}renderTable()});
+ $('tb').querySelectorAll('th').forEach(th=>th.onclick=()=>{const key=th.dataset.k;if(sortS.key===key)sortS.dir*=-1;else{sortS.key=key;sortS.dir=-1}renderTable()});
  $('tb').querySelector('tbody').innerHTML=data.slice(0,3000).map(x=>'<tr>'+cols.map(c=>`<td>${c[2](x)}</td>`).join('')+'</tr>').join('');
  syncRevenueVisibility();
 }
