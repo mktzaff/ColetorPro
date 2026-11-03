@@ -316,23 +316,35 @@ body:after{width:600px;height:600px;right:-160px;top:55%;background:rgba(18,59,9
 .mf-cell .btn{margin:0;padding:7px 11px;font-size:11px;white-space:nowrap}
 @media(max-width:760px){.mf-head{display:none}.mf-row{grid-template-columns:1fr}}
 </style><style id="layout-fix">
-/* KPIs: linhas sempre completas e do mesmo tamanho */
-.grid-kpi{display:grid!important;grid-template-columns:repeat(60,minmax(0,1fr))!important;gap:14px!important;grid-auto-rows:minmax(112px,auto)}
-.grid-kpi>.kpi{grid-column:span 15!important;min-width:0;height:100%}
-.grid-kpi.k9>.kpi{grid-column:span 12!important}.grid-kpi.k9>.kpi:nth-child(n+6){grid-column:span 15!important}
-.grid-kpi.k7>.kpi{grid-column:span 15!important}.grid-kpi.k7>.kpi:nth-child(n+5){grid-column:span 20!important}
-.grid-kpi.k6>.kpi{grid-column:span 20!important}
-.kpi{container-type:inline-size;overflow:hidden!important;display:flex;flex-direction:column;justify-content:center}
-.kpi .value{font-size:clamp(14px,10cqw,30px)!important;white-space:nowrap;line-height:1.1;letter-spacing:-.5px}
-.kpi .label,.kpi .note{overflow-wrap:anywhere}
-.kpi:hover,.card:hover{transform:translateY(-2px)}
+/* KPIs em 2 níveis: destaque (faturamento + horas lado a lado) e indicadores compactos */
+.grid-kpi{display:grid!important;grid-template-columns:repeat(60,minmax(0,1fr))!important;gap:14px!important;grid-auto-rows:auto;align-items:stretch}
+.grid-kpi>.kpi{grid-column:span 15!important;min-width:0;container-type:inline-size;overflow:hidden!important;display:flex;flex-direction:column;justify-content:center;order:2;min-height:86px!important;padding:12px 16px!important;border-top-width:3px!important}
+.kpi:before{display:none!important}
+.kpi .label{font-size:9.5px;letter-spacing:.8px;margin:0}
+.kpi .value{font-size:clamp(16px,8cqw,24px)!important;white-space:nowrap;line-height:1.1;letter-spacing:-.5px;margin-top:5px!important}
+.kpi .note{font-size:10px;margin-top:3px!important;overflow-wrap:anywhere}
+/* destaques */
+.grid-kpi.k7>.kpi:nth-child(3),.grid-kpi.k7>.kpi:nth-child(4),.grid-kpi.k7>.kpi:nth-child(5),
+.grid-kpi.k9>.kpi:nth-child(5),.grid-kpi.k9>.kpi:nth-child(6),.grid-kpi.k9>.kpi:nth-child(7){order:1;min-height:128px!important;padding:16px 20px!important}
+.grid-kpi.k7>.kpi:nth-child(3),.grid-kpi.k9>.kpi:nth-child(5){grid-column:span 30!important}
+.grid-kpi.k7>.kpi:nth-child(4),.grid-kpi.k7>.kpi:nth-child(5),.grid-kpi.k9>.kpi:nth-child(6),.grid-kpi.k9>.kpi:nth-child(7){grid-column:span 15!important}
+.grid-kpi.k7>.kpi:nth-child(3) .value,.grid-kpi.k7>.kpi:nth-child(4) .value,.grid-kpi.k7>.kpi:nth-child(5) .value,
+.grid-kpi.k9>.kpi:nth-child(5) .value,.grid-kpi.k9>.kpi:nth-child(6) .value,.grid-kpi.k9>.kpi:nth-child(7) .value{font-size:clamp(22px,9cqw,38px)!important}
+.grid-kpi.k7>.kpi:nth-child(3) .label,.grid-kpi.k7>.kpi:nth-child(4) .label,.grid-kpi.k7>.kpi:nth-child(5) .label,
+.grid-kpi.k9>.kpi:nth-child(5) .label,.grid-kpi.k9>.kpi:nth-child(6) .label,.grid-kpi.k9>.kpi:nth-child(7) .label{font-size:11px}
+/* visão geral: 6 indicadores pequenos em uma linha */
+.grid-kpi.k9>.kpi:not(:nth-child(5)):not(:nth-child(6)):not(:nth-child(7)){grid-column:span 10!important}
+/* fallback para 6 ou 8 cards */
+.grid-kpi.k6>.kpi{grid-column:span 20!important;order:0}
+.grid-kpi:not(.k6):not(.k7):not(.k9)>.kpi{order:0}
+/* aparência mais limpa */
+.card,.kpi{background:rgba(255,255,255,.92)!important;box-shadow:0 4px 16px rgba(11,39,66,.07)!important}
+.kpi.dark{background:linear-gradient(145deg,#0b2742,#123b5f)!important}
+.kpi:hover,.card:hover{transform:none;box-shadow:0 8px 22px rgba(11,39,66,.12)!important}
+body:before,body:after{opacity:.2}
 @media(max-width:1000px){.grid-kpi{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-.grid-kpi>.kpi,.grid-kpi.k9>.kpi,.grid-kpi.k9>.kpi:nth-child(n+6),.grid-kpi.k7>.kpi,.grid-kpi.k7>.kpi:nth-child(n+5),.grid-kpi.k6>.kpi{grid-column:auto!important}
-.grid-kpi.k9>.kpi:last-child,.grid-kpi.k7>.kpi:last-child{grid-column:span 2!important}}
-/* visual mais limpo e legível */
-.card,.kpi{background:rgba(255,255,255,.80)!important}
-.kpi.dark{background:linear-gradient(145deg,rgba(11,39,66,.95),rgba(18,59,95,.9))!important}
-body:before,body:after{opacity:.28}
+.grid-kpi>.kpi,.grid-kpi.k9>.kpi:not(:nth-child(5)):not(:nth-child(6)):not(:nth-child(7)),.grid-kpi.k7>.kpi:nth-child(4),.grid-kpi.k7>.kpi:nth-child(5),.grid-kpi.k9>.kpi:nth-child(6),.grid-kpi.k9>.kpi:nth-child(7),.grid-kpi.k6>.kpi{grid-column:auto!important}
+.grid-kpi.k7>.kpi:nth-child(3),.grid-kpi.k9>.kpi:nth-child(5){grid-column:span 2!important}}
 h1{overflow-wrap:anywhere;line-height:1.05;font-size:clamp(24px,3.2vw,38px);max-width:calc(100% - 300px)}
 @media(max-width:900px){h1{max-width:100%}}
 </style></head><body><div id="busyOverlay" role="status" aria-live="polite" aria-label="Carregando"><div class="busy-card"><div class="busy-spin"></div><div id="busyText">Atualizando informações…</div><small>Aguarde a conclusão antes de continuar.</small></div></div>
@@ -454,7 +466,7 @@ const supplierKey=v=>supplierTokens(v).sort((a,b)=>a.localeCompare(b)).join(' ')
 const auxPairMatches=(a,b)=>!!supplierKey(a)&&supplierKey(a)===supplierKey(b);
 // Não confundir fornecedores diferentes quando há uma abreviação: somente
 // relacionar aliases manuais explícitos, editáveis abaixo se necessário.
-const SUPPLIER_ALIASES={};
+const SUPPLIER_ALIASES={"ARROZ ARROZEIRA BRILHANTE PELOTAS":"ARROZEIRA CEREAIS IND PELOTAS","B BARUEL DIST HIGIENE PROD":"B DIST HIGIENE PROD","ALIMENTOS BATATA BEM BRASIL UAI":"ALIMENTOS BEM BRASIL","ALIMENTOS BRASIL CACAU DO DONA FOODS JURA":"ALIMENTOS BRASIL CACAU DO FOODS","JOAQUIM JOSAPAR OLIVEIRA PARTICIPACOES":"JOAQUIM JOSAPAR OLIVEIRA PART","CAFE ITALLE":"ALIMENTOS BEB CAFE COM DE E ITALLE","ALIM BILHAR COM E F IND P":"ALIM BILHAR COM E E F IND P","CENTRALSUL IND PRODUTOS QUIMICOS":"CALISUL COM DE E IND PROD QUIMI","CLARAMAX COM DE E IND NOTAVEL PAPEIS":"CLARAMAX COM DE E IND PAPEIS","ALCOOL COALA COMPANHIA DE NACIONAL":"ALCOOL COMPANHIA DE NACIONAL","COMERCIO E HIGIE INDUSTRIA PLUS":"COM COTTONBABY E HIGIE IND PLUS","BRASIL DAYS GOOD":"BRASIL DANILLA FOODS","ALIMENTOS BELG INDUSTRIA":"ALIMENTOS BELG DE INDUSTRIA","ALIMENTOS DITALIA MASSAS SECAS":"ALIMENTOS DITALIA","DIVINE":"ALIMENTOS DIVINE","DOMAZZI FRANUI":"DOMAZZI","ALIMENTOS DOMELLI REDOL":"ALIMENTOS REDOL","AGROINDUSTRIA CARNES DTALIA":"AGROINDUSTRIA DTALIA","BEBIDAS COMERCIO E EIRELE ELENZA INDUSTRIA":"COMERCIO E EIRELE ELENZA INDUSTRIA","ALIM BEBIDAS BRASILEIRA BRITVIC DE E EMPRESA":"ALIM BEBIDAS BRASILEIRA DE E EMPRESA","ALIMENTOS DE INDUSTRIA ZACCARON":"ALIM DE IND ZACCARON","COSMETICOS DISTRIBUICAO QUMORY YAMA":"COSMETICOS DE DISTRIBUIDORA QUMORY","COM IND LARANJA NATURAIS SUCOS VITTA":"COM IND LARANJA NAT SUCOS VITTA","CAMPESTRE PERGOLA VINICOLA":"CAMPESTRE VINICOLA","RANDON STEMPEL VINHOS":"RANDON VINHOS","CARE COM DE E IND PROCAO PRODUTOS TRADING":"CARE COM DE E IND PRODUTOS TRADING","ORQUIDEA TONDO":"TONDO","ALIMENTOS COMERCIO DE E INDUSTRIA NOP PAO TCHE":"ALIM COM IND NOP","BEBIDAS COMERCIO DE DIRE E IND STIER":"BEBIDAS BIER COM DE E IND STIER","ALIMENTOS DE HELENA INDUSTRIA SANTA":"ALIMENTOS DE HELENA IND SANTA","DE IND LIMPEZA MACKERDUZ PRODUTOS SAIF":"DE IND LIMPEZA MACKERDUZ PRODUTOS","ROSANE SCHMECKEN SCHNEIDER SPECHT":"ROSANE SCHNEIDER SPECHT","FILHOS ROCHA":"E FILHOS ROCHA","ALIMENTOS CAMPOS DE GERAIS INDUSTRIA":"ALIMENTOS CAMPOS DE GERAIS IND","ALIMENTICIOS CEFER MASSA PRODUTOS SANTA":"ALIMENTICIOS CEFER PRODUTOS","ALIM COM DE E IND KARUI PONZAN PROD":"ALIM COM DE E IND PONZAN PROD","CIA N ZEPPONE":"N ZEPPONE","COM IND PLASTICOS PLASUTIL":"COM IND PLASTICOS","BELA LATICINIOS PIRACANJUBA VISTA":"BELA LATICINIOS VISTA","CIA PIETROBON":"CIA E PIETROBON","COMERCIO DE E EMBALAGENS FERREIRA PLASTICOS":"COM DE E EMBALAGENS FERREIRA PLAST","ALIMENTOS BAUDUCCO PANDURATA":"ALIMENTOS PANDURATA","NORDESTE":"DO MOINHO NORDESTE","COM IND NADIR":"COM FIGUEIREDO IND NADIR","BEBIDAS CIA MURARO":"CIA E MURARO","COM E EXP GROUP IMP MIOLO WINE":"GROUP MIOLO VITIVINICULTURA WINE","BR DE E IND MERHEJE METAL PREC":"BR DE E IND MEREJE METAL PREC","DISTRIBUIDORA MARS PET":"DISTRIBUIDORA MARS","E EQUIP IPIRANGA LUBRIFICANTES MAKENA MAQ":"E EQUIP LUBRIFICANTES MAKENA MAQ","LAVIE MOINHO VACARIA":"AGRICOLA E IND MOINHO VACARIA","AQUINO BEBS FILHO IND JOAQUIM THOMAZ":"AQUINO BEB FILHO IND JOAQUIM THOMAZ","BISCOITOS KLAIN":"BISCOITOS DE INDUSTRIA KLAIN","BRASIL BRASIL CLARK IND KIMBERLY":"BRASIL CLARK COM DE E IND KIMBERLY PROD","BRAZIL CONSUMER E HEALTH JNTL JOHNSON JOHNSON":"BRAZIL CONSUMER HEALTH JNTL","ANIMAIS CARE KELCO PET PRODUTOS":"ANIMAIS CARE KELCO PET PROD","DIAS ISABELLA M":"ALIM BRANCO COM DE DIAS E IND M","COM DE DITALIA E IND MASSAS PERECIVEIS":"COM DE DITALIA E IND MASSAS","ALIMENTOS COM DE E FUCHINA GIRASSOL IND":"ALIMENTOS COM DE E FUCHINA IND","COM IND MASSAS ROMENA":"COM DE E INDUSTRIA MASSAS ROMENA","BRASIL DO HERSHEYS":"BRASIL DO HERSHEY","AM COSMETICOS INDUSTRIA":"AM COSMETICOS DE INDUSTRIA","GUIMARAES LIMPEZA PRODUTOS QUIMICOS":"GUIMARAES LIMP PRODUTOS QUIMICOS","ALIMENTICIO COM E GUIMARAES IND":"COM E GUIMARAES IND","BRAZIL DAUCY FROZEN GREENYARD":"BRAZIL FROZEN GREENYARD","ALIMENTOS GRANO VEGETAIS":"ALIMENTOS GRANO","FRIOLACK":"FRIOLACK LATICINIO","FRIGORIFICO SILVA":"COM E FRIGORIFICO IND SILVA","CARLOS FRIGORIFICO JCW JOSE":"CARLOS FRIGORIFICO JOSE WENSING","CASA FORT":"ARTEF COM DE E FLORAPACK IND","BRASIL DO MATCH SWEDISH":"BRASIL DO FIAT LUX"};
 let BRAND_RULE=true;
 // Nome no formato "MARCA - RAZÃO SOCIAL": quando o trecho após o último " - " parece uma razão social (LTDA, S/A etc. ou 3+ palavras), ele passa a ser a identidade da indústria.
 const legalPart=v=>{const t=String(v??''),i=t.lastIndexOf(' - ');if(i<=0)return t;const tail=t.slice(i+3).trim();return(/\b(LTDA|S\s*\/?\s*A|SA|EIRELI|EPP|ME|CIA)\b/i.test(tail)||tail.split(/\s+/).length>=3)?tail:t};
