@@ -400,6 +400,21 @@ html:not(.is-admin) .admin-only{display:none!important}
 <style id="rating-stars-fill-fix">
 .stars{display:inline-block;color:transparent!important;background:linear-gradient(90deg,#f0a51a var(--star-fill,0%),#dfe4e9 var(--star-fill,0%))!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important}
 </style>
+<style id="pdf-revenue-hard-block">
+@media print{
+  /* Exportação em lista permitida: imprime só o relatório PDF, nunca o dashboard vivo. */
+  body.pdf-export-mode #app > :not(#pdfDetail):not(.pdf-confidential-footer){display:none!important}
+  body.pdf-export-mode #app > #pdfDetail{display:block!important;visibility:visible!important}
+  body.pdf-export-mode #app > .pdf-confidential-footer{display:flex!important}
+  body.pdf-export-mode .revenue-card,
+  body.pdf-export-mode .kpi-revenue,
+  body.pdf-export-mode [data-revenue-display],
+  body.pdf-export-mode [data-revenue-toggle],
+  body.pdf-export-mode [data-k="faturamento"],
+  body.pdf-export-mode th[data-k="faturamento"],
+  body.pdf-export-mode .revenue-display{display:none!important;visibility:hidden!important}
+}
+</style>
 </head><body>
 <div id="login"><div class="box"><h2>ColetorPRO</h2><p>Acesso restrito. Entre com o e-mail e a senha cadastrados pelo administrador.</p>
 <form id="loginForm" onsubmit="return false"><label for="lgEmail">E-mail</label><input id="lgEmail" type="email" autocomplete="username" required><label for="lgPass">Senha</label><input id="lgPass" type="password" autocomplete="current-password" required><button class="btn" id="loginBtn" type="submit">Entrar</button><div id="loginErr" role="alert"></div></form></div></div>
@@ -529,6 +544,8 @@ const auxIndustryCanonical=v=>{
  if((raw.includes('coca cola')&&raw.includes('spal'))||(raw.includes('spal')&&raw.includes('brasileira')&&raw.includes('bebidas')))return 'coca cola spal';
  return auxCanonical(v);
 };
+// Chaves equivalentes: mantém a correspondência da indústria mesmo quando a ordem das palavras muda.
+const auxIndustryMatchKeys=v=>[...new Set([auxIndustryCanonical(v),...auxMatchKeys(v)].filter(Boolean))];
 const auxKey=(forn,loja)=>auxIndustryCanonical(forn)+'|'+auxCanonical(loja);
 const auxPairMatches=(a,b)=>auxIndustryCanonical(a)===auxIndustryCanonical(b)||auxMatchKeys(a).some(k=>auxMatchKeys(b).includes(k));
 // A planilha pode trazer a loja como “STOK CENTER LOJA 32 - REG VII”,
@@ -539,43 +556,54 @@ const auxStoreKey=v=>auxMatchKey(v)
  .replace(/\s+/g,' ').trim().split(' ').filter(Boolean).sort().join(' ');
 const auxStoreIdentity=v=>{
  const t=String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
- const n=t.match(/\b(?:loja|lj|store)\s*0*(\d{1,5})\b/)||t.match(/\b0*(\d{1,4})\b/);
+ // Prioriza o número explicitamente associado a LOJA/LJ/STORE. O fallback
+ // aceita códigos numéricos completos, sem truncar lojas com 5+ dígitos.
+ const explicit=t.match(/\b(?:loja|lj|store)\s*0*(\d+)\b/);
+ const onlyNumber=t.match(/^\s*0*(\d+)\s*$/);
+ const fallback=t.match(/(?:^|\D)0*(\d+)(?=\D|$)/);
+ const rawNumber=explicit?.[1]||onlyNumber?.[1]||fallback?.[1]||null;
+ const number=rawNumber?rawNumber.replace(/^0+(?=\d)/,''):null;
  const r=t.match(/\breg(?:iao)?\.?\s*([ivxlcdm]+|\d+)\b/);
  const brand=/\bstok(?:\s+center)?\b/.test(t)?'stok':(/\bcomercial\s+zaffari\b/.test(t)?'zaffari':null);
- return {number:n?n[1]:null,region:r?r[1].toLowerCase():null,brand};
+ return {number,region:r?r[1].toLowerCase():null,brand};
 };
 const auxStoreMatches=(a,b)=>{
  const ia=auxStoreIdentity(a),ib=auxStoreIdentity(b);
- // Se os dois nomes identificam bandeiras diferentes, nunca cruzar as lojas.
- if(ia.brand&&ib.brand&&ia.brand!==ib.brand)return false;
- const ka=auxStoreKey(a),kb=auxStoreKey(b);
- if(ka&&kb&&ka===kb)return true;
- if(!ia.number||!ib.number||ia.number!==ib.number)return false;
- return !ia.region||!ib.region||ia.region===ib.region;
+ // Regra de faturamento: o identificador numérico é a referência; região,
+ // prefixos e variações de escrita não podem impedir a correspondência.
+ if(ia.number&&ib.number)return ia.number===ib.number;
+ // Para cadastros antigos sem número, só aceita nome normalizado idêntico.
+ return !ia.number&&!ib.number&&!!auxStoreKey(a)&&auxStoreKey(a)===auxStoreKey(b);
 };
 function buildRevenueIndexes(){
  REVENUE_INDEX=new Map();REVENUE_TOTALS=new Map();REVENUE_LOOKUP_CACHE.clear();REVENUE_GRAND_TOTAL=0;
  for(const row of REVENUE_DB){
-  const industryKey=auxIndustryCanonical(row.forn),value=Number(row.faturamento)||0;
-  REVENUE_GRAND_TOTAL+=value;REVENUE_TOTALS.set(industryKey,(REVENUE_TOTALS.get(industryKey)||0)+value);
-  if(!REVENUE_INDEX.has(industryKey))REVENUE_INDEX.set(industryKey,{exact:new Map(),byNumber:new Map()});
-  const index=REVENUE_INDEX.get(industryKey);
-  for(const key of auxMatchKeys(row.loja)){if(!index.exact.has(key))index.exact.set(key,[]);index.exact.get(key).push(row)}
+  const value=Number(row.faturamento)||0;REVENUE_GRAND_TOTAL+=value;
   const id=auxStoreIdentity(row.loja);
-  if(id.number){if(!index.byNumber.has(id.number))index.byNumber.set(id.number,[]);index.byNumber.get(id.number).push(row)}
+  for(const industryKey of auxIndustryMatchKeys(row.forn)){
+   if(!REVENUE_INDEX.has(industryKey))REVENUE_INDEX.set(industryKey,{exact:new Map(),byNumber:new Map()});
+   const index=REVENUE_INDEX.get(industryKey);
+   if(id.number){if(!index.byNumber.has(id.number))index.byNumber.set(id.number,[]);index.byNumber.get(id.number).push(row)}
+   else for(const key of auxMatchKeys(row.loja)){if(!index.exact.has(key))index.exact.set(key,[]);index.exact.get(key).push(row)}
+  }
  }
 }
 function revenueFor(forn,loja){
- const industryKey=auxIndustryCanonical(forn),storeKey=auxCanonical(loja),cacheKey=industryKey+'|'+storeKey;
+ const wanted=auxStoreIdentity(loja),cacheKey=auxIndustryCanonical(forn)+'|'+(wanted.number||auxCanonical(loja));
  if(REVENUE_LOOKUP_CACHE.has(cacheKey))return REVENUE_LOOKUP_CACHE.get(cacheKey);
- const index=REVENUE_INDEX.get(industryKey);if(!index){REVENUE_LOOKUP_CACHE.set(cacheKey,null);return null}
- const exact=new Set();for(const key of auxMatchKeys(loja)){for(const row of index.exact.get(key)||[])exact.add(row)}
- let matches=[...exact];
- if(!matches.length){const wanted=auxStoreIdentity(loja);if(wanted.number)matches=(index.byNumber.get(wanted.number)||[]).filter(row=>{const found=auxStoreIdentity(row.loja);if(wanted.brand&&found.brand&&wanted.brand!==found.brand)return false;return !wanted.region||!found.region||wanted.region===found.region})}
- const value=matches.length?matches.reduce((sum,row)=>sum+(Number(row.faturamento)||0),0):null;
+ const matches=new Set();
+ for(const industryKey of auxIndustryMatchKeys(forn)){
+  const index=REVENUE_INDEX.get(industryKey);if(!index)continue;
+  if(wanted.number){for(const row of index.byNumber.get(wanted.number)||[])matches.add(row)}
+  else for(const key of auxMatchKeys(loja)){for(const row of index.exact.get(key)||[])matches.add(row)}
+ }
+ const value=matches.size?[...matches].reduce((sum,row)=>sum+(Number(row.faturamento)||0),0):null;
  REVENUE_LOOKUP_CACHE.set(cacheKey,value);return value;
 }
-function revenueTotal(forn=null){return forn===null?REVENUE_GRAND_TOTAL:(REVENUE_TOTALS.get(auxIndustryCanonical(forn))||0)}
+function revenueTotal(forn=null){
+ if(forn===null)return REVENUE_GRAND_TOTAL;
+ return REVENUE_DB.filter(row=>auxPairMatches(row.forn,forn)).reduce((sum,row)=>sum+(Number(row.faturamento)||0),0);
+}
 function storesWithoutVisits(){
  // Junta cadastro e faturamento, depois cruza com visitas usando índice por indústria e número da loja.
  // Isso evita varrer toda a base de visitas para cada loja e mantém a aba responsiva.
@@ -585,7 +613,7 @@ function storesWithoutVisits(){
   const identity=auxStoreIdentity(row.loja);
   if(identity.number==='100')return;
   if(curInd!=='__all__'&&!auxPairMatches(row.forn,curInd))return;
-  const industry=auxIndustryCanonical(row.forn),key=industry+'|'+(identity.number||auxStoreKey(row.loja))+'|'+(identity.region||'');
+  const industry=auxIndustryCanonical(row.forn),key=industry+'|'+(identity.number?'#'+identity.number:'name:'+auxStoreKey(row.loja));
   if(!candidates.has(key))candidates.set(key,{forn:row.forn,loja:row.loja,industry,identity,sources:new Set([source])});
   else candidates.get(key).sources.add(source);
  };
@@ -594,12 +622,12 @@ function storesWithoutVisits(){
  const visitIndex=new Map();
  for(const visit of ALL){
   const industry=auxIndustryCanonical(visit.forn),identity=auxStoreIdentity(visit.loja);
-  const key=industry+'|'+(identity.number||auxStoreKey(visit.loja));
+  const key=industry+'|'+(identity.number?'#'+identity.number:'name:'+auxStoreKey(visit.loja));
   if(!visitIndex.has(key))visitIndex.set(key,[]);
   visitIndex.get(key).push(visit);
  }
  return [...candidates.values()].filter(candidate=>{
-  const id=candidate.identity,base=candidate.industry+'|'+(id.number||auxStoreKey(candidate.loja));
+  const id=candidate.identity,base=candidate.industry+'|'+(id.number?'#'+id.number:'name:'+auxStoreKey(candidate.loja));
   const possible=visitIndex.get(base)||[];
   return !possible.some(visit=>auxStoreMatches(visit.loja,candidate.loja));
  }).sort((a,b)=>a.loja.localeCompare(b.loja,'pt-BR',{numeric:true})||a.forn.localeCompare(b.forn,'pt-BR'));
@@ -707,31 +735,39 @@ function renderTable(){
   data=data.filter(x=>(x.loja+x.prom+x.comp+x.status).toLowerCase().includes(q));sub=fI(data.length)+' visitas';
  }else{
   const key=tab==='forn'?'forn':tab==='lojas'?'loja':'prom';const lab=tab==='forn'?'Indústria':tab==='lojas'?'Loja':'Promotor';
-  data=group(cur,key).filter(x=>x.name.toLowerCase().includes(q));
-  if(tab==='lojas'&&curInd!=='__all__'){
-   // União de lojas com visitas, cadastro independente e faturamento da indústria.
-   // Assim, lojas sem agenda também aparecem no detalhamento com seu faturamento.
-   const storeMap=new Map(),storeNumbers=new Map();
-   const registerStore=x=>{
-    const id=auxStoreIdentity(x.name),key=id.number?(id.number+'|'+(id.region||'')):auxStoreKey(x.name);
-    if(storeMap.has(key))return;
-    storeMap.set(key,{...x});
-    if(id.number){if(!storeNumbers.has(id.number))storeNumbers.set(id.number,[]);storeNumbers.get(id.number).push({name:x.name,region:id.region||null})}
-   };
-   for(const x of data)registerStore(x);
-   const addAuxStore=row=>{
-    if(!row||!auxPairMatches(row.forn,curInd))return;
-    const id=auxStoreIdentity(row.loja);if(id.number==='100')return;
-    if(id.number){const existing=storeNumbers.get(id.number)||[];if(existing.some(x=>!id.region||!x.region||id.region===x.region))return;}
-    else if(storeMap.has(auxStoreKey(row.loja)))return;
-    const empty={lojas:0,ag:0,real:0,pct:0,nc:0,ea:0,sc:0,contr:0,exec:0,util:null,avg:0,min:null,nota:0,rows:[]};
-    registerStore({...empty,name:row.loja});
-   };
-   STORE_DB.forEach(addAuxStore);REVENUE_DB.forEach(addAuxStore);
-   data=[...storeMap.values()].filter(x=>x.name.toLowerCase().includes(q));
-   data.forEach(x=>{x.faturamento=revenueFor(curInd,x.name)});
-   cols=[['name',lab,x=>esc(x.name)],['faturamento','Faturamento',x=>x.faturamento==null?'—':`<span class="revenue-display" data-revenue-display="${esc(fBRL(x.faturamento))}">${revenueVisible?esc(fBRL(x.faturamento)):'••••••'}</span>`],...std];
-  }else cols=[['name',lab,x=>esc(x.name)],['lojas','Lojas',x=>x.lojas],...std];
+  data=group(cur,key);
+   if(tab==='lojas'&&curInd!=='__all__'){
+    // Une lojas pelo número. A mesma unidade não vira duas linhas por trazer
+    // região, prefixo ou escrita diferentes entre visitas e faturamento.
+    const storeMap=new Map();
+    const storeIdentityKey=name=>{const id=auxStoreIdentity(name);return id.number?'#'+id.number:'name:'+auxStoreKey(name)};
+    const registerStore=x=>{
+     const key=storeIdentityKey(x.name),current=storeMap.get(key);
+     if(!current){storeMap.set(key,{...x,rows:Array.isArray(x.rows)?x.rows.slice():[]});return}
+     const mergedRows=[...(current.rows||[]),...(x.rows||[])];
+     const metrics=mergedRows.length?agg(mergedRows):current;
+     if(mergedRows.length){
+      // Contrato é contado uma única vez por loja, mesmo quando o nome veio
+      // duplicado na base operacional com outra grafia/região.
+      const contracts=new Map();
+      for(const visit of mergedRows){const id=auxStoreIdentity(visit.loja),store=id.number?'#'+id.number:'name:'+auxCanonical(visit.loja);contracts.set(auxIndustryCanonical(visit.forn)+'|'+store,Number(visit.contr)||0)}
+      metrics.lojas=1;metrics.contr=[...contracts.values()].reduce((sum,value)=>sum+value,0);metrics.util=metrics.contr?metrics.exec/metrics.contr*100:null;
+     }
+     storeMap.set(key,{...metrics,name:current.name||x.name,rows:mergedRows});
+    };
+    for(const x of data)registerStore(x);
+    const addAuxStore=row=>{
+     if(!row||!auxPairMatches(row.forn,curInd))return;
+     const id=auxStoreIdentity(row.loja);if(id.number==='100')return;
+     if(storeMap.has(storeIdentityKey(row.loja)))return;
+     const empty={lojas:0,ag:0,real:0,pct:0,nc:0,ea:0,sc:0,contr:0,exec:0,util:null,avg:0,min:null,nota:0,rows:[]};
+     registerStore({...empty,name:row.loja});
+    };
+    STORE_DB.forEach(addAuxStore);REVENUE_DB.forEach(addAuxStore);
+    data=[...storeMap.values()].filter(x=>x.name.toLowerCase().includes(q));
+    data.forEach(x=>{x.faturamento=revenueFor(curInd,x.name)});
+    cols=[['name',lab,x=>esc(x.name)],['faturamento','Faturamento',x=>x.faturamento==null?'—':`<span class="revenue-display" data-revenue-display="${esc(fBRL(x.faturamento))}">${revenueVisible?esc(fBRL(x.faturamento)):'••••••'}</span>`],...std];
+   }else{data=data.filter(x=>x.name.toLowerCase().includes(q));cols=[['name',lab,x=>esc(x.name)],['lojas','Lojas',x=>x.lojas],...std]}
   title='Todas as '+(tab==='forn'?'indústrias':tab==='lojas'?'lojas':'promotores');sub=fI(data.length)+' registros • busca e ordenação';
  }
  const s=sortS;data.sort((a,b)=>{const A=a[s.key],B=b[s.key];if(A==null&&B==null)return 0;if(A==null)return 1;if(B==null)return -1;if(typeof A==='string'||typeof B==='string')return String(A).localeCompare(String(B),'pt-BR',{numeric:true,sensitivity:'base'})*s.dir;return (Number(A)-Number(B))*s.dir});
@@ -811,7 +847,7 @@ function buildPdfDetail(){
 }
 function stripRevenueFromPdf(){
  const root=$('pdfDetail');if(!root)return;
- root.querySelectorAll('[data-revenue-display],[data-revenue-toggle],.revenue-card,[data-k="faturamento"]').forEach(el=>el.remove());
+ root.querySelectorAll('[data-revenue-display],[data-revenue-toggle],.revenue-card,.kpi-revenue,[data-k="faturamento"]').forEach(el=>el.remove());
  root.querySelectorAll('.pdf-summary-item').forEach(item=>{const label=item.querySelector('.label')?.textContent||'';if(/faturamento|receita/i.test(label))item.remove()});
  root.querySelectorAll('table').forEach(table=>{
   const header=table.querySelector('thead tr');if(!header)return;
@@ -819,7 +855,15 @@ function stripRevenueFromPdf(){
   indexes.forEach(index=>table.querySelectorAll('tr').forEach(row=>{if(row.children[index])row.children[index].remove()}));
  });
 }
-async function exportPDF(){if(!window.__COLETOR_EXPORTED_DATA__&&!await requireServerPerm('export_pdf'))return;closeIndustryList();buildPdfDetail();stripRevenueFromPdf();const old=document.title,nm=curInd==='__all__'?'Geral':curInd.split(' - ')[0].trim();document.title='ColetorPRO - '+nm+' - '+$('period').textContent;window.onafterprint=()=>{document.title=old;window.onafterprint=null};requestAnimationFrame(()=>requestAnimationFrame(()=>window.print()))}
+async function exportPDF(){
+ if(!window.__COLETOR_EXPORTED_DATA__&&!await requireServerPerm('export_pdf'))return;
+ closeIndustryList();buildPdfDetail();stripRevenueFromPdf();
+ const old=document.title,nm=curInd==='__all__'?'Geral':curInd.split(' - ')[0].trim();
+ document.title='ColetorPRO - '+nm+' - '+$('period').textContent;
+ document.body.classList.add('pdf-export-mode');
+ window.onafterprint=()=>{document.title=old;document.body.classList.remove('pdf-export-mode');window.onafterprint=null};
+ requestAnimationFrame(()=>requestAnimationFrame(()=>window.print()));
+}
 async function readAuxPublished(file){
  try{const {data,error}=await sb.storage.from(BUCKET).createSignedUrl(file,60);if(error||!data)return [];const res=await fetch(data.signedUrl,{cache:'no-store'});if(!res.ok)return [];const j=await res.json();return Array.isArray(j)?j:[]}catch(e){console.warn('Base auxiliar indisponível:',file,e);return []}
 }
@@ -827,7 +871,8 @@ async function loadAuxBases(){
  if(!sb||window.__COLETOR_EXPORTED_DATA__)return;
  const [stores,revenue]=await Promise.all([readAuxPublished(STORE_FILE),readAuxPublished(REVENUE_FILE)]);
  STORE_DB=stores.filter(x=>x&&typeof x.forn==='string'&&typeof x.loja==='string').map(x=>({forn:x.forn.trim(),loja:x.loja.trim()}));
- const revMap=new Map();for(const x of revenue.filter(x=>x&&typeof x.forn==='string'&&typeof x.loja==='string')){const row={forn:x.forn.trim(),loja:x.loja.trim(),faturamento:Number(x.faturamento)||0},id=auxStoreIdentity(row.loja),key=auxIndustryCanonical(row.forn)+'|'+(id.number||auxCanonical(row.loja))+'|'+(id.region||'')+'|'+(id.brand||'');if(revMap.has(key))revMap.get(key).faturamento+=row.faturamento;else revMap.set(key,row)}REVENUE_DB=[...revMap.values()];
+ // Consolida linhas de faturamento pela indústria + número da loja, sem separar por região ou grafia.
+ const revMap=new Map();for(const x of revenue.filter(x=>x&&typeof x.forn==='string'&&typeof x.loja==='string')){const row={forn:x.forn.trim(),loja:x.loja.trim(),faturamento:Number(x.faturamento)||0},id=auxStoreIdentity(row.loja),key=auxIndustryCanonical(row.forn)+'|'+(id.number?'#'+id.number:'name:'+auxCanonical(row.loja));if(revMap.has(key))revMap.get(key).faturamento+=row.faturamento;else revMap.set(key,row)}REVENUE_DB=[...revMap.values()];
  buildRevenueIndexes();
 }
 function normAuxHeader(v){return String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'')}
