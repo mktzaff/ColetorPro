@@ -270,6 +270,51 @@ html:not(.is-admin) .admin-only{display:none!important}
 .exported-view .cmp-actions{display:none!important}@media print{.cmp-actions{display:none!important}.cmp-line{animation:none;stroke-dashoffset:0}.cmp-area{animation:none;opacity:1}.cmp-pt{animation:none}}
 @media(prefers-reduced-motion:reduce){.cmp-line{animation:none;stroke-dashoffset:0}.cmp-area{animation:none;opacity:1}.cmp-pt{animation:none}}
 @media(max-width:1000px){.cmp-metric-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cmp-metric-card{padding:12px}}@media(max-width:520px){.cmp-metric-grid{grid-template-columns:1fr}.cmp-metric-title{font-size:14px}.cmp-month-value{font-size:15px}}
+</style><style id="pro-glass">
+body{background:linear-gradient(135deg,#eef3f8,#f6f1f2 55%,#eaf0f6) fixed}
+body:before,body:after{content:"";position:fixed;z-index:-1;border-radius:50%;filter:blur(90px);opacity:.55;pointer-events:none;animation:blobMove 18s ease-in-out infinite alternate}
+body:before{width:520px;height:520px;left:-140px;top:30%;background:rgba(227,6,19,.18)}
+body:after{width:600px;height:600px;right:-160px;top:55%;background:rgba(18,59,95,.24);animation-delay:-6s}
+@keyframes blobMove{to{transform:translate(70px,-60px) scale(1.15)}}
+.card,.kpi{background:rgba(255,255,255,.58)!important;backdrop-filter:blur(18px) saturate(170%);-webkit-backdrop-filter:blur(18px) saturate(170%);border:1px solid rgba(255,255,255,.75);box-shadow:0 10px 32px rgba(11,39,66,.10),inset 0 1px 0 rgba(255,255,255,.9)}
+.kpi.dark{background:linear-gradient(145deg,rgba(11,39,66,.88),rgba(18,59,95,.78))!important;border-color:rgba(255,255,255,.18)}
+.kpi:hover,.card:hover{box-shadow:0 18px 44px rgba(11,39,66,.16),inset 0 1px 0 #fff;transform:translateY(-4px)}
+.kpi:before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(120deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);transform:translateX(-120%);transition:transform .8s}
+.kpi{position:relative;overflow:hidden}.kpi:hover:before{transform:translateX(120%)}
+/* separação entre gráficos */
+.section-title{margin:44px 0 16px;padding-top:26px;border-top:1px solid rgba(11,39,66,.10)}
+.section-title:first-of-type{border-top:0;padding-top:0}
+.grid2,.grid3{gap:28px}.grid3>.card,.grid2>.card{position:relative;overflow:hidden}
+.grid2>.card:before,.grid3>.card:before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,var(--red),var(--navy2));opacity:.85}
+.card-title{padding-top:4px}
+.bar-chart{background:linear-gradient(to top,rgba(11,39,66,.045) 1px,transparent 1px) 0 0/100% 49px;border-radius:10px}
+/* animações */
+.fx .kpi .value,.fx .score-num{animation:numIn .7s cubic-bezier(.2,.8,.2,1) backwards}
+@keyframes numIn{from{opacity:0;transform:translateY(16px) scale(.9);filter:blur(6px)}}
+.fx .bar{animation:growY .9s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--i,0)*45ms)}
+.fx .bar span{animation:fadeIn .5s ease backwards;animation-delay:calc(.55s + var(--i,0)*45ms)}
+.fx .progress>div{animation:fillX 1.1s cubic-bezier(.2,.8,.2,1) .2s backwards;background-image:linear-gradient(90deg,rgba(255,255,255,0) 0,rgba(255,255,255,.35) 50%,rgba(255,255,255,0) 100%);background-size:200% 100%}
+.progress>div{position:relative}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.8,.2,1),transform .7s cubic-bezier(.2,.8,.2,1);animation:none!important}
+.reveal.in{opacity:1;transform:none}
+@media print{.reveal{opacity:1!important;transform:none!important}body:before,body:after{display:none}}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}body:before,body:after{animation:none}}
+/* modal de bases em glass + arquivos por mês */
+#basesModal{background:rgba(8,24,40,.55);backdrop-filter:blur(10px)}
+#basesModal .bases-box{background:rgba(255,255,255,.78);backdrop-filter:blur(22px) saturate(170%);border:1px solid rgba(255,255,255,.8)}
+#basesModal .bases-card{background:rgba(255,255,255,.6)}
+.mf-wrap{margin-top:16px;border:1px solid var(--line);border-radius:12px;padding:15px;background:rgba(255,255,255,.6)}
+.mf-wrap h3{margin:0 0 4px;font-size:15px}.mf-wrap p{font-size:12px;color:var(--muted);margin:0 0 12px;line-height:1.5}
+.mf-head,.mf-row{display:grid;grid-template-columns:150px 1fr 1fr;gap:10px;align-items:stretch}
+.mf-head{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:6px}
+.mf-row{margin-bottom:8px}
+.mf-month{display:flex;flex-direction:column;justify-content:center;padding:10px 12px;border-radius:10px;background:var(--navy);color:#fff}
+.mf-row:first-of-type .mf-month{background:var(--red)}.mf-month b{font-size:14px}.mf-month em{font-size:10px;font-style:normal;opacity:.8}
+.mf-cell{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.7)}
+.mf-cell.ok{border-left:4px solid var(--green)}.mf-cell.empty{border-left:4px solid var(--amber)}
+.mf-info{display:flex;flex-direction:column;min-width:0;font-size:11px}.mf-info span{color:var(--muted);font-size:10px;margin-top:2px}
+.mf-cell .btn{margin:0;padding:7px 11px;font-size:11px;white-space:nowrap}
+@media(max-width:760px){.mf-head{display:none}.mf-row{grid-template-columns:1fr}}
 </style></head><body><div id="busyOverlay" role="status" aria-live="polite" aria-label="Carregando"><div class="busy-card"><div class="busy-spin"></div><div id="busyText">Atualizando informações…</div><small>Aguarde a conclusão antes de continuar.</small></div></div>
 <div id="login"><div class="box"><h2>ColetorPRO</h2><p>Acesso restrito. Entre com o e-mail e a senha cadastrados pelo administrador.</p>
 <form id="loginForm" onsubmit="return false"><label for="lgEmail">E-mail</label><input id="lgEmail" type="email" autocomplete="username" required><label for="lgPass">Senha</label><input id="lgPass" type="password" autocomplete="current-password" required><button class="btn" id="loginBtn" type="submit">Entrar</button><div id="loginErr" role="alert"></div></form></div></div>
@@ -298,7 +343,7 @@ html:not(.is-admin) .admin-only{display:none!important}
 <div class="topbar"><div class="combo"><label>Indústria (fornecedor)</label><input id="indIn" placeholder="Carregando dados publicados..." autocomplete="off" disabled><div class="combo-list hidden" id="indList"></div></div>
 <div class="top-actions"><button class="btn btn-pdf" id="pdfBtn" disabled onclick="exportPDF()">Exportar PDF</button><button class="btn btn-out" id="basesOpenBtn" type="button" style="display:none" title="Gerenciar as bases do dashboard">Gerenciar bases</button><button class="btn btn-up" id="upBtn" type="button" style="display:none">Atualizar base (.csv, .xlsx)</button><button class="btn btn-out" id="storeDbBtn" type="button" style="display:none" title="Importar cadastro de lojas por indústria">Base de lojas</button><button class="btn btn-out" id="revenueDbBtn" type="button" style="display:none" title="Importar faturamento mensal por loja">Base de faturamento</button><button class="btn" id="ctrBtn" type="button" style="background:var(--navy2);display:none">Contratos realizados</button><input type="file" id="upFile" accept=".csv,.xlsx,.xls,.json,text/csv,application/csv,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden><input type="file" id="storeDbFile" accept=".csv,.xlsx,.xls,.json,text/csv,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden><input type="file" id="revenueDbFile" accept=".csv,.xlsx,.xls,.json,text/csv,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden><span class="who" id="who"></span><button class="btn btn-out" id="accBtn" type="button">Conta</button><button class="btn btn-out" id="logoutBtn" type="button">Sair</button></div>
 </div>
-<div id="basesModal" class="hidden" role="dialog" aria-modal="true" aria-labelledby="basesTitle"><div class="bases-box"><div class="bases-head"><div><h2 id="basesTitle">Gerenciamento de bases</h2><div class="bases-intro">Atualize as visitas e o faturamento mensal. As lojas são identificadas automaticamente pelo faturamento, sem cadastro separado.</div></div><button class="btn btn-out" id="basesCloseBtn" type="button">Fechar</button></div><div class="bases-grid"><section class="bases-card" id="visitBaseCard"><h3>Base de visitas</h3><p>Atualiza os registros de visitas usados no dashboard. Não altera o cadastro independente de lojas.</p><div class="bases-actions"><button class="btn btn-up" id="visitBaseOpenBtn" type="button">Importar base de visitas</button></div></section><section class="bases-card" id="storeBaseCard"><h3>Cadastro de lojas</h3><p>Cadastro de lojas por bandeira, no padrão “STOK LOJA X - REG X” ou “COMERCIAL ZAFFARI LOJA X - REG X”. Não utiliza indústria nem fornecedor.</p><div class="bases-actions"><button class="btn" id="storeEditOpenBtn" type="button">Editar cadastro de lojas</button><button class="btn btn-out" id="storeImportOpenBtn" type="button">Importar arquivo</button></div></section><section class="bases-card" id="revenueBaseCard"><h3>Faturamento mensal</h3><p>Importe o arquivo do mês atual com as colunas Empresa, Fornecedor e Venda R$ 2026 (ou Venda). Se aparecer R$ 0,00, importe novamente a planilha aqui. A base é independente das visitas.</p><div class="bases-actions"><button class="btn btn-out" id="revenueImportOpenBtn" type="button">Importar faturamento</button></div></section><section class="bases-card"><h3>Estado das bases</h3><p id="basesSummary">Carregando informações das bases...</p><div class="bases-actions"><button class="btn btn-out" id="basesRefreshBtn" type="button">Atualizar informações</button></div></section></div><section class="bases-editor bases-hidden" id="storeEditor"><div class="bases-editor-head"><div><h3>Editar cadastro de lojas</h3><div class="bases-intro">Cadastre cada unidade pela bandeira e identificação no formato “LOJA X - REG X”. Não preencha indústria ou fornecedor. As alterações só entram na base após clicar em “Salvar cadastro”.</div></div><input id="storeEditSearch" placeholder="Buscar bandeira ou loja..." style="max-width:280px"></div><div class="bases-add"><select id="storeNewBrand" aria-label="Bandeira"><option value="STOK">STOK</option><option value="COMERCIAL ZAFFARI">COMERCIAL ZAFFARI</option></select><input id="storeNewName" placeholder="LOJA X - REG X" aria-label="Identificação da loja"><button class="btn" id="storeAddRowBtn" type="button">+ Adicionar loja</button></div><div class="bases-table-wrap"><table><thead><tr><th>Bandeira</th><th>Identificação da loja</th><th>Ação</th></tr></thead><tbody id="storeEditRows"></tbody></table></div><div class="bases-foot"><span id="storeEditStatus" role="status">Cadastro não alterado.</span><div class="bases-actions"><button class="btn btn-out" id="storeEditCancelBtn" type="button">Descartar alterações</button><button class="btn" id="storeEditSaveBtn" type="button">Salvar cadastro</button></div></div></section><div id="basesStatus" role="status" class="small-note" style="margin-top:12px"></div><span class="up-status" id="upStatus" role="status"></span></div></div>
+<div id="basesModal" class="hidden" role="dialog" aria-modal="true" aria-labelledby="basesTitle"><div class="bases-box"><div class="bases-head"><div><h2 id="basesTitle">Gerenciamento de bases</h2><div class="bases-intro">Atualize as visitas e o faturamento mensal. As lojas são identificadas automaticamente pelo faturamento, sem cadastro separado.</div></div><button class="btn btn-out" id="basesCloseBtn" type="button">Fechar</button></div><div class="bases-grid"><section class="bases-card" id="visitBaseCard"><h3>Base de visitas</h3><p>Atualiza os registros de visitas usados no dashboard. Não altera o cadastro independente de lojas.</p><div class="bases-actions"><button class="btn btn-up" id="visitBaseOpenBtn" type="button">Importar base de visitas</button></div></section><section class="bases-card" id="storeBaseCard"><h3>Cadastro de lojas</h3><p>Cadastro de lojas por bandeira, no padrão “STOK LOJA X - REG X” ou “COMERCIAL ZAFFARI LOJA X - REG X”. Não utiliza indústria nem fornecedor.</p><div class="bases-actions"><button class="btn" id="storeEditOpenBtn" type="button">Editar cadastro de lojas</button><button class="btn btn-out" id="storeImportOpenBtn" type="button">Importar arquivo</button></div></section><section class="bases-card" id="revenueBaseCard"><h3>Faturamento mensal</h3><p>Importe o arquivo do mês atual com as colunas Empresa, Fornecedor e Venda R$ 2026 (ou Venda). Se aparecer R$ 0,00, importe novamente a planilha aqui. A base é independente das visitas.</p><div class="bases-actions"><button class="btn btn-out" id="revenueImportOpenBtn" type="button">Importar faturamento</button></div></section><section class="bases-card"><h3>Estado das bases</h3><p id="basesSummary">Carregando informações das bases...</p><div class="bases-actions"><button class="btn btn-out" id="basesRefreshBtn" type="button">Atualizar informações</button></div></section></div><section class="mf-wrap"><h3>Arquivos por mês</h3><p>Mês atual e os 2 anteriores. Use “Substituir” para trocar o arquivo de um mês específico sem mexer nos outros. Na base de visitas, só entram as linhas do mês escolhido.</p><div id="monthFiles"></div><input type="file" id="monthFile" accept=".csv,.xlsx,.xls,.json,text/csv,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden></section><section class="bases-editor bases-hidden" id="storeEditor"><div class="bases-editor-head"><div><h3>Editar cadastro de lojas</h3><div class="bases-intro">Cadastre cada unidade pela bandeira e identificação no formato “LOJA X - REG X”. Não preencha indústria ou fornecedor. As alterações só entram na base após clicar em “Salvar cadastro”.</div></div><input id="storeEditSearch" placeholder="Buscar bandeira ou loja..." style="max-width:280px"></div><div class="bases-add"><select id="storeNewBrand" aria-label="Bandeira"><option value="STOK">STOK</option><option value="COMERCIAL ZAFFARI">COMERCIAL ZAFFARI</option></select><input id="storeNewName" placeholder="LOJA X - REG X" aria-label="Identificação da loja"><button class="btn" id="storeAddRowBtn" type="button">+ Adicionar loja</button></div><div class="bases-table-wrap"><table><thead><tr><th>Bandeira</th><th>Identificação da loja</th><th>Ação</th></tr></thead><tbody id="storeEditRows"></tbody></table></div><div class="bases-foot"><span id="storeEditStatus" role="status">Cadastro não alterado.</span><div class="bases-actions"><button class="btn btn-out" id="storeEditCancelBtn" type="button">Descartar alterações</button><button class="btn" id="storeEditSaveBtn" type="button">Salvar cadastro</button></div></div></section><div id="basesStatus" role="status" class="small-note" style="margin-top:12px"></div><span class="up-status" id="upStatus" role="status"></span></div></div>
 <div id="empty">Carregando dados publicados...</div>
 <div id="app" class="hidden">
 <div class="ctr-msg hidden" id="ctrMsg"></div>
@@ -1149,5 +1194,58 @@ async function updateComparativoInline(){
  renderComparativo(COMP_MERGED,curInd,COMP_WARN)
 }
 {const __render0=render;render=function(...a){const r=__render0.apply(this,a);try{updateComparativoInline()}catch(e){console.error(e)}return r}}
+/* ===== Arquivos por mês (atual + 2 anteriores) ===== */
+const MFILE=(k,m)=>(k==='visits'?'visitas-':'faturamento-')+m+'.json';
+let MONTH_TARGET=null;
+const mfSize=n=>n>1048576?(n/1048576).toFixed(1)+' MB':Math.max(1,Math.round(n/1024))+' KB';
+const mfUpload=async(path,rows)=>{const{error}=await sb.storage.from(BUCKET).upload(path,new Blob([JSON.stringify(rows)],{type:'application/json'}),{upsert:true,contentType:'application/json',cacheControl:'0'});if(error)throw error};
+async function renderMonthFiles(){
+ const box=$('monthFiles');if(!box||!sb||window.__COLETOR_EXPORTED_DATA__)return;
+ box.textContent='Carregando arquivos…';
+ let files;try{const{data,error}=await sb.storage.from(BUCKET).list('',{limit:300});if(error)throw error;files=new Map((data||[]).map(o=>[o.name,o]))}catch(e){box.textContent='Não foi possível listar os arquivos: '+(e?.message||e);return}
+ const win=comparativoWindow().slice().reverse();
+ const cell=(kind,m)=>{const o=files.get(MFILE(kind,m.mes)),d=o&&o.updated_at?new Date(o.updated_at):null;
+  return `<div class="mf-cell ${o?'ok':'empty'}"><div class="mf-info"><b>${o?'Arquivo enviado':'Sem arquivo'}</b><span>${o?d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+' • '+mfSize(o.metadata?.size||0):'Envie para preencher este mês'}</span></div><button type="button" class="btn btn-out" data-mf-kind="${kind}" data-mf-mes="${m.mes}">${o?'Substituir':'Enviar'}</button></div>`};
+ box.innerHTML='<div class="mf-head"><span>Mês</span><span>Visitas</span><span>Faturamento</span></div>'+win.map((m,i)=>`<div class="mf-row"><div class="mf-month"><b>${m.fullLabel}</b><em>${['Mês atual','1 mês atrás','2 meses atrás'][i]}</em></div>${cell('visits',m)}${cell('revenue',m)}</div>`).join('');
+}
+$('monthFiles').addEventListener('click',async e=>{const b=e.target.closest('[data-mf-kind]');if(!b)return;const kind=b.dataset.mfKind;if(!await requireServerPerm(kind==='visits'?'update_data':'manage_bases'))return;MONTH_TARGET={kind,mes:b.dataset.mfMes};$('monthFile').click()});
+$('monthFile').onchange=async e=>{
+ const f=e.target.files[0];e.target.value='';if(!f||!MONTH_TARGET)return;const{kind,mes}=MONTH_TARGET;MONTH_TARGET=null;
+ const st=$('basesStatus'),lbl=mes.split('-').reverse().join('/'),isCur=mes===comparativoWindow()[2].mes;
+ try{
+  st.textContent='Validando arquivo…';let rows;
+  if(kind==='visits'){
+   const all=await parseComparativoImportFile(f);rows=all.map(r=>({...r,date:normalizarData(r.date)})).filter(r=>comparativoMonthKey(r.date)===mes);
+   if(!rows.length)throw new Error('o arquivo não tem nenhuma visita de '+lbl);
+   if(!confirm('Substituir as visitas de '+lbl+' por '+fI(rows.length)+' registros'+(rows.length<all.length?' ('+fI(all.length-rows.length)+' linhas de outros meses serão ignoradas)':'')+(isCur?'? A base do dashboard passará a mostrar somente este mês.':'?'))){st.textContent='';return}
+  }else{
+   rows=await parseAuxFile(f,'revenue');
+   if(!confirm('Substituir o faturamento de '+lbl+' por '+fI(rows.length)+' registros?'+(isCur?' Ele também passa a ser o faturamento do dashboard.':''))){st.textContent='';return}
+  }
+  st.textContent='Enviando…';
+  await mfUpload(MFILE(kind,mes),rows);
+  if(kind==='visits'){
+   if(isCur)await mfUpload(FILE,rows);
+   try{await saveComparativoHistory(rows)}catch(h){console.error(h)}
+   if(isCur){await loadPublishedData();await setUpdated()}
+  }else if(isCur){await mfUpload(REVENUE_FILE,rows);await loadAuxBases();render();updateBasesSummary()}
+  st.textContent=(kind==='visits'?'Visitas':'Faturamento')+' de '+lbl+' atualizado: '+fI(rows.length)+' registros.';
+  await renderMonthFiles();
+ }catch(err){st.textContent='Erro: '+(err?.message||err)}
+};
+/* guarda cópia mensal nos uploads normais (visitas e faturamento) */
+{const _sch=saveComparativoHistory;saveComparativoHistory=async function(rows){const r=await _sch.apply(this,arguments);try{const keep=new Set(comparativoWindow().map(m=>m.mes)),by={};for(const x of rows||[]){const d=normalizarData(x.date),m=comparativoMonthKey(d);if(keep.has(m))(by[m]=by[m]||[]).push({...x,date:d})}
+ for(const m in by)await mfUpload(MFILE('visits',m),by[m])}catch(e){console.warn('Cópia mensal de visitas falhou',e)}return r};
+ const _uab=uploadAuxBase;uploadAuxBase=async function(kind){await _uab.apply(this,arguments);if(kind==='revenue'&&!/^Erro/.test($('upStatus').textContent)){try{const rows=await readAuxPublished(REVENUE_FILE);if(rows.length)await mfUpload(MFILE('revenue',comparativoWindow()[2].mes),rows)}catch(e){console.warn(e)}}}}
+{const _o=$('basesOpenBtn').onclick;$('basesOpenBtn').onclick=async function(){await _o.apply(this,arguments);renderMonthFiles()};const _r=$('basesRefreshBtn').onclick;$('basesRefreshBtn').onclick=async function(){await _r.apply(this,arguments);renderMonthFiles()}}
+/* ===== Efeitos: números entrando, barras em sequência e reveal ao rolar ===== */
+{const app=$('app'),reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
+ const io='IntersectionObserver'in window?new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{threshold:.08}):null;
+ const prep=()=>{app.querySelectorAll('.card,.section-title,.visits-store-card').forEach(el=>{if(el.classList.contains('reveal')||!io)return;el.classList.add('reveal');io.observe(el)})};
+ const run=()=>{prep();app.querySelectorAll('.bar-group').forEach(g=>g.querySelectorAll('.bar').forEach(b=>b.style.setProperty('--i',[...g.parentNode.children].indexOf(g))));
+  app.classList.remove('fx');void app.offsetWidth;app.classList.add('fx');
+  if(!reduced)app.querySelectorAll('.kpi .value,.score-num,#vp,#hp').forEach(countUp)};
+ const _rr=render;render=function(...a){const r=_rr.apply(this,a);try{run()}catch(e){console.error(e)}return r};
+}
 boot();
 </script></body></html>
