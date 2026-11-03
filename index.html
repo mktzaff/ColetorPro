@@ -455,7 +455,10 @@ const auxPairMatches=(a,b)=>!!supplierKey(a)&&supplierKey(a)===supplierKey(b);
 // Não confundir fornecedores diferentes quando há uma abreviação: somente
 // relacionar aliases manuais explícitos, editáveis abaixo se necessário.
 const SUPPLIER_ALIASES={};
-const supplierId=v=>{const k=supplierKey(v);return SUPPLIER_ALIASES[k]||k};
+let BRAND_RULE=true;
+// Nome no formato "MARCA - RAZÃO SOCIAL": quando o trecho após o último " - " parece uma razão social (LTDA, S/A etc. ou 3+ palavras), ele passa a ser a identidade da indústria.
+const legalPart=v=>{const t=String(v??''),i=t.lastIndexOf(' - ');if(i<=0)return t;const tail=t.slice(i+3).trim();return(/\b(LTDA|S\s*\/?\s*A|SA|EIRELI|EPP|ME|CIA)\b/i.test(tail)||tail.split(/\s+/).length>=3)?tail:t};
+const supplierId=v=>{const k=supplierKey(BRAND_RULE?legalPart(v):v);return SUPPLIER_ALIASES[k]||k};
 const sameSupplier=(a,b)=>!!supplierId(a)&&supplierId(a)===supplierId(b);
 // A loja é vinculada pelo número identificador, nunca por texto parcial.
 // Ex.: 55-STOK 55 = STOK LOJA 55; 5 não pode corresponder a 55.
