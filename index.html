@@ -315,6 +315,14 @@ body:after{width:600px;height:600px;right:-160px;top:55%;background:rgba(18,59,9
 .mf-info{display:flex;flex-direction:column;min-width:0;font-size:11px}.mf-info span{color:var(--muted);font-size:10px;margin-top:2px}
 .mf-cell .btn{margin:0;padding:7px 11px;font-size:11px;white-space:nowrap}
 @media(max-width:760px){.mf-head{display:none}.mf-row{grid-template-columns:1fr}}
+</style><style id="fix-cut">
+.grid-kpi,.grid-kpi.k6,.grid-kpi.k7,.grid-kpi.k9{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))!important}
+.kpi{overflow:visible!important;min-width:0}.kpi:before{overflow:hidden}
+.kpi .value{font-size:clamp(19px,2vw,27px);white-space:nowrap;overflow-wrap:normal;max-width:100%}
+.kpi .label,.kpi .note{overflow-wrap:anywhere}
+h1{overflow-wrap:anywhere;line-height:1.05;font-size:clamp(24px,3.2vw,38px);max-width:calc(100% - 300px)}
+@media(max-width:900px){h1{max-width:100%}}
+.score-num{overflow-wrap:anywhere}
 </style></head><body><div id="busyOverlay" role="status" aria-live="polite" aria-label="Carregando"><div class="busy-card"><div class="busy-spin"></div><div id="busyText">Atualizando informações…</div><small>Aguarde a conclusão antes de continuar.</small></div></div>
 <div id="login"><div class="box"><h2>ColetorPRO</h2><p>Acesso restrito. Entre com o e-mail e a senha cadastrados pelo administrador.</p>
 <form id="loginForm" onsubmit="return false"><label for="lgEmail">E-mail</label><input id="lgEmail" type="email" autocomplete="username" required><label for="lgPass">Senha</label><input id="lgPass" type="password" autocomplete="current-password" required><button class="btn" id="loginBtn" type="submit">Entrar</button><div id="loginErr" role="alert"></div></form></div></div>
@@ -1204,8 +1212,14 @@ async function renderMonthFiles(){
  box.textContent='Carregando arquivos…';
  let files;try{const{data,error}=await sb.storage.from(BUCKET).list('',{limit:300});if(error)throw error;files=new Map((data||[]).map(o=>[o.name,o]))}catch(e){box.textContent='Não foi possível listar os arquivos: '+(e?.message||e);return}
  const win=comparativoWindow().slice().reverse();
- const cell=(kind,m)=>{const o=files.get(MFILE(kind,m.mes)),d=o&&o.updated_at?new Date(o.updated_at):null;
-  return `<div class="mf-cell ${o?'ok':'empty'}"><div class="mf-info"><b>${o?'Arquivo enviado':'Sem arquivo'}</b><span>${o?d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+' • '+mfSize(o.metadata?.size||0):'Envie para preencher este mês'}</span></div><button type="button" class="btn btn-out" data-mf-kind="${kind}" data-mf-mes="${m.mes}">${o?'Substituir':'Enviar'}</button></div>`};
+ const vm={};for(const r of (window.ALL||ALL||[])){const k=comparativoMonthKey(normalizarData(r.date));if(k)vm[k]=(vm[k]||0)+1}
+ const curMes=comparativoWindow()[2].mes,fmtD=o=>{const d=new Date(o.updated_at);return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})};
+ const cell=(kind,m)=>{const o=files.get(MFILE(kind,m.mes));let t,sub,ok=true;
+  if(o){t='Arquivo enviado';sub=(o.updated_at?fmtD(o)+' • ':'')+mfSize(o.metadata?.size||0)}
+  else if(kind==='visits'&&vm[m.mes]){const lg=files.get(FILE);t='Base vigente';sub=fI(vm[m.mes])+' visitas na base atual'+(lg&&lg.updated_at?' • '+fmtD(lg):'')}
+  else if(kind==='revenue'&&m.mes===curMes&&REVENUE_DB.length){const lg=files.get(REVENUE_FILE);t='Base vigente';sub=fI(REVENUE_DB.length)+' registros'+(lg&&lg.updated_at?' • '+fmtD(lg):'')}
+  else{ok=false;t='Sem arquivo';sub='Envie para preencher este mês'}
+  return `<div class="mf-cell ${ok?'ok':'empty'}"><div class="mf-info"><b>${t}</b><span>${sub}</span></div><button type="button" class="btn btn-out" data-mf-kind="${kind}" data-mf-mes="${m.mes}">${ok?'Substituir':'Enviar'}</button></div>`};
  box.innerHTML='<div class="mf-head"><span>Mês</span><span>Visitas</span><span>Faturamento</span></div>'+win.map((m,i)=>`<div class="mf-row"><div class="mf-month"><b>${m.fullLabel}</b><em>${['Mês atual','1 mês atrás','2 meses atrás'][i]}</em></div>${cell('visits',m)}${cell('revenue',m)}</div>`).join('');
 }
 $('monthFiles').addEventListener('click',async e=>{const b=e.target.closest('[data-mf-kind]');if(!b)return;const kind=b.dataset.mfKind;if(!await requireServerPerm(kind==='visits'?'update_data':'manage_bases'))return;MONTH_TARGET={kind,mes:b.dataset.mfMes};$('monthFile').click()});
