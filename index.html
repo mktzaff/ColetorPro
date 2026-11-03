@@ -638,7 +638,6 @@ function storesWithoutVisits(){
  const addCandidate=(row,source)=>{
   if(!row||!row.forn||!row.loja)return;
   const identity=auxStoreIdentity(row.loja);
-  if(identity.number==='100')return;
   if(curInd!=='__all__'&&!auxPairMatches(row.forn,curInd))return;
   const industry=auxIndustryCanonical(row.forn),key=industry+'|'+(identity.number?'#'+identity.number:'name:'+auxStoreKey(row.loja));
   if(!candidates.has(key))candidates.set(key,{forn:row.forn,loja:row.loja,industry,identity,sources:new Set([source])});
@@ -725,11 +724,12 @@ function render(){
  $('chTitle').textContent=title;$('chSub').textContent=sub;
  const mx=Math.max(1,...cg.map(x=>Math.max(x.ag,x.real))),sn=s=>s.replace(/ - .*/,'').replace(/\s+(LTDA|S\.A\.?)$/,'');
  $('chart').className='bar-chart'+(all?' industry-chart':'');$('chart').innerHTML=cg.map(x=>`<div class="bar-group" style="min-width:${all?120:22}px;flex:${all?'0 0 120px':'1'}"><div class="bars"><div class="bar navy" style="height:${x.ag/mx*220}px"><span>${x.ag}</span></div><div class="bar red" style="height:${x.real/mx*220}px"><span>${x.real}</span></div></div><div class="bar-label" title="${esc(x.name)}">${esc(all?x.name:x.name.slice(0,5))}</div></div>`).join('');
- const sg=group(cur,'loja');
+ const storeChartKey=r=>auxIndustryCanonical(r.forn)+'|'+(auxStoreIdentity(r.loja).number?'#'+auxStoreIdentity(r.loja).number:'name:'+auxStoreKey(r.loja));
+ const sg=group(cur,storeChartKey);sg.forEach(x=>{x.industry=auxIndustryCanonical(x.rows?.[0]?.forn||'');x.storeName=x.rows?.[0]?.loja||x.name;x.name=x.storeName});
  const noAgendaStores=storesWithoutVisits();
- for(const item of noAgendaStores){if(!sg.some(x=>auxStoreMatches(x.name,item.loja))){sg.push({name:item.loja,lojas:0,ag:0,real:0,pct:0,nc:0,ea:0,sc:0,contr:0,exec:0,util:null,avg:0,min:null,nota:0,rows:[]})}}
- sg.sort((a,b)=>b.real-a.real||b.ag-a.ag||a.name.localeCompare(b.name,'pt-BR',{numeric:true}));
- sg.splice(20);
+ for(const item of noAgendaStores){const ik=auxIndustryCanonical(item.forn),id=auxStoreIdentity(item.loja),exists=sg.some(x=>x.industry===ik&&auxStoreMatches(x.storeName,item.loja));if(!exists)sg.push({name:item.loja,storeName:item.loja,industry:ik,forn:item.forn,lojas:0,ag:0,real:0,pct:0,nc:0,ea:0,sc:0,contr:0,exec:0,util:null,avg:0,min:null,nota:0,rows:[]})}
+ sg.sort((a,b)=>b.real-a.real||b.ag-a.ag||a.name.localeCompare(b.name,'pt-BR',{numeric:true})||String(a.industry).localeCompare(String(b.industry)));
+ // Mantém todas as lojas da base de faturamento/cadastro na visão, inclusive sem agenda.
  const smx=Math.max(1,...sg.map(x=>Math.max(x.ag,x.real)));
  $('storeChTitle').textContent='Visitas por loja';
  $('storeChSub').textContent=all?'Top 20 lojas por visitas realizadas • agendadas x realizadas':'Agendadas x realizadas por loja';
@@ -766,8 +766,9 @@ function renderTable(){
   data=data.filter(x=>(x.loja+x.prom+x.comp+x.status).toLowerCase().includes(q));sub=fI(data.length)+' visitas';
  }else{
   const key=tab==='forn'?'forn':tab==='lojas'?'loja':'prom';const lab=tab==='forn'?'Indústria':tab==='lojas'?'Loja':'Promotor';
-  data=group(cur,key);
+  data=tab==='lojas'?group(cur,r=>auxIndustryCanonical(r.forn)+'|'+(auxStoreIdentity(r.loja).number?'#'+auxStoreIdentity(r.loja).number:'name:'+auxStoreKey(r.loja))):group(cur,key);
    if(tab==='lojas'){
+    data.forEach(x=>{x.name=x.rows?.[0]?.loja||x.name;x.industry=auxIndustryCanonical(x.rows?.[0]?.forn||'')});
     // Inclui também todas as lojas da base de faturamento/cadastro, mesmo sem agenda.
     // No modo geral, consolida a loja entre indústrias; no modo selecionado, limita à indústria.
     // Une lojas pelo número. A mesma unidade não vira duas linhas por trazer
@@ -775,7 +776,8 @@ function renderTable(){
     const storeMap=new Map();
     const storeIdentityKey=name=>{const id=auxStoreIdentity(name);return id.number?'#'+id.number:'name:'+auxStoreKey(name)};
     const registerStore=x=>{
-     const key=storeIdentityKey(x.name),current=storeMap.get(key);
+     const industryKey=x.industry||auxIndustryCanonical(x.rows?.[0]?.forn||x.forn||curInd);
+     const key=industryKey+'|'+storeIdentityKey(x.name),current=storeMap.get(key);
      if(!current){storeMap.set(key,{...x,rows:Array.isArray(x.rows)?x.rows.slice():[]});return}
      const mergedRows=[...(current.rows||[]),...(x.rows||[])];
      const metrics=mergedRows.length?agg(mergedRows):current;
@@ -791,13 +793,15 @@ function renderTable(){
     for(const x of data)registerStore(x);
     const addAuxStore=row=>{
      if(!row||(curInd!=='__all__'&&!auxPairMatches(row.forn,curInd)))return;
-     const id=auxStoreIdentity(row.loja);if(id.number==='100')return;
-     if(storeMap.has(storeIdentityKey(row.loja)))return;
+     const id=auxStoreIdentity(row.loja);
+     const industryKey=curInd==='__all__'?auxIndustryCanonical(row.forn):auxIndustryCanonical(curInd);
+     const compositeKey=industryKey+'|'+storeIdentityKey(row.loja);
+     if(storeMap.has(compositeKey))return;
      const empty={lojas:0,ag:0,real:0,pct:0,nc:0,ea:0,sc:0,contr:0,exec:0,util:null,avg:0,min:null,nota:0,rows:[]};
-     registerStore({...empty,name:row.loja});
+     registerStore({...empty,name:row.loja,forn:row.forn,industry:industryKey});
     };
     STORE_DB.forEach(addAuxStore);REVENUE_DB.forEach(addAuxStore);
-    data=[...storeMap.values()].filter(x=>x.name.toLowerCase().includes(q));
+    data=[...storeMap.values()].map(x=>({...x,name:x.name||x.rows?.[0]?.loja||'Loja'})).filter(x=>x.name.toLowerCase().includes(q));
     data.forEach(x=>{
      if(curInd==='__all__'){const id=auxStoreIdentity(x.name);const matches=REVENUE_DB.filter(r=>auxStoreMatches(r.loja,x.name));x.faturamento=matches.length?matches.reduce((sum,r)=>sum+(Number(r.faturamento)||0),0):null;}
      else x.faturamento=revenueFor(curInd,x.name);
