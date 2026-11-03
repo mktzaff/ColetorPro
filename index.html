@@ -368,6 +368,35 @@ html:not(.is-admin) .admin-only{display:none!important}
   #kpis .kpi-secondary.contract-card,#kpis .kpi-secondary.revenue-card{grid-column:span 2!important}
 }
 </style>
+<style id="cmp-inline-style">
+.cmp-card{margin-top:4px;padding:12px 16px}.cmp-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}.cmp-top .card-sub{margin-bottom:6px}.cmp-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.cmp-actions .btn{padding:7px 12px;font-size:11px}
+.cmp-body{display:block;min-width:0}.cmp-chart{min-width:0;max-width:none;margin:0;width:100%}.cmp-svg{width:100%;height:auto;display:block;overflow:visible;border-radius:8px}.cmp-empty{padding:24px 10px;text-align:center;color:var(--muted);font-size:13px;font-weight:800}
+.cmp-metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:stretch}.cmp-metric-card{min-width:0;background:#fff;border:1px solid var(--line);border-radius:11px;padding:13px 14px;box-shadow:0 2px 7px rgba(17,42,70,.045)}.cmp-metric-head{display:flex;align-items:flex-start;gap:8px;min-height:36px;margin-bottom:5px}.cmp-metric-dot{flex:0 0 9px;width:9px;height:9px;border-radius:3px;background:var(--metric-color);margin-top:4px}.cmp-metric-title{font-size:13px;line-height:1.25;font-weight:900;color:var(--navy);overflow-wrap:anywhere}.cmp-month-row{padding:7px 6px 8px;border-radius:7px;margin:3px -6px 0}.cmp-month-row.latest{background:#f6f8fb}.cmp-month-meta{display:flex;align-items:baseline;justify-content:space-between;gap:7px}.cmp-month-name{font-size:10px;line-height:1.2;font-weight:800;color:var(--muted);white-space:nowrap}.cmp-month-value{font-size:14px;line-height:1.2;font-weight:900;color:var(--text,#172b4d);white-space:nowrap;font-variant-numeric:tabular-nums}.cmp-month-row.latest .cmp-month-value{color:var(--metric-color)}.cmp-meter{height:7px;width:100%;overflow:hidden;border-radius:99px;background:#edf1f5;margin-top:6px}.cmp-meter-fill{display:block;height:100%;border-radius:99px;background:var(--metric-color);min-width:0;transition:width .35s ease}.cmp-meter-fill.previous{opacity:.48}.cmp-stats{display:none!important}.cmp-legend{display:none!important}.cmp-stat{border:1px solid var(--line);border-left:5px solid var(--c);border-radius:10px;padding:8px 10px;min-width:0}.cmp-stat .l{font-size:10px;font-weight:900;text-transform:uppercase;color:var(--muted);letter-spacing:.4px}.cmp-stat .v{font-size:21px;font-weight:900;letter-spacing:-1px;color:var(--c);line-height:1.15}.cmp-stat .d{display:inline-block;margin-top:3px;font-size:10px;font-weight:900;border-radius:6px;padding:3px 7px;background:#f1f5f9;color:var(--muted)}.cmp-stat .d.up{background:#e4f6ee;color:#13724b}.cmp-stat .d.down{background:#fff1d8;color:#95650b}
+.cmp-line{fill:none;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:cmpDraw 1.1s cubic-bezier(.3,.7,.2,1) .1s forwards}.cmp-area{opacity:0;animation:cmpFade .9s ease .5s forwards}.cmp-pt{transform-box:fill-box;transform-origin:center;animation:cmpPop .45s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes cmpDraw{to{stroke-dashoffset:0}}@keyframes cmpFade{to{opacity:1}}@keyframes cmpPop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.cmp-status{font-size:11px;font-weight:800;color:var(--muted)}.cmp-warning{font-size:12px;font-weight:700;color:#93610a;margin-top:8px;line-height:1.45}.cmp-warning:empty{display:none}
+.exported-view .cmp-actions{display:none!important}@media print{.cmp-actions{display:none!important}.cmp-line{animation:none;stroke-dashoffset:0}.cmp-area{animation:none;opacity:1}.cmp-pt{animation:none}}
+@media(prefers-reduced-motion:reduce){.cmp-line{animation:none;stroke-dashoffset:0}.cmp-area{animation:none;opacity:1}.cmp-pt{animation:none}}
+@media(max-width:1000px){.cmp-metric-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cmp-metric-card{padding:12px}}@media(max-width:520px){.cmp-metric-grid{grid-template-columns:1fr}.cmp-metric-title{font-size:14px}.cmp-month-value{font-size:15px}}
+</style>
+<style id="network-growth-support-style">
+.mf-wrap{margin-top:16px;border:1px solid var(--line);border-radius:12px;padding:15px;background:#fff}
+.mf-wrap h3{margin:0 0 4px;font-size:15px}.mf-wrap p{font-size:12px;color:var(--muted);margin:0 0 12px;line-height:1.5}
+.mf-head,.mf-row{display:grid;grid-template-columns:150px 1fr 1fr;gap:10px;align-items:stretch}
+.mf-head{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:6px}
+.mf-row{margin-bottom:8px}.mf-month{display:flex;flex-direction:column;justify-content:center;padding:10px 12px;border-radius:10px;background:var(--navy);color:#fff}
+.mf-row:first-of-type .mf-month{background:var(--red)}.mf-month b{font-size:14px}.mf-month em{font-size:10px;font-style:normal;opacity:.8}
+.mf-cell{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.mf-cell.ok{border-left:4px solid var(--green)}.mf-cell.empty{border-left:4px solid var(--amber)}
+.mf-info{display:flex;flex-direction:column;min-width:0;font-size:11px}.mf-info span{color:var(--muted);font-size:10px;margin-top:2px}
+.mf-cell .btn{margin:0;padding:7px 11px;font-size:11px;white-space:nowrap}
+.pdf-evolution{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:10px;align-items:start;border:1px solid var(--line);border-radius:8px;padding:8px;margin:5px 0 10px;break-inside:avoid}
+.pdf-evolution-chart{min-width:0}.pdf-evolution-chart .cmp-legend{font-size:8px;gap:4px 9px;margin-bottom:3px}.pdf-evolution-chart .cmp-svg{width:100%;max-height:220px;height:auto}
+.pdf-evolution-stats{display:grid;grid-template-columns:1fr 1fr;gap:5px}.pdf-evolution-stats .cmp-stat{padding:5px 6px;border-left-width:3px;border-radius:5px}.pdf-evolution-stats .cmp-stat .l{font-size:7px}.pdf-evolution-stats .cmp-stat .v{font-size:13px;letter-spacing:0}.pdf-evolution-stats .cmp-stat .d{font-size:7px;padding:2px 4px}
+.pdf-evolution-note{grid-column:1/-1;font-size:8px;color:var(--muted)}
+@media(max-width:760px){.mf-head{display:none}.mf-row{grid-template-columns:1fr}}
+@media print{.pdf-evolution{break-inside:avoid!important;page-break-inside:avoid!important}.pdf-evolution-chart .cmp-svg{max-height:190px!important}.pdf-evolution-chart .cmp-line{animation:none!important;stroke-dashoffset:0!important}.pdf-evolution-chart .cmp-area{animation:none!important;opacity:1!important}.pdf-evolution-chart .cmp-pt{animation:none!important}}
+</style>
 </head><body>
 <div id="login"><div class="box"><h2>ColetorPRO</h2><p>Acesso restrito. Entre com o e-mail e a senha cadastrados pelo administrador.</p>
 <form id="loginForm" onsubmit="return false"><label for="lgEmail">E-mail</label><input id="lgEmail" type="email" autocomplete="username" required><label for="lgPass">Senha</label><input id="lgPass" type="password" autocomplete="current-password" required><button class="btn" id="loginBtn" type="submit">Entrar</button><div id="loginErr" role="alert"></div></form></div></div>
@@ -396,7 +425,8 @@ html:not(.is-admin) .admin-only{display:none!important}
 <div class="topbar"><div class="combo"><label>Indústria (fornecedor)</label><input id="indIn" placeholder="Carregando dados publicados..." autocomplete="off" disabled><div class="combo-list hidden" id="indList"></div></div>
 <div class="top-actions"><button class="btn btn-pdf" id="pdfBtn" disabled onclick="exportPDF()">Exportar PDF</button><button class="btn btn-out" id="basesOpenBtn" type="button" style="display:none" title="Gerenciar as bases do dashboard">Gerenciar bases</button><button class="btn btn-up" id="upBtn" type="button" style="display:none">Atualizar base (.csv, .xlsx)</button><button class="btn btn-out" id="storeDbBtn" type="button" style="display:none" title="Importar cadastro de lojas por indústria">Base de lojas</button><button class="btn btn-out" id="revenueDbBtn" type="button" style="display:none" title="Importar faturamento mensal por loja">Base de faturamento</button><button class="btn" id="ctrBtn" type="button" style="background:var(--navy2);display:none">Contratos realizados</button><input type="file" id="upFile" accept=".csv,.xlsx,.xls,.json,text/csv,application/csv,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden><input type="file" id="storeDbFile" accept=".csv,.xlsx,.xls,.json,text/csv,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden><input type="file" id="revenueDbFile" accept=".csv,.xlsx,.xls,.json,text/csv,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden><span class="who" id="who"></span><button class="btn btn-out" id="accBtn" type="button">Conta</button><button class="btn btn-out" id="logoutBtn" type="button">Sair</button></div>
 </div>
-<div id="basesModal" class="hidden" role="dialog" aria-modal="true" aria-labelledby="basesTitle"><div class="bases-box"><div class="bases-head"><div><h2 id="basesTitle">Gerenciamento de bases</h2><div class="bases-intro">Cada base é independente. Atualize as visitas, mantenha o cadastro de lojas editável e importe o faturamento mensal sem alterar os registros de visitas.</div></div><button class="btn btn-out" id="basesCloseBtn" type="button">Fechar</button></div><div class="bases-grid"><section class="bases-card" id="visitBaseCard"><h3>Base de visitas</h3><p>Atualiza os registros de visitas usados no dashboard. Não altera o cadastro independente de lojas.</p><div class="bases-actions"><button class="btn btn-up" id="visitBaseOpenBtn" type="button">Importar base de visitas</button></div></section><section class="bases-card" id="storeBaseCard"><h3>Cadastro de lojas</h3><p>Cadastro de lojas por bandeira, no padrão “STOK LOJA X - REG X” ou “COMERCIAL ZAFFARI LOJA X - REG X”. Não utiliza indústria nem fornecedor.</p><div class="bases-actions"><button class="btn" id="storeEditOpenBtn" type="button">Editar cadastro de lojas</button><button class="btn btn-out" id="storeImportOpenBtn" type="button">Importar arquivo</button></div></section><section class="bases-card" id="revenueBaseCard"><h3>Faturamento mensal</h3><p>Importe o arquivo do mês atual. A base de faturamento é separada das visitas e do cadastro de lojas.</p><div class="bases-actions"><button class="btn btn-out" id="revenueImportOpenBtn" type="button">Importar faturamento</button></div></section><section class="bases-card"><h3>Estado das bases</h3><p id="basesSummary">Carregando informações das bases...</p><div class="bases-actions"><button class="btn btn-out" id="basesRefreshBtn" type="button">Atualizar informações</button></div></section></div><section class="bases-editor bases-hidden" id="storeEditor"><div class="bases-editor-head"><div><h3>Editar cadastro de lojas</h3><div class="bases-intro">Cadastre cada unidade pela bandeira e identificação no formato “LOJA X - REG X”. Não preencha indústria ou fornecedor. As alterações só entram na base após clicar em “Salvar cadastro”.</div></div><input id="storeEditSearch" placeholder="Buscar bandeira ou loja..." style="max-width:280px"></div><div class="bases-add"><select id="storeNewBrand" aria-label="Bandeira"><option value="STOK">STOK</option><option value="COMERCIAL ZAFFARI">COMERCIAL ZAFFARI</option></select><input id="storeNewName" placeholder="LOJA X - REG X" aria-label="Identificação da loja"><button class="btn" id="storeAddRowBtn" type="button">+ Adicionar loja</button></div><div class="bases-table-wrap"><table><thead><tr><th>Bandeira</th><th>Identificação da loja</th><th>Ação</th></tr></thead><tbody id="storeEditRows"></tbody></table></div><div class="bases-foot"><span id="storeEditStatus" role="status">Cadastro não alterado.</span><div class="bases-actions"><button class="btn btn-out" id="storeEditCancelBtn" type="button">Descartar alterações</button><button class="btn" id="storeEditSaveBtn" type="button">Salvar cadastro</button></div></div></section><div id="basesStatus" role="status" class="small-note" style="margin-top:12px"></div><span class="up-status" id="upStatus" role="status"></span></div></div>
+<div id="basesModal" class="hidden" role="dialog" aria-modal="true" aria-labelledby="basesTitle"><div class="bases-box"><div class="bases-head"><div><h2 id="basesTitle">Gerenciamento de bases</h2><div class="bases-intro">Cada base é independente. Atualize as visitas, mantenha o cadastro de lojas editável e importe o faturamento mensal sem alterar os registros de visitas.</div></div><button class="btn btn-out" id="basesCloseBtn" type="button">Fechar</button></div><div class="bases-grid"><section class="bases-card" id="visitBaseCard"><h3>Base de visitas</h3><p>Atualiza os registros de visitas usados no dashboard. Não altera o cadastro independente de lojas.</p><div class="bases-actions"><button class="btn btn-up" id="visitBaseOpenBtn" type="button">Importar base de visitas</button></div></section><section class="bases-card" id="storeBaseCard"><h3>Cadastro de lojas</h3><p>Cadastro de lojas por bandeira, no padrão “STOK LOJA X - REG X” ou “COMERCIAL ZAFFARI LOJA X - REG X”. Não utiliza indústria nem fornecedor.</p><div class="bases-actions"><button class="btn" id="storeEditOpenBtn" type="button">Editar cadastro de lojas</button><button class="btn btn-out" id="storeImportOpenBtn" type="button">Importar arquivo</button></div></section><section class="bases-card" id="revenueBaseCard"><h3>Faturamento mensal</h3><p>Importe o arquivo do mês atual. A base de faturamento é separada das visitas e do cadastro de lojas.</p><div class="bases-actions"><button class="btn btn-out" id="revenueImportOpenBtn" type="button">Importar faturamento</button></div></section><section class="bases-card"><h3>Estado das bases</h3><p id="basesSummary">Carregando informações das bases...</p><div class="bases-actions"><button class="btn btn-out" id="basesRefreshBtn" type="button">Atualizar informações</button></div></section></div><section class="mf-wrap"><h3>Arquivos por mês</h3><p>Mês atual e os 2 anteriores. Use “Substituir” para trocar o arquivo de um mês específico sem mexer nos outros. Na base de visitas, só entram as linhas do mês escolhido.</p><div id="monthFiles"></div><input type="file" id="monthFile" accept=".csv,.xlsx,.xls,.json,text/csv,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden></section>
+<section class="bases-editor bases-hidden" id="storeEditor"><div class="bases-editor-head"><div><h3>Editar cadastro de lojas</h3><div class="bases-intro">Cadastre cada unidade pela bandeira e identificação no formato “LOJA X - REG X”. Não preencha indústria ou fornecedor. As alterações só entram na base após clicar em “Salvar cadastro”.</div></div><input id="storeEditSearch" placeholder="Buscar bandeira ou loja..." style="max-width:280px"></div><div class="bases-add"><select id="storeNewBrand" aria-label="Bandeira"><option value="STOK">STOK</option><option value="COMERCIAL ZAFFARI">COMERCIAL ZAFFARI</option></select><input id="storeNewName" placeholder="LOJA X - REG X" aria-label="Identificação da loja"><button class="btn" id="storeAddRowBtn" type="button">+ Adicionar loja</button></div><div class="bases-table-wrap"><table><thead><tr><th>Bandeira</th><th>Identificação da loja</th><th>Ação</th></tr></thead><tbody id="storeEditRows"></tbody></table></div><div class="bases-foot"><span id="storeEditStatus" role="status">Cadastro não alterado.</span><div class="bases-actions"><button class="btn btn-out" id="storeEditCancelBtn" type="button">Descartar alterações</button><button class="btn" id="storeEditSaveBtn" type="button">Salvar cadastro</button></div></div></section><div id="basesStatus" role="status" class="small-note" style="margin-top:12px"></div><span class="up-status" id="upStatus" role="status"></span></div></div>
 <div id="empty">Carregando dados publicados...</div>
 <div id="appLoading" role="status" aria-live="polite" aria-modal="true"><div class="loading-panel"><div class="loading-mark" aria-hidden="true"></div><div class="loading-title">Preparando o ColetorPRO</div><div class="loading-copy" id="appLoadingText">Carregando informações. Aguarde um instante…</div><div class="loading-track" aria-hidden="true"></div></div></div>
 <div id="app" class="hidden">
@@ -410,12 +440,19 @@ html:not(.is-admin) .admin-only{display:none!important}
 <div class="grid3"><section class="card"><div class="card-title">Tempo médio de atendimento</div><div class="card-sub">Por visita realizada</div><div class="score"><div><div class="score-num" id="at"></div><div class="score-max">por visita</div></div><div><div class="small-note">Menor atendimento</div><div class="score-num" style="font-size:32px" id="mt"></div><div class="score-max">minutos</div></div></div></section>
 <section class="card"><div class="card-title">Nota média do repositor</div><div class="card-sub">Escala máxima = 5,0</div><div class="score"><div class="score-num" id="as"></div><div><div class="stars">★★★★★</div><div class="small-note">média das avaliações registradas</div></div></div></section>
 <section class="card"><div class="card-title" id="rkTitle"></div><div class="card-sub" id="rkSub"></div><div class="rank-switch" id="rankSwitch"><button class="active" data-rank="more">Mais horas</button><button data-rank="less">Menos horas</button><button data-rank="none">Sem visitas</button></div><div class="rank-count" id="rankCount"></div><div class="rank-list" id="rank"></div></section></div>
+<div class="section-title">Evolução da marca na rede</div>
+<section class="card cmp-card" id="cmpSection">
+<div class="cmp-top"><div><div class="card-title">Execução, horas contratadas, tempo médio e nota</div><div class="card-sub" id="cmpIndustry"></div></div><div class="cmp-actions"><span class="cmp-status" id="cmpStatus" role="status"></span><button class="btn btn-out" id="cmpReloadBtn" type="button">Atualizar</button><button class="btn btn-up" id="cmpSaveBtn" type="button" style="display:none">Registrar base atual</button></div></div>
+<div class="cmp-body"><div class="cmp-chart" id="cmpChart" aria-label="Evolução da marca na rede nos últimos três meses"></div><div class="cmp-stats" id="cmpTrend"></div></div>
+<div class="cmp-warning" id="cmpWarning" role="status"></div>
+</section>
 <div class="section-title">Detalhamento completo</div>
 <section class="card"><div class="tabs" id="tabs"></div><div class="table-tools"><div><div class="card-title" id="tbTitle"></div><div class="card-sub" id="tbSub"></div></div><input class="search" id="q" placeholder="Buscar..."></div><div class="table-wrap"><table id="tb"><thead></thead><tbody></tbody></table></div></section>
 <div id="pdfDetail" class="pdf-detail">
 <div class="pdf-report-head"><div class="pdf-report-kicker">COLETORPRO • RELATÓRIO COMPLETO</div><div class="pdf-report-title" id="pdfTitle">Execução por indústria</div><div class="card-sub pdf-context" id="pdfContext"></div><div class="pdf-contract-context" id="pdfContractContext"></div></div>
 <div class="section-title">Resumo da indústria</div>
 <div class="pdf-summary" id="pdfSummary"></div>
+<div class="section-title" id="pdfEvolutionTitle">Evolução da marca na rede</div><div class="pdf-evolution" id="pdfEvolution"><div class="pdf-evolution-chart" id="pdfEvolutionChart"></div><div class="pdf-evolution-stats" id="pdfEvolutionStats"></div><div class="pdf-evolution-note" id="pdfEvolutionNote"></div></div>
 <div class="section-title">Visão operacional</div>
 <div class="pdf-op"><div><div class="pdf-chart-title">Visitas por dia — agendadas x realizadas</div><div class="pdf-vchart" id="pdfDayChart"></div><div class="pdf-legend"><span><i class="n"></i>Agendadas</span><span><i class="r"></i>Realizadas</span></div></div><div id="pdfOpSide"></div></div>
 <div class="section-title" id="pdfIndChartTitle">Visitas por indústria</div><div class="pdf-legend"><span><i class="n"></i>Agendadas</span><span><i class="r"></i>Realizadas</span></div><div class="pdf-table-wrap" id="pdfIndChartWrap"><table id="pdfIndChart" class="pdf-rank"><thead></thead><tbody></tbody></table></div>
@@ -744,6 +781,12 @@ function buildPdfDetail(){
  const pdfContract=$('pdfContractContext');if(pdfContract){let cc=null;if(!all){if('__COLETOR_EXPORTED_CONTRATO__' in window)cc=window.__COLETOR_EXPORTED_CONTRATO__;else cc=CTR.find(x=>nk(x.fornecedor)===nk(selectedIndustry));}pdfContract.textContent=cc?('Contrato: '+(cc.recebido?'recebido dia '+fD(cc.recebido):'ainda não recebido')+' • '+(cc.atualizado?'atualizado dia '+fD(cc.atualizado):'ainda não atualizado')):'';}
  const summary=[['Visitas agendadas',fI(O.ag),'programadas'],['Visitas realizadas',fI(O.real),fP(O.pct)+' de execução'],['Horas contratadas',fH(O.contr),'base registrada'],['Horas executadas',fH(O.exec),O.util==null?'sem horas contratadas':fP(O.util)+' das contratadas'],['Tempo médio',fH(O.avg),'por visita realizada'],['Nota média',fN(O.nota),'escala máxima 5,0'],['Não compareceu',fI(O.nc),'visitas'],['Em andamento',fI(O.ea),'visitas'],['Agendado (a realizar)',fI(O.sc),'visitas'],['Gap de visitas',fI(O.real-O.ag),'realizadas − agendadas'],['Gap de horas',fH(O.exec-O.contr),'executadas − contratadas'],['Menor atendimento',fMin(O.min),'entre realizadas']];
  $('pdfSummary').innerHTML=summary.map(x=>`<div class="pdf-summary-item"><div class="label">${x[0]}</div><div class="value">${x[1]}</div><div class="note">${x[2]}</div></div>`).join('');
+ // Reproduz no PDF o mesmo comparativo de três meses apresentado no painel.
+ const evolutionChart=$('pdfEvolutionChart'),evolutionStats=$('pdfEvolutionStats'),evolutionNote=$('pdfEvolutionNote');
+ const sourceChart=$('cmpChart'),sourceStats=$('cmpTrend'),sourceIndustry=$('cmpIndustry');
+ if(evolutionChart)evolutionChart.innerHTML=sourceChart&&sourceChart.innerHTML?sourceChart.innerHTML:'<div class="cmp-empty">Evolução não disponível para esta seleção.</div>';
+ if(evolutionStats)evolutionStats.innerHTML=sourceStats&&sourceStats.innerHTML?sourceStats.innerHTML:'';
+ if(evolutionNote)evolutionNote.textContent=(sourceIndustry&&sourceIndustry.textContent?sourceIndustry.textContent+' • ':'')+'Comparativo dos últimos três meses conforme os dados disponíveis no painel.';
  const byName=(a,b)=>a.name.localeCompare(b.name),rankBase=all?group(rows,'forn'):group(rows,'loja'),noneBase=all?group(rows,r=>r.loja+' — '+r.forn):rankBase;
  const moreL=[...rankBase].sort((a,b)=>b.exec-a.exec||byName(a,b)),lessL=rankBase.filter(x=>x.real>0).sort((a,b)=>a.exec-b.exec||byName(a,b)),noneL=noneBase.filter(x=>x.real===0).sort(byName),nm=all?'Indústria':'Loja';
  const rankCols=[['name',nm,x=>esc(x.name)],['ag','Agend.',x=>fI(x.ag)],['real','Realiz.',x=>fI(x.real)],['contr','H. contrat.',x=>fH(x.contr)],['exec','H. exec.',x=>fH(x.exec)],['util','Util. horas',x=>x.util==null?'—':fP(x.util)]],rankNoneCols=[['name',all?'Loja — Indústria':'Loja',x=>esc(x.name)],['ag','Agend.',x=>fI(x.ag)],['nc','Não comp.',x=>fI(x.nc)],['ea','Em and.',x=>fI(x.ea)],['sc','A realizar',x=>fI(x.sc)]];
@@ -853,6 +896,7 @@ async function loadPublishedData(){
 $('q').addEventListener('input',renderTable);
 /* ===== Supabase: login, perfis e upload (somente admin) ===== */
 const SUPABASE_URL='https://nduabnxombkgwmlzzsjg.supabase.co',SUPABASE_ANON_KEY='sb_publishable_UgW5UpjaJNqtTm8aUoHakA_KdMz7bQ9',BUCKET='dashboard-data',FILE='dados.json';
+const COMPARATIVO_FILE='comparativo.json';let COMPARATIVO_CACHE=[];
 let sb=null,ME=null,idleT,fails=0;const IDLE=30*60e3;
 function idleReset(){clearTimeout(idleT);if(ME)idleT=setTimeout(()=>sb.auth.signOut(),IDLE)}
 ['click','keydown','mousemove','touchstart','scroll'].forEach(ev=>addEventListener(ev,idleReset,{passive:true}));
@@ -1154,5 +1198,183 @@ $('ctrAddBtn').onclick=async()=>{
  if(error)return ctrSt(/duplicate|unique/i.test(error.message)?'Esse fornecedor já existe.':'Erro: '+error.message,1);
  CTR.push(data);CTR.sort((a,b)=>a.fornecedor.localeCompare(b.fornecedor));$('ctrNewAg').value=$('ctrNewForn').value='';ctrRender();ctrSt('Fornecedor adicionado.');
 };
+
+/* ===== Histórico e cálculo da evolução da marca na rede ===== */
+const COMP_MONTHS=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+function comparativoMonthKey(date){const m=String(date||'').match(/^\d{2}\/(\d{2})\/(\d{4})$/);return m?`${m[2]}-${m[1]}`:''}
+function comparativoKey(mes,forn){return String(mes||'')+'|'+String(forn||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('pt-BR').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ')}
+function comparativoWindow(){const now=new Date(),out=[];for(let offset=2;offset>=0;offset--){const d=new Date(now.getFullYear(),now.getMonth()-offset,1),mes=String(d.getFullYear())+'-'+String(d.getMonth()+1).padStart(2,'0');out.push({mes,label:COMP_MONTHS[d.getMonth()].toUpperCase()+'/'+d.getFullYear(),fullLabel:COMP_MONTHS[d.getMonth()].toUpperCase()+'/'+d.getFullYear()})}return out}
+function comparativoSummaries(rows){
+ const by=new Map();
+ for(const original of (Array.isArray(rows)?rows:[])){
+  const r={...original,date:normalizarData(original?.date),tempo:Number(original?.tempo)||0,nota:Number(original?.nota)||0,contr:Number(original?.contr)||0,status:normSt(String(original?.status||'')),forn:String(original?.forn||'').trim()};
+  const mes=comparativoMonthKey(r.date);if(!mes||!r.forn)continue;
+  const key=comparativoKey(mes,r.forn);if(!by.has(key))by.set(key,{mes,forn:r.forn,rows:[]});by.get(key).rows.push(r);
+ }
+ const updatedAt=new Date().toISOString();
+ return [...by.values()].map(g=>{const o=agg(g.rows);return{mes:g.mes,forn:g.forn,real:o.real,exec:o.exec,avg:o.avg,nota:o.nota,ag:o.ag,contr:o.contr,pct:o.ag?o.real/o.ag*100:null,util:o.contr?o.exec/o.contr*100:null,registros:g.rows.length,atualizadoEm:updatedAt}});
+}
+function comparativoMerge(history,rows){
+ // Janela móvel: somente o mês corrente e os dois meses imediatamente anteriores.
+ const keepMonths=new Set(comparativoWindow().map(m=>m.mes));
+ const incoming=comparativoSummaries(rows),incomingMonths=new Set(incoming.map(x=>x.mes));
+ const map=new Map();
+ for(const x of (Array.isArray(history)?history:[])){
+  const mes=String(x?.mes||'');
+  if(!x||!/^\d{4}-\d{2}$/.test(mes)||!keepMonths.has(mes)||incomingMonths.has(mes)||!String(x.forn||'').trim())continue;
+  const item={mes,forn:String(x.forn),real:Number(x.real)||0,exec:Number(x.exec)||0,avg:Number(x.avg)||0,nota:Number(x.nota)||0,ag:Number(x.ag)||0,contr:Number(x.contr)||0,pct:x.pct==null?null:Number(x.pct),util:x.util==null?null:Number(x.util),registros:Number(x.registros)||0,atualizadoEm:String(x.atualizadoEm||'')};map.set(comparativoKey(item.mes,item.forn),item);
+ }
+ // Cada envio substitui o mês inteiro, evitando manter fornecedores removidos/corrigidos com valores antigos.
+ for(const x of incoming){if(keepMonths.has(x.mes))map.set(comparativoKey(x.mes,x.forn),x)}
+ return [...map.values()].sort((a,b)=>a.mes.localeCompare(b.mes,'en')||a.forn.localeCompare(b.forn,'pt-BR'));
+}
+async function readComparativoHistory(){
+ if(!sb)throw new Error('Sessão do Supabase não disponível.');
+ const {data:list,error:listError}=await sb.storage.from(BUCKET).list('',{search:COMPARATIVO_FILE,limit:100});
+ if(listError)throw listError;
+ if(!(list||[]).some(x=>x.name===COMPARATIVO_FILE))return[];
+ const {data:signed,error:signedError}=await sb.storage.from(BUCKET).createSignedUrl(COMPARATIVO_FILE,60);
+ if(signedError||!signed?.signedUrl)throw(signedError||new Error('Não foi possível abrir o histórico comparativo.'));
+ const res=await fetch(signed.signedUrl,{cache:'no-store'});if(!res.ok)throw new Error('Falha ao baixar comparativo.json ('+res.status+').');
+ const json=await res.json();if(!Array.isArray(json))throw new Error('O arquivo comparativo.json não contém uma lista válida.');return json;
+}
+async function saveComparativoHistory(rows){
+ const old=await readComparativoHistory(),merged=comparativoMerge(old,rows),blob=new Blob([JSON.stringify(merged)],{type:'application/json'});
+ const {error}=await sb.storage.from(BUCKET).upload(COMPARATIVO_FILE,blob,{upsert:true,contentType:'application/json',cacheControl:'0'});
+ if(error)throw error;COMPARATIVO_CACHE=merged;return merged;
+}
+function comparativoValue(row,metric){if(!row)return null;if(metric==='pct'||metric==='util')return row[metric]==null||!isFinite(Number(row[metric]))?null:Number(row[metric]);return Number(row[metric])||0}
+function renderComparativo(history,industry,warning=''){
+ const months=comparativoWindow(),key=String(industry||'');
+ // Recalcula os indicadores mensais a partir das visitas da indústria selecionada.
+ // O histórico salvo só é usado para meses sem registros na base operacional atual.
+ const freshByMonth=new Map(comparativoSummaries(ALL).map(x=>[x.mes+'|'+comparativoKey(x.mes,x.forn),x]));
+ // O ponto mais recente usa os mesmos totais do painel superior para execução e tempo médio.
+ const panelRows=key==='__all__'?ALL:ALL.filter(r=>auxPairMatches(r.forn,key));
+ const panelAgg=agg(panelRows);
+ const items=months.map((m,i)=>{const saved=(history||[]).find(x=>x.mes===m.mes&&auxPairMatches(x.forn,key));const fresh=freshByMonth.get(m.mes+'|'+comparativoKey(m.mes,key));const row=fresh||saved||null;const pos=v=>Number(v)>0?Number(v):null;const latest=i===months.length-1;return{...m,row:row||null,pct:latest&&panelRows.length?panelAgg.pct:(row?comparativoValue(row,'pct'):null),util:latest&&panelRows.length?panelAgg.util:(row?comparativoValue(row,'util'):null),avg:latest&&panelRows.length?pos(panelAgg.avg):(row?pos(row.avg):null),nota:row?pos(row.nota):null}});
+ window.__comparativoRows=items;
+ $('cmpIndustry').textContent='Indústria: '+key+' • últimos três meses';$('cmpWarning').textContent=warning;$('cmpStatus').textContent='';
+ $('cmpChart').innerHTML='<div class="cmp-legend">'+COMP_SERIES.map(sr=>'<span><i style="background:'+sr.color+'"></i>'+sr.name+(sr.axis==='R'?' (eixo direito)':'')+'</span>').join('')+'</div>'+compLineSVG(items);
+ $('cmpTrend').innerHTML=COMP_SERIES.map(sr=>{const prev=items[1][sr.k],cur=items[2][sr.k];let d='sem comparação',c='';if(prev!=null&&cur!=null){const x=cur-prev;d=(x>0?'▲ +':x<0?'▼ ':'')+sr.dfmt(x)+' vs. mês ant.';c=sr.k==='avg'?'':(x>0?'up':x<0?'down':'')}
+  return '<div class="cmp-stat" style="--c:'+sr.color+'"><div class="l">'+sr.name+'</div><div class="v">'+(cur==null?'—':sr.fmt(cur))+'</div><span class="d '+c+'">'+d+'</span></div>'}).join('');
+}
+const COMP_SERIES=[
+ {k:'pct',name:'% de execução',color:'#123b5f',axis:'L',fmt:v=>fP(v),dfmt:x=>x.toFixed(1).replace('.',',')+' p.p.'},
+ {k:'util',name:'% horas contratadas',color:'#e30613',axis:'L',fmt:v=>fP(v),dfmt:x=>x.toFixed(1).replace('.',',')+' p.p.'},
+ {k:'avg',name:'Tempo médio',color:'#e08a00',axis:'R',dash:true,fmt:v=>Math.round(v)+' min',dfmt:x=>Math.round(x)+' min'},
+ {k:'nota',name:'Nota média',color:'#20a36a',axis:'L',scale:20,fmt:v=>fN(v),dfmt:x=>x.toFixed(2).replace('.',',')+' pt'}];
+function compLineSVG(items){
+ // Cartões compactos lado a lado; os valores usam os indicadores já calculados.
+ return '<div class="cmp-metric-grid">'+COMP_SERIES.map(sr=>{
+  const vals=items.map(m=>m[sr.k]).filter(v=>v!=null&&isFinite(Number(v))).map(Number);
+  let max=vals.length?Math.max(...vals):1;
+  if(sr.k==='pct'||sr.k==='util')max=Math.max(100,max);
+  if(sr.k==='nota')max=Math.max(5,max);
+  if(sr.k==='avg')max=Math.max(1,max*1.15);
+  if(!isFinite(max)||max<=0)max=1;
+  const rows=items.map((m,i)=>{
+   const raw=m[sr.k],valid=raw!=null&&isFinite(Number(raw)),v=valid?Number(raw):0;
+   const width=valid?Math.min(100,Math.max(0,(v/max)*100)):0;
+   const value=valid?sr.fmt(v):'—';
+   return '<div class="cmp-month-row '+(i===items.length-1?'latest':'')+'"><div class="cmp-month-meta"><span class="cmp-month-name">'+esc(m.label)+'</span><strong class="cmp-month-value">'+esc(value)+'</strong></div><div class="cmp-meter" aria-label="'+esc(m.label)+' '+esc(sr.name)+'"><span class="cmp-meter-fill '+(i===items.length-1?'':'previous')+'" style="width:'+width.toFixed(1)+'%;"></span></div></div>';
+  }).join('');
+  return '<article class="cmp-metric-card" style="--metric-color:'+sr.color+'"><div class="cmp-metric-head"><span class="cmp-metric-dot" aria-hidden="true"></span><div class="cmp-metric-title">'+esc(sr.name)+'</div></div>'+rows+'</article>';
+ }).join('')+'</div>';
+}
+let COMP_STATE='idle',COMP_WARN='',COMP_KEY={a:null,c:null},COMP_MERGED=[];
+function compShowEmpty(msg){$('cmpIndustry').textContent='';$('cmpChart').innerHTML='<div class="cmp-empty">'+esc(msg)+'</div>';$('cmpTrend').innerHTML='';$('cmpStatus').textContent='';$('cmpWarning').textContent=''}
+async function updateComparativoInline(){
+ const sec=$('cmpSection');if(!sec)return;
+ if(ME&&!canPerm('consult_industries')){sec.style.display='none';return}
+ sec.style.display='';
+ if(curInd==='__all__'){compShowEmpty('Selecione uma indústria no campo superior para ver o comparativo dos últimos três meses.');return}
+ if(COMP_STATE==='idle'){COMP_STATE='loading';if(sb&&ME){try{COMPARATIVO_CACHE=await readComparativoHistory();COMP_WARN=''}catch(err){COMP_WARN='Não foi possível ler comparativo.json no Supabase. O gráfico mostra somente os dados da base atual. Detalhe: '+(err?.message||err)}}COMP_STATE='done'}
+ if(COMP_STATE!=='done'||curInd==='__all__')return;
+ if(COMP_KEY.a!==ALL||COMP_KEY.c!==COMPARATIVO_CACHE){COMP_MERGED=comparativoMerge(COMPARATIVO_CACHE,ALL);COMP_KEY={a:ALL,c:COMPARATIVO_CACHE}}
+ renderComparativo(COMP_MERGED,curInd,COMP_WARN)
+}
+async function refreshComparativo(){
+ $('cmpStatus').textContent='Atualizando…';$('cmpWarning').textContent='';
+ try{
+  const saved=await readComparativoHistory();let current=saved;
+  if(canPerm('update_data'))current=await saveComparativoHistory([]);
+  COMPARATIVO_CACHE=current;COMP_KEY={a:null,c:null};COMP_STATE='done';
+  COMP_MERGED=comparativoMerge(current,ALL);renderComparativo(COMP_MERGED,curInd);
+ }catch(err){renderComparativo(comparativoMerge([],ALL),curInd,'Não foi possível atualizar o histórico. '+(err?.message||err))}
+}
+$('cmpReloadBtn').onclick=refreshComparativo;
+
+/* ===== Arquivos mensais que alimentam os três meses do comparativo ===== */
+const MFILE=(k,m)=>(k==='visits'?'visitas-':'faturamento-')+m+'.json';
+let MONTH_TARGET=null;
+const mfSize=n=>n>1048576?(n/1048576).toFixed(1)+' MB':Math.max(1,Math.round(n/1024))+' KB';
+const mfUpload=async(path,rows)=>{const{error}=await sb.storage.from(BUCKET).upload(path,new Blob([JSON.stringify(rows)],{type:'application/json'}),{upsert:true,contentType:'application/json',cacheControl:'0'});if(error)throw error};
+async function parseComparativoImportFile(file){
+ if(file.size>50*1048576)throw new Error('Arquivo acima de 50 MB.');
+ let rows;
+ if(/\.json$/i.test(file.name))rows=JSON.parse(await file.text());
+ else{
+  if(!window.XLSX)throw new Error('Leitor de planilhas não carregou. Recarregue a página e tente novamente.');
+  let wb;
+  if(/\.csv$/i.test(file.name)||/csv/i.test(file.type)){const text=(await file.text()).replace(/^\uFEFF/,'');wb=XLSX.read(text,{type:'string',cellNF:true,raw:false})}
+  else wb=XLSX.read(await file.arrayBuffer(),{type:'array',cellNF:true});
+  if(!wb.SheetNames||!wb.SheetNames.length)throw new Error('Não foi possível ler a planilha/CSV.');
+  rows=parse(xlsxToCsv(wb.Sheets[wb.SheetNames[0]]));
+ }
+ const S=['loja','forn','comp','prom','status','date'],N=['tempo','nota','contr'];
+ if(!Array.isArray(rows)||!rows.length)throw new Error('O arquivo não contém uma lista válida de visitas.');
+ const bad=rows.findIndex(r=>!r||typeof r!=='object'||S.some(k=>typeof r[k]!=='string')||N.some(k=>typeof r[k]!=='number'||!isFinite(r[k])));
+ if(bad>=0)throw new Error('Registro '+(bad+1)+' fora do padrão esperado para a base de visitas.');
+ if(!comparativoSummaries(rows).length)throw new Error('Não encontrei datas válidas para gerar resumos mensais.');
+ return rows;
+}
+async function renderMonthFiles(){
+ const box=$('monthFiles');if(!box||!sb||window.__COLETOR_EXPORTED_DATA__)return;
+ box.textContent='Carregando arquivos…';
+ let files;try{const{data,error}=await sb.storage.from(BUCKET).list('',{limit:300});if(error)throw error;files=new Map((data||[]).map(o=>[o.name,o]))}catch(e){box.textContent='Não foi possível listar os arquivos: '+(e?.message||e);return}
+ const win=comparativoWindow().slice().reverse();
+ const vm={};for(const r of (window.ALL||ALL||[])){const k=comparativoMonthKey(normalizarData(r.date));if(k)vm[k]=(vm[k]||0)+1}
+ const curMes=comparativoWindow()[2].mes,fmtD=o=>{const d=new Date(o.updated_at);return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})};
+ const cell=(kind,m)=>{const o=files.get(MFILE(kind,m.mes));let t,sub,ok=true;
+  if(o){t='Arquivo enviado';sub=(o.updated_at?fmtD(o)+' • ':'')+mfSize(o.metadata?.size||0)}
+  else if(kind==='visits'&&vm[m.mes]){const lg=files.get(FILE);t='Base vigente';sub=fI(vm[m.mes])+' visitas na base atual'+(lg&&lg.updated_at?' • '+fmtD(lg):'')}
+  else if(kind==='revenue'&&m.mes===curMes&&REVENUE_DB.length){const lg=files.get(REVENUE_FILE);t='Base vigente';sub=fI(REVENUE_DB.length)+' registros'+(lg&&lg.updated_at?' • '+fmtD(lg):'')}
+  else{ok=false;t='Sem arquivo';sub='Envie para preencher este mês'}
+  return `<div class="mf-cell ${ok?'ok':'empty'}"><div class="mf-info"><b>${t}</b><span>${sub}</span></div><button type="button" class="btn btn-out" data-mf-kind="${kind}" data-mf-mes="${m.mes}">${ok?'Substituir':'Enviar'}</button></div>`};
+ box.innerHTML='<div class="mf-head"><span>Mês</span><span>Visitas</span><span>Faturamento</span></div>'+win.map((m,i)=>`<div class="mf-row"><div class="mf-month"><b>${m.fullLabel}</b><em>${['Mês atual','1 mês atrás','2 meses atrás'][i]}</em></div>${cell('visits',m)}${cell('revenue',m)}</div>`).join('');
+}
+$('monthFiles').addEventListener('click',async e=>{const b=e.target.closest('[data-mf-kind]');if(!b)return;const kind=b.dataset.mfKind;if(!await requireServerPerm(kind==='visits'?'update_data':'manage_bases'))return;MONTH_TARGET={kind,mes:b.dataset.mfMes};$('monthFile').click()});
+$('monthFile').onchange=async e=>{
+ const f=e.target.files[0];e.target.value='';if(!f||!MONTH_TARGET)return;const{kind,mes}=MONTH_TARGET;MONTH_TARGET=null;
+ const st=$('basesStatus'),lbl=mes.split('-').reverse().join('/'),isCur=mes===comparativoWindow()[2].mes;
+ try{
+  st.textContent='Validando arquivo…';let rows;
+  if(kind==='visits'){
+   const all=await parseComparativoImportFile(f);rows=all.map(r=>({...r,date:normalizarData(r.date)})).filter(r=>comparativoMonthKey(r.date)===mes);
+   if(!rows.length)throw new Error('O arquivo não tem nenhuma visita de '+lbl+'.');
+   if(!confirm('Substituir as visitas de '+lbl+' por '+fI(rows.length)+' registros'+(rows.length<all.length?' ('+fI(all.length-rows.length)+' linhas de outros meses serão ignoradas)':'')+(isCur?'? A base do dashboard passará a mostrar somente este mês.':'?'))){st.textContent='';return}
+  }else{
+   rows=await parseAuxFile(f,'revenue');
+   if(!confirm('Substituir o faturamento de '+lbl+' por '+fI(rows.length)+' registros?'+(isCur?' Ele também passa a ser o faturamento do dashboard.':''))){st.textContent='';return}
+  }
+  st.textContent='Enviando…';await mfUpload(MFILE(kind,mes),rows);
+  if(kind==='visits'){
+   if(isCur)await mfUpload(FILE,rows);
+   try{await saveComparativoHistory(rows)}catch(h){console.error(h)}
+   if(isCur){await loadPublishedData();await setUpdated()}
+  }else if(isCur){await mfUpload(REVENUE_FILE,rows);await loadAuxBases();render();updateBasesSummary()}
+  st.textContent=(kind==='visits'?'Visitas':'Faturamento')+' de '+lbl+' atualizado: '+fI(rows.length)+' registros.';
+  await renderMonthFiles();
+ }catch(err){st.textContent='Erro: '+(err?.message||err)}
+};
+/* Mantém cópias mensais das visitas que forem registradas no histórico. */
+{const _sch=saveComparativoHistory;saveComparativoHistory=async function(rows){const r=await _sch.apply(this,arguments);try{const keep=new Set(comparativoWindow().map(m=>m.mes)),by={};for(const x of rows||[]){const d=normalizarData(x.date),m=comparativoMonthKey(d);if(keep.has(m))(by[m]=by[m]||[]).push({...x,date:d})}for(const m in by)await mfUpload(MFILE('visits',m),by[m])}catch(e){console.warn('Cópia mensal de visitas falhou',e)}return r};
+ const _uab=uploadAuxBase;uploadAuxBase=async function(kind){await _uab.apply(this,arguments);if(kind==='revenue'&&!/^Erro/.test($('upStatus').textContent)){try{const rows=await readAuxPublished(REVENUE_FILE);if(rows.length)await mfUpload(MFILE('revenue',comparativoWindow()[2].mes),rows)}catch(e){console.warn(e)}}}}
+{const _o=$('basesOpenBtn').onclick;$('basesOpenBtn').onclick=async function(){await _o.apply(this,arguments);renderMonthFiles()};const _r=$('basesRefreshBtn').onclick;$('basesRefreshBtn').onclick=async function(){await _r.apply(this,arguments);renderMonthFiles()}}
+
+/* O painel atualiza junto com a seleção e mantém a lógica de cálculo original. */
+{const __render0=render;render=function(...a){const r=__render0.apply(this,a);try{updateComparativoInline()}catch(e){console.error(e)}return r}}
+
 boot();
 </script></body></html>
