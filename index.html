@@ -453,7 +453,7 @@ html:not(.is-admin) .admin-only{display:none!important}
 <div class="grid-kpi" id="kpis"></div>
 <div class="section-title">Visão operacional</div>
 <div class="grid2"><section class="card visits-day-card"><div class="card-title" id="chTitle"></div><div class="card-sub" id="chSub"></div><div class="bar-chart" id="chart"></div><div class="legend"><span><i class="r"></i>Realizadas</span><span><i class="n"></i>Agendadas</span></div></section>
-<section class="card operation-card"><div class="card-title">Aproveitamento da operação</div><div class="card-sub">Execução das visitas e utilização das horas contratadas</div><div class="progress-wrap"><div class="progress-top"><span>Visitas realizadas</span><strong id="vp"></strong></div><div class="progress"><div class="exec" id="vb"></div></div></div><div class="progress-wrap"><div class="progress-top"><span>Horas executadas</span><strong id="hp"></strong></div><div class="progress"><div class="hours" id="hb"></div></div></div><div class="metric-row"><span>Gap de visitas</span><b id="vg"></b></div><div class="metric-row"><span>Gap de horas</span><b id="hg"></b></div><div class="metric-row"><span>Não compareceu</span><b id="nc"></b></div><div class="metric-row"><span>Em andamento</span><b id="ea"></b></div><div class="metric-row"><span>Agendado (a realizar)</span><b id="sc"></b></div><div class="metric-row"><span>Outros (visita avulsa etc.)</span><b id="ou"></b></div></section></div>
+<section class="card operation-card"><div class="card-title">Aproveitamento da operação</div><div class="card-sub">Execução das visitas e utilização das horas contratadas</div><div class="progress-wrap"><div class="progress-top"><span>Visitas realizadas</span><strong id="vp"></strong></div><div class="progress"><div class="exec" id="vb"></div></div></div><div class="progress-wrap"><div class="progress-top"><span>Horas executadas</span><strong id="hp"></strong></div><div class="progress"><div class="hours" id="hb"></div></div></div><div class="metric-row"><span>Gap de visitas</span><b id="vg"></b></div><div class="metric-row"><span>Gap de horas</span><b id="hg"></b></div><div class="metric-row"><span>Não compareceu</span><b id="nc"></b></div><div class="metric-row"><span>Em andamento</span><b id="ea"></b></div><div class="metric-row"><span>Agendado (a realizar)</span><b id="sc"></b></div></section></div>
 <section class="card visits-store-card"><div class="card-title" id="storeChTitle">Visitas por loja</div><div class="card-sub" id="storeChSub">Agendadas x realizadas por loja</div><div class="bar-chart store-chart" id="storeChart"></div><div class="legend"><span><i class="r"></i>Realizadas</span><span><i class="n"></i>Agendadas</span></div></section>
 <div class="section-title">Tempo de atendimento e qualidade</div>
 <div class="grid3"><section class="card"><div class="card-title">Tempo médio de atendimento</div><div class="card-sub">Por visita realizada</div><div class="score"><div><div class="score-num" id="at"></div><div class="score-max">por visita</div></div><div><div class="small-note">Menor atendimento</div><div class="score-num" style="font-size:32px" id="mt"></div><div class="score-max">minutos</div></div></div></section>
@@ -493,7 +493,7 @@ const $=id=>document.getElementById(id);
 let appLoadingDepth=0;function showAppLoading(message='Carregando informações. Aguarde um instante…'){appLoadingDepth++;const el=$('appLoading');if(el){$('appLoadingText').textContent=message;el.classList.add('show');document.body.style.overflow='hidden'}}function hideAppLoading(){appLoadingDepth=Math.max(0,appLoadingDepth-1);if(!appLoadingDepth){const el=$('appLoading');if(el){el.classList.remove('show');document.body.style.overflow=''}}}
 const fI=n=>new Intl.NumberFormat('pt-BR').format(Math.round(n)),fP=n=>(Number(n)||0).toFixed(1).replace('.',',')+'%',fH=m=>{m=Math.round(Number(m)||0);const s=m<0?'-':'';m=Math.abs(m);return s+String(Math.floor(m/60)).padStart(2,'0')+'h'+String(m%60).padStart(2,'0')},fMin=m=>m==null?'—':Math.round(m)+' min',fN=n=>n?n.toFixed(2).replace('.',','):'—';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const normSt=s=>{const t=(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();if(t.startsWith('conclu')||t.includes('avaliacao pendente'))return 'Concluido';if(t.includes('compareceu')||t.includes('ausente')||t.includes('falta'))return 'Não Compareceu';if(t.includes('andamento')||t.includes('atendimento'))return 'Em Andamento';if(t.includes('agend'))return 'Agendado';if(t.includes('avulsa'))return 'Visita Avulsa';return (s||'').trim()||'Sem status'};
+const normSt=s=>{const t=(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();if(t.startsWith('conclu')||t.includes('avaliacao pendente'))return 'Concluido';if(t.includes('andamento'))return 'Em Andamento';if(t.includes('agendad'))return 'Agendado';if(t.includes('compareceu'))return 'Não Compareceu';return s.trim()};
 const hm=s=>{s=(s||'').trim();if(!s.includes(':'))return 0;const[a,b]=s.split(':');return (+a||0)*60+(+b||0)};
 
 /* CORREÇÃO: normaliza datas com ano de 2 ou 4 dígitos para o mesmo padrão DD/MM/AAAA. */
@@ -667,33 +667,25 @@ function parse(txt){
  // Usa os títulos do relatório quando disponíveis, mas mantém fallback para o layout original.
  const header=lines[0].split(';').map(v=>v.trim().toLocaleLowerCase('pt-BR'));
  const findCol=(patterns,fallback)=>{const i=header.findIndex(h=>patterns.some(p=>h===p||h.includes(p)));return i>=0?i:fallback};
- const ix={plan:findCol(['planejamento'],4),loja:findCol(['loja'],0),forn:findCol(['fornecedor'],1),comp:findCol(['comprador'],2),prom:findCol(['promotor'],3),status:findCol(['status'],5),periodo:findCol(['entrada e saída','entrada e saida'],6),tempo:findCol(['tempo'],7),aval:findCol(['usuário avaliação','usuario avaliacao','avaliação','avaliacao'],8),nota:findCol(['nota'],10),contr:findCol(['total horas contratadas','horas contratadas'],13)};
- const seen=new Set();
+ const ix={loja:findCol(['loja'],0),forn:findCol(['fornecedor'],1),comp:findCol(['comprador'],2),prom:findCol(['promotor'],3),status:findCol(['status'],5),periodo:findCol(['entrada e saída','entrada e saida'],6),tempo:findCol(['tempo'],7),aval:findCol(['avaliação','avaliacao'],9),nota:findCol(['nota'],10),contr:findCol(['total horas contratadas','horas contratadas'],13)};
  for(let i=1;i<lines.length;i++){
-  const l=lines[i];if(!l.trim())continue;
-  if(seen.has(l))continue;seen.add(l); // linha idêntica repetida no relatório
-  const c=l.split(';');
-  if(c.length<Math.max(ix.loja,ix.forn,ix.status,ix.periodo,ix.tempo)+1)continue;
-  // Colunas do fim lidas de trás para frente (ignora vazios finais), porque campos de texto com ';' deslocam as colunas.
-  const t=c.slice();while(t.length&&!String(t[t.length-1]).trim())t.pop();
-  const fromEnd=n=>(t[t.length-n]??'').trim();
+  const l=lines[i];if(!l.trim())continue;const c=l.split(';');
+  // O CSV recebido tem campos vazios extras no fim; eles são ignorados sem deslocar as colunas nomeadas.
+  if(c.length<Math.max(ix.loja,ix.forn,ix.status,ix.periodo,ix.tempo,ix.nota,ix.contr)+1)continue;
   const val=k=>(c[ix[k]]??'').trim();
-  const periodo=val('periodo');const ent=periodo.split(/\s+-\s+/);
-  // Não Compareceu / Agendado / Avulsa vêm com "Entrada e Saída" vazio: a data está em Planejamento.
-  let d=normalizarData(ent[0]||'');if(!d)d=normalizarData(val('plan'));
-  const numeroNota=Number(fromEnd(6).replace(',','.'));
-  out.push({loja:val('loja'),forn:val('forn'),comp:val('comp'),prom:val('prom'),status:normSt(val('status')),date:d,tempo:hm(val('tempo')),nota:Number.isFinite(numeroNota)?numeroNota:0,contr:hm(fromEnd(3)),loja_ok:1,aval:val('aval')});
+  const periodo=val('periodo');const ent=periodo.split(/\s+-\s+/);const d=normalizarData(ent[0]||'');
+  const numeroNota=Number(String(val('nota')).replace(',','.'));
+  out.push({loja:val('loja'),forn:val('forn'),comp:val('comp'),prom:val('prom'),status:normSt(val('status')),date:d,tempo:hm(val('tempo')),nota:Number.isFinite(numeroNota)?numeroNota:0,contr:hm(val('contr')),loja_ok:1,aval:val('aval')});
  }
  return out
 }
 function agg(rows){
- const lojas=new Set(),cm={};let ag=0,re=0,nc=0,ea=0,sc=0,ou=0,tm=0,mn=null,ns=0,nn=0;
+ const lojas=new Set(),cm={};let ag=0,re=0,nc=0,ea=0,sc=0,tm=0,mn=null,ns=0,nn=0;
  for(const r of rows){lojas.add(r.loja);cm[r.forn+'|'+r.loja]=r.contr;ag++;
   if(r.status==='Não Compareceu')nc++;else if(r.status==='Em Andamento')ea++;else if(r.status==='Agendado')sc++;
-  else if(r.status==='Concluido'){re++;tm+=r.tempo;if(r.tempo>0&&(mn==null||r.tempo<mn))mn=r.tempo;if(r.nota>0){ns+=r.nota;nn++}}
-  else ou++;}
+  else if(r.status==='Concluido'){re++;tm+=r.tempo;if(r.tempo>0&&(mn==null||r.tempo<mn))mn=r.tempo;if(r.nota>0){ns+=r.nota;nn++}}}
  let c=0;for(const k in cm)c+=cm[k];
- return{lojas:lojas.size,ag,real:re,nc,ea,sc,ou,contr:c,exec:tm,pct:ag?re/ag*100:0,util:c?tm/c*100:null,avg:re?tm/re:0,min:mn,nota:nn?ns/nn:0}}
+ return{lojas:lojas.size,ag,real:re,nc,ea,sc,contr:c,exec:tm,pct:ag?re/ag*100:0,util:c?tm/c*100:null,avg:re?tm/re:0,min:mn,nota:nn?ns/nn:0}}
 function group(rows,key){const m=new Map();for(const r of rows){const k=typeof key==='function'?key(r):r[key];if(!m.has(k))m.set(k,[]);m.get(k).push(r)}return[...m].map(([k,v])=>({name:k,...agg(v),rows:v}))}
 const dkey=d=>dataOrdenavel(d);
 function render(){
@@ -726,7 +718,7 @@ function render(){
  $('kpis').innerHTML='<div class="kpi-primary-grid">'+primary.map((x,i)=>`<div class="kpi-primary ${x[3]}"><div class="kpi-primary-label"><span class="kpi-dot"></span>${x[0]}</div><div class="kpi-primary-value">${x[1]}</div><div class="kpi-primary-note">${x[2]}</div></div>`).join('')+'</div>'+
   '<div class="kpi-secondary-grid'+(all?' five':'')+'">'+secondary.map(x=>`<div class="kpi-secondary"><div class="kpi-secondary-label">${x[0]}</div><div class="kpi-secondary-value">${x[1]}</div><div class="kpi-secondary-note">${x[2]}</div></div>`).join('')+contractCard+revenueCard+'</div>';
  $('vp').textContent=fP(O.pct);$('hp').textContent=O.util==null?'—':fP(O.util);$('vb').style.width=Math.min(O.pct,100)+'%';$('hb').style.width=Math.min(O.util||0,100)+'%';
- $('vg').textContent=fI(O.real-O.ag)+' visitas';$('hg').textContent=fH(O.exec-O.contr);$('nc').textContent=fI(O.nc);$('ea').textContent=fI(O.ea);$('sc').textContent=fI(O.sc);$('ou').textContent=fI(O.ou);
+ $('vg').textContent=fI(O.real-O.ag)+' visitas';$('hg').textContent=fH(O.exec-O.contr);$('nc').textContent=fI(O.nc);$('ea').textContent=fI(O.ea);$('sc').textContent=fI(O.sc);
  $('at').textContent=fH(O.avg);$('mt').textContent=O.min??'—';$('as').textContent=fN(O.nota);const rating=Math.max(0,Math.min(5,Number(O.nota)||0)),stars=$('asStars');if(stars){stars.style.setProperty('--star-fill',(rating/5*100)+'%');stars.setAttribute('aria-label',rating>0?'Nota média '+fN(O.nota)+' de 5':'Sem avaliações registradas')}
  let cg,title,sub;
  if(all){cg=group(cur,'forn').sort((a,b)=>b.real-a.real).slice(0,12);title='Visitas por indústria';sub='Top 12 por visitas realizadas • agendadas x realizadas'}
@@ -764,7 +756,7 @@ function render(){
 }
 function renderTable(){
  const q=$('q').value.toLowerCase();let cols,data,title,sub;
- const std=[['ag','Agendadas',x=>fI(x.ag)],['real','Realizadas',x=>fI(x.real)],['pct','Execução',x=>badge(x.pct)],['nc','Não comp.',x=>fI(x.nc)],['ea','Em andamento',x=>fI(x.ea)],['sc','Agendado',x=>fI(x.sc)],['ou','Outros',x=>fI(x.ou)],['contr','H. contratadas',x=>fH(x.contr)],['exec','H. executadas',x=>fH(x.exec)],['util','Util. horas',x=>badge(x.util)],['avg','Tempo médio',x=>fH(x.avg)],['min','Menor min.',x=>fMin(x.min)],['nota','Nota / 5',x=>fN(x.nota)]];
+ const std=[['ag','Agendadas',x=>fI(x.ag)],['real','Realizadas',x=>fI(x.real)],['pct','Execução',x=>badge(x.pct)],['nc','Não comp.',x=>fI(x.nc)],['ea','Em andamento',x=>fI(x.ea)],['sc','Agendado',x=>fI(x.sc)],['contr','H. contratadas',x=>fH(x.contr)],['exec','H. executadas',x=>fH(x.exec)],['util','Util. horas',x=>badge(x.util)],['avg','Tempo médio',x=>fH(x.avg)],['min','Menor min.',x=>fMin(x.min)],['nota','Nota / 5',x=>fN(x.nota)]];
  if(tab==='visitas'){
   title='Todas as visitas';data=cur.map(r=>({...r}));
   cols=[['date','Data',x=>esc(x.date)],['loja','Loja',x=>esc(x.loja)],['prom','Promotor',x=>esc(x.prom)],['comp','Comprador',x=>esc(x.comp||'—')],['status','Status',x=>`<span class="badge ${x.status==='Concluido'?'ok':x.status==='Não Compareceu'?'bad':x.status==='Agendado'?'':'warn'}">${esc(x.status)}</span>`],['tempo','Tempo',x=>fH(x.tempo)],['nota','Nota',x=>x.nota?esc(x.nota):'—']];
@@ -860,10 +852,10 @@ function buildPdfRank(id,data,cols){
 }
 function buildPdfDetail(){
  const selectedIndustry=curInd,rows=selectedIndustry==='__all__'?ALL.slice():ALL.filter(r=>r.forn===selectedIndustry),O=agg(rows),all=selectedIndustry==='__all__';
- const std=[['ag','Agendadas',x=>fI(x.ag)],['real','Realizadas',x=>fI(x.real)],['pct','Execução',x=>fP(x.pct)],['nc','Não compareceu',x=>fI(x.nc)],['ea','Em andamento',x=>fI(x.ea)],['sc','Agendado (a realizar)',x=>fI(x.sc)],['ou','Outros (avulsa etc.)',x=>fI(x.ou)],['contr','Horas contratadas',x=>fH(x.contr)],['exec','Horas executadas',x=>fH(x.exec)],['util','Utilização das horas',x=>x.util==null?'—':fP(x.util)],['avg','Tempo médio',x=>fH(x.avg)],['min','Menor atendimento',x=>fMin(x.min)],['nota','Nota / 5',x=>fN(x.nota)]];
+ const std=[['ag','Agendadas',x=>fI(x.ag)],['real','Realizadas',x=>fI(x.real)],['pct','Execução',x=>fP(x.pct)],['nc','Não compareceu',x=>fI(x.nc)],['ea','Em andamento',x=>fI(x.ea)],['sc','Agendado (a realizar)',x=>fI(x.sc)],['contr','Horas contratadas',x=>fH(x.contr)],['exec','Horas executadas',x=>fH(x.exec)],['util','Utilização das horas',x=>x.util==null?'—':fP(x.util)],['avg','Tempo médio',x=>fH(x.avg)],['min','Menor atendimento',x=>fMin(x.min)],['nota','Nota / 5',x=>fN(x.nota)]];
  $('pdfTitle').textContent=all?'Execução geral — relatório completo':'Indústria — '+selectedIndustry;$('pdfContext').textContent=(all?'Todas as indústrias — banco completo':'Indústria selecionada: '+selectedIndustry)+' • '+fI(rows.length)+' visitas';
  const pdfContract=$('pdfContractContext');if(pdfContract){let cc=null;if(!all){if('__COLETOR_EXPORTED_CONTRATO__' in window)cc=window.__COLETOR_EXPORTED_CONTRATO__;else cc=CTR.find(x=>nk(x.fornecedor)===nk(selectedIndustry));}pdfContract.textContent=cc?('Contrato: '+(cc.recebido?'recebido dia '+fD(cc.recebido):'ainda não recebido')+' • '+(cc.atualizado?'atualizado dia '+fD(cc.atualizado):'ainda não atualizado')):'';}
- const summary=[['Visitas agendadas',fI(O.ag),'programadas'],['Visitas realizadas',fI(O.real),fP(O.pct)+' de execução'],['Horas contratadas',fH(O.contr),'base registrada'],['Horas executadas',fH(O.exec),O.util==null?'sem horas contratadas':fP(O.util)+' das contratadas'],['Tempo médio',fH(O.avg),'por visita realizada'],['Nota média',fN(O.nota),'escala máxima 5,0'],['Não compareceu',fI(O.nc),'visitas'],['Em andamento',fI(O.ea),'visitas'],['Agendado (a realizar)',fI(O.sc),'visitas'],['Outros (avulsa etc.)',fI(O.ou),'visitas'],['Gap de visitas',fI(O.real-O.ag),'realizadas − agendadas'],['Gap de horas',fH(O.exec-O.contr),'executadas − contratadas'],['Menor atendimento',fMin(O.min),'entre realizadas']];
+ const summary=[['Visitas agendadas',fI(O.ag),'programadas'],['Visitas realizadas',fI(O.real),fP(O.pct)+' de execução'],['Horas contratadas',fH(O.contr),'base registrada'],['Horas executadas',fH(O.exec),O.util==null?'sem horas contratadas':fP(O.util)+' das contratadas'],['Tempo médio',fH(O.avg),'por visita realizada'],['Nota média',fN(O.nota),'escala máxima 5,0'],['Não compareceu',fI(O.nc),'visitas'],['Em andamento',fI(O.ea),'visitas'],['Agendado (a realizar)',fI(O.sc),'visitas'],['Gap de visitas',fI(O.real-O.ag),'realizadas − agendadas'],['Gap de horas',fH(O.exec-O.contr),'executadas − contratadas'],['Menor atendimento',fMin(O.min),'entre realizadas']];
  $('pdfSummary').innerHTML=summary.map(x=>`<div class="pdf-summary-item"><div class="label">${x[0]}</div><div class="value">${x[1]}</div><div class="note">${x[2]}</div></div>`).join('');
  // Reproduz no PDF o mesmo comparativo de três meses apresentado no painel.
  const evolutionChart=$('pdfEvolutionChart'),evolutionStats=$('pdfEvolutionStats'),evolutionNote=$('pdfEvolutionNote');
@@ -880,7 +872,7 @@ function buildPdfDetail(){
  const days=group(rows,'date').filter(g=>g.name).sort((a,b)=>dkey(a.name)-dkey(b.name)),dmx=mxOf(days),showV=days.length<=31;
  $('pdfDayChart').innerHTML=days.map(x=>`<div class="g"><div class="bs"><div class="b n" style="height:${x.ag/dmx*84}px">${showV?`<i>${x.ag}</i>`:''}</div><div class="b r" style="height:${x.real/dmx*84}px">${showV?`<i>${x.real}</i>`:''}</div></div><div class="lb">${esc(x.name.slice(0,5))}</div></div>`).join('');
  const prog=(l,p,c)=>`<div class="pdf-prog"><div class="t"><span>${l}</span><span>${p==null?'—':fP(p)}</span></div><div class="pb"><div style="width:${Math.min(p||0,100)}%;background:${c}"></div></div></div>`,mrow=(l,v)=>`<div class="pdf-m"><span>${l}</span><b>${v}</b></div>`;
- $('pdfOpSide').innerHTML='<div class="pdf-chart-title">Aproveitamento da operação</div>'+prog('Visitas realizadas',O.pct,'#e30613')+prog('Horas executadas',O.util,'#0b2742')+mrow('Gap de visitas',fI(O.real-O.ag)+' visitas')+mrow('Gap de horas',fH(O.exec-O.contr))+mrow('Não compareceu',fI(O.nc))+mrow('Em andamento',fI(O.ea))+mrow('Agendado (a realizar)',fI(O.sc))+mrow('Outros (avulsa etc.)',fI(O.ou))+mrow('Tempo médio por visita',fH(O.avg))+mrow('Menor atendimento',fMin(O.min))+mrow('Nota média do repositor',fN(O.nota)+' / 5');
+ $('pdfOpSide').innerHTML='<div class="pdf-chart-title">Aproveitamento da operação</div>'+prog('Visitas realizadas',O.pct,'#e30613')+prog('Horas executadas',O.util,'#0b2742')+mrow('Gap de visitas',fI(O.real-O.ag)+' visitas')+mrow('Gap de horas',fH(O.exec-O.contr))+mrow('Não compareceu',fI(O.nc))+mrow('Em andamento',fI(O.ea))+mrow('Agendado (a realizar)',fI(O.sc))+mrow('Tempo médio por visita',fH(O.avg))+mrow('Menor atendimento',fMin(O.min))+mrow('Nota média do repositor',fN(O.nota)+' / 5');
  const sg=group(rows,'loja').sort((a,b)=>b.real-a.real||b.ag-a.ag||byName(a,b));$('pdfStoreTitle').textContent='Visitas por loja — todas ('+fI(sg.length)+')';buildPdfRank('pdfStoreChart',sg,[['name','Loja',x=>esc(x.name)],barCol(mxOf(sg)),['ag','Ag.',x=>fI(x.ag)],['real','Real.',x=>fI(x.real)]]);
  ['pdfIndChartTitle','pdfIndChartWrap','pdfIndTitle','pdfIndWrap'].forEach(i=>$(i).style.display=all?'':'none');
  if(all){const ig=group(rows,'forn').sort((a,b)=>b.real-a.real||b.ag-a.ag||byName(a,b));$('pdfIndChartTitle').textContent='Visitas por indústria — todas ('+fI(ig.length)+')';buildPdfRank('pdfIndChart',ig,[['name','Indústria',x=>esc(x.name)],barCol(mxOf(ig)),['ag','Ag.',x=>fI(x.ag)],['real','Real.',x=>fI(x.real)]]);buildPdfTable('pdfInd',ig,[['name','Indústria',x=>esc(x.name)],['lojas','Qtd. lojas',x=>x.lojas],...std])}
@@ -996,12 +988,12 @@ async function loadPublishedData(){
   }else{
    const {data:su,error:se}=await sb.storage.from(BUCKET).createSignedUrl(FILE,60);if(se||!su)throw new Error('sem acesso à base');const res=await fetch(su.signedUrl,{cache:'no-store'});if(!res.ok)throw new Error('dados.json não encontrado');ALL=await res.json();if(!Array.isArray(ALL))throw new Error('dados.json inválido');
    /* Dados publicados também são normalizados, caso o JSON antigo contenha datas em formatos diferentes. */
-   ALL=ALL.map(r=>({...r,status:normSt(r.status),date:normalizarData(r.date),tempo:+r.tempo||0,nota:+r.nota||0,contr:+r.contr||0}));
+   ALL=ALL.map(r=>({...r,date:normalizarData(r.date),tempo:+r.tempo||0,nota:+r.nota||0,contr:+r.contr||0}));
    suppliers=[...new Set(ALL.map(r=>r.forn))].filter(Boolean).sort((a,b)=>a.localeCompare(b));
    const ds=ALL.map(r=>r.date).filter(Boolean).sort((a,b)=>dkey(a)-dkey(b));$('period').textContent=ds.length?ds[0]+' A '+ds[ds.length-1]:'SEM PERÍODO';$('upd').textContent='Dados publicados em '+new Date().toLocaleDateString('pt-BR');$('indIn').disabled=false;$('pdfBtn').disabled=false;curInd='__all__';$('indIn').value=ALLTXT;
   }
   /* Segurança extra para HTMLs exportados: normaliza também os registros já incorporados. */
-  ALL=ALL.map(r=>({...r,status:normSt(r.status),date:normalizarData(r.date),tempo:+r.tempo||0,nota:+r.nota||0,contr:+r.contr||0}));
+  ALL=ALL.map(r=>({...r,date:normalizarData(r.date),tempo:+r.tempo||0,nota:+r.nota||0,contr:+r.contr||0}));
   await loadAuxBases();
   $('empty').classList.add('hidden');render();if(ME)applyPermissionUI();else $('app').classList.remove('hidden');return true;
  }catch(err){console.error(err);$('empty').classList.remove('hidden');$('empty').innerHTML='<strong>Não foi possível carregar o dashboard.</strong><br><span style="font-size:12px">'+esc(err?.message||'Confira a base publicada e as permissões de acesso.')+'</span>';if(ME&&!(canPerm('dashboard')||canPerm('consult_industries')||canPerm('visit_details'))) $('app').classList.add('hidden');return false}finally{hideAppLoading()}
