@@ -461,7 +461,7 @@ html:not(.is-admin) .admin-only{display:none!important}
 <section class="card"><div class="card-title" id="rkTitle"></div><div class="card-sub" id="rkSub"></div><div class="rank-switch" id="rankSwitch"><button class="active" data-rank="more">Mais horas</button><button data-rank="less">Menos horas</button><button data-rank="none">Sem visitas</button></div><div class="rank-count" id="rankCount"></div><div class="rank-list" id="rank"></div></section></div>
 <div class="section-title">Evolução da marca na rede</div>
 <section class="card cmp-card" id="cmpSection">
-<div class="cmp-top"><div><div class="card-title">Execução, horas executadas, tempo médio e nota</div><div class="card-sub" id="cmpIndustry"></div></div><div class="cmp-actions"><span class="cmp-status" id="cmpStatus" role="status"></span><button class="btn btn-out" id="cmpReloadBtn" type="button">Atualizar</button><button class="btn btn-up" id="cmpSaveBtn" type="button" style="display:none">Registrar base atual</button></div></div>
+<div class="cmp-top"><div><div class="card-title">% de execução de visitas, % de horas executadas/contratadas, tempo médio e nota</div><div class="card-sub" id="cmpIndustry"></div></div><div class="cmp-actions"><span class="cmp-status" id="cmpStatus" role="status"></span><button class="btn btn-out" id="cmpReloadBtn" type="button">Atualizar</button><button class="btn btn-up" id="cmpSaveBtn" type="button" style="display:none">Registrar base atual</button></div></div>
 <div class="cmp-body"><div class="cmp-chart" id="cmpChart" aria-label="Evolução da marca na rede: base vigente e dois meses anteriores"></div><div class="cmp-stats" id="cmpTrend"></div></div>
 <div class="cmp-warning" id="cmpWarning" role="status"></div>
 </section>
@@ -1530,8 +1530,8 @@ function renderComparativo(history,industry,warning=''){
   return '<div class="cmp-stat" style="--c:'+sr.color+'"><div class="l">'+sr.name+'</div><div class="v">'+(cur==null?'—':sr.fmt(cur))+'</div><span class="d '+c+'">'+d+'</span></div>'}).join('');
 }
 const COMP_SERIES=[
- {k:'pct',name:'% de execução',color:'#123b5f',axis:'L',fmt:v=>fP(v),dfmt:x=>x.toFixed(1).replace('.',',')+' p.p.'},
- {k:'util',name:'% horas executadas',color:'#e30613',axis:'L',fmt:v=>fP(v),dfmt:x=>x.toFixed(1).replace('.',',')+' p.p.'},
+ {k:'pct',name:'% de execução — visitas realizadas (agendando)',color:'#123b5f',axis:'L',fmt:v=>fP(v),dfmt:x=>x.toFixed(1).replace('.',',')+' p.p.'},
+ {k:'util',name:'% de horas executadas/contratadas',color:'#e30613',axis:'L',fmt:v=>fP(v),dfmt:x=>x.toFixed(1).replace('.',',')+' p.p.'},
  {k:'avg',name:'Tempo médio',color:'#e08a00',axis:'R',dash:true,fmt:v=>Math.round(v)+' min',dfmt:x=>Math.round(x)+' min'},
  {k:'nota',name:'Nota média',color:'#20a36a',axis:'L',scale:20,fmt:v=>fN(v),dfmt:x=>x.toFixed(2).replace('.',',')+' pt'}];
 function compLineSVG(items){
