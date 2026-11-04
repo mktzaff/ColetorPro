@@ -493,7 +493,27 @@ const $=id=>document.getElementById(id);
 let appLoadingDepth=0;function showAppLoading(message='Carregando informações. Aguarde um instante…'){appLoadingDepth++;const el=$('appLoading');if(el){$('appLoadingText').textContent=message;el.classList.add('show');document.body.style.overflow='hidden'}}function hideAppLoading(){appLoadingDepth=Math.max(0,appLoadingDepth-1);if(!appLoadingDepth){const el=$('appLoading');if(el){el.classList.remove('show');document.body.style.overflow=''}}}
 const fI=n=>new Intl.NumberFormat('pt-BR').format(Math.round(n)),fP=n=>(Number(n)||0).toFixed(1).replace('.',',')+'%',fH=m=>{m=Math.round(Number(m)||0);const s=m<0?'-':'';m=Math.abs(m);return s+String(Math.floor(m/60)).padStart(2,'0')+'h'+String(m%60).padStart(2,'0')},fMin=m=>m==null?'—':Math.round(m)+' min',fN=n=>n?n.toFixed(2).replace('.',','):'—';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const normSt=s=>{const t=(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();if(t.startsWith('conclu')||t.includes('avaliacao pendente'))return 'Concluido';if(t.includes('andamento'))return 'Em Andamento';if(t.includes('agendad'))return 'Agendado';if(t.includes('compareceu'))return 'Não Compareceu';return s.trim()};
+const normSt=s=>{
+ const raw=String(s??'').trim();
+ const t=raw.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ');
+ // O status de ausência precisa ser identificado pelo "não". A palavra
+ // isolada "compareceu" não pode ser classificada como falta.
+ if(/\bnao\s+compareceu\b/.test(t)||/\bnao\s+comparecimento\b/.test(t)||/\bausente\b/.test(t)||/\bfaltou\b/.test(t))return 'Não Compareceu';
+ if(t.startsWith('conclu')||t.includes('avaliacao pendente')||/^compareceu(?:\b|$)/.test(t))return 'Concluido';
+ if(t.includes('andamento'))return 'Em Andamento';
+ if(t.includes('agendad'))return 'Agendado';
+ return raw;
+};
+function normalizarRegistroVisita(r){
+ const row=r&&typeof r==='object'?r:{};
+ return {...row,
+  loja:String(row.loja??'').trim(),forn:String(row.forn??'').trim(),
+  comp:String(row.comp??'').trim(),prom:String(row.prom??'').trim(),
+  status:normSt(row.status),date:normalizarData(row.date),
+  tempo:Number(row.tempo)||0,nota:Number(String(row.nota??0).replace(',','.'))||0,
+  contr:Number(row.contr)||0
+ };
+}
 const hm=s=>{s=(s||'').trim();if(!s.includes(':'))return 0;const[a,b]=s.split(':');return (+a||0)*60+(+b||0)};
 
 /* CORREÇÃO: normaliza datas com ano de 2 ou 4 dígitos para o mesmo padrão DD/MM/AAAA. */
@@ -680,11 +700,20 @@ function parse(txt){
  return out
 }
 function agg(rows){
- const lojas=new Set(),cm={};let ag=0,re=0,nc=0,ea=0,sc=0,tm=0,mn=null,ns=0,nn=0;
- for(const r of rows){lojas.add(r.loja);cm[r.forn+'|'+r.loja]=r.contr;ag++;
-  if(r.status==='Não Compareceu')nc++;else if(r.status==='Em Andamento')ea++;else if(r.status==='Agendado')sc++;
-  else if(r.status==='Concluido'){re++;tm+=r.tempo;if(r.tempo>0&&(mn==null||r.tempo<mn))mn=r.tempo;if(r.nota>0){ns+=r.nota;nn++}}}
- let c=0;for(const k in cm)c+=cm[k];
+ const lojas=new Set(),cm=new Map();let ag=0,re=0,nc=0,ea=0,sc=0,tm=0,mn=null,ns=0,nn=0;
+ for(const r of rows){
+  lojas.add(r.loja);cm.set(String(r.forn??'')+'|'+String(r.loja??''),Number(r.contr)||0);ag++;
+  const status=normSt(r.status);
+  if(status==='Não Compareceu')nc++;
+  else if(status==='Em Andamento')ea++;
+  else if(status==='Agendado')sc++;
+  else if(status==='Concluido'){
+   re++;const tempo=Number(r.tempo)||0;tm+=tempo;
+   if(tempo>0&&(mn==null||tempo<mn))mn=tempo;
+   const nota=Number(r.nota)||0;if(nota>0){ns+=nota;nn++}
+  }
+ }
+ let c=0;for(const value of cm.values())c+=value;
  return{lojas:lojas.size,ag,real:re,nc,ea,sc,contr:c,exec:tm,pct:ag?re/ag*100:0,util:c?tm/c*100:null,avg:re?tm/re:0,min:mn,nota:nn?ns/nn:0}}
 function group(rows,key){const m=new Map();for(const r of rows){const k=typeof key==='function'?key(r):r[key];if(!m.has(k))m.set(k,[]);m.get(k).push(r)}return[...m].map(([k,v])=>({name:k,...agg(v),rows:v}))}
 const dkey=d=>dataOrdenavel(d);
@@ -756,11 +785,12 @@ function render(){
 }
 function renderTable(){
  const q=$('q').value.toLowerCase();let cols,data,title,sub;
+ const baseLabel=window.COLETOR_BASE_VIGENTE?.mes?window.COLETOR_BASE_VIGENTE.mes.split('-').reverse().join('/'):'base vigente';
  const std=[['ag','Agendadas',x=>fI(x.ag)],['real','Realizadas',x=>fI(x.real)],['pct','Execução',x=>badge(x.pct)],['nc','Não comp.',x=>fI(x.nc)],['ea','Em andamento',x=>fI(x.ea)],['sc','Agendado',x=>fI(x.sc)],['contr','H. contratadas',x=>fH(x.contr)],['exec','H. executadas',x=>fH(x.exec)],['util','Util. horas',x=>badge(x.util)],['avg','Tempo médio',x=>fH(x.avg)],['min','Menor min.',x=>fMin(x.min)],['nota','Nota / 5',x=>fN(x.nota)]];
  if(tab==='visitas'){
   title='Todas as visitas';data=cur.map(r=>({...r}));
   cols=[['date','Data',x=>esc(x.date)],['loja','Loja',x=>esc(x.loja)],['prom','Promotor',x=>esc(x.prom)],['comp','Comprador',x=>esc(x.comp||'—')],['status','Status',x=>`<span class="badge ${x.status==='Concluido'?'ok':x.status==='Não Compareceu'?'bad':x.status==='Agendado'?'':'warn'}">${esc(x.status)}</span>`],['tempo','Tempo',x=>fH(x.tempo)],['nota','Nota',x=>x.nota?esc(x.nota):'—']];
-  data=data.filter(x=>(x.loja+x.prom+x.comp+x.status).toLowerCase().includes(q));sub=fI(data.length)+' visitas';
+  data=data.filter(x=>(x.loja+x.prom+x.comp+x.status).toLowerCase().includes(q));sub=fI(data.length)+' visitas • base vigente: '+baseLabel;
  }else{
   const key=tab==='forn'?'forn':tab==='lojas'?'loja':'prom';const lab=tab==='forn'?'Indústria':tab==='lojas'?'Loja':'Promotor';
   data=group(cur,key);
@@ -805,7 +835,7 @@ function renderTable(){
     data.forEach(x=>{const v=revenueTotal(x.name);x.faturamento=REVENUE_DB.length?v:null});
     cols=[['name',lab,x=>esc(x.name)],['lojas','Lojas',x=>x.lojas],['faturamento','Faturamento',x=>x.faturamento==null?'—':`<span class="revenue-display" data-revenue-display="${esc(fBRL(x.faturamento))}">${revenueVisible?esc(fBRL(x.faturamento)):'••••••'}</span>`],...std]
    }else{data=data.filter(x=>x.name.toLowerCase().includes(q));cols=[['name',lab,x=>esc(x.name)],['lojas','Lojas',x=>x.lojas],...std]}
-  title='Todas as '+(tab==='forn'?'indústrias':tab==='lojas'?'lojas':'promotores');sub=fI(data.length)+' registros • busca e ordenação';
+  title='Todas as '+(tab==='forn'?'indústrias':tab==='lojas'?'lojas':'promotores');sub=fI(data.length)+' registros • busca e ordenação • base vigente: '+baseLabel;
  }
  const s=sortS;data.sort((a,b)=>{const A=a[s.key],B=b[s.key];if(A==null&&B==null)return 0;if(A==null)return 1;if(B==null)return -1;if(typeof A==='string'||typeof B==='string')return String(A).localeCompare(String(B),'pt-BR',{numeric:true,sensitivity:'base'})*s.dir;return (Number(A)-Number(B))*s.dir});
  $('tbTitle').textContent=title;$('tbSub').textContent=sub;
@@ -979,21 +1009,30 @@ async function loadPublishedData(){
  showAppLoading('Carregando base de visitas e indicadores…');
  try{
   $('empty').innerHTML='Carregando dados publicados...';
-  if(window.__COLETOR_EXPORTED_DATA__){
-   ALL=Array.isArray(window.__COLETOR_EXPORTED_DATA__)?window.__COLETOR_EXPORTED_DATA__.slice():[];
-   suppliers=[...new Set(ALL.map(r=>r.forn))].filter(Boolean).sort((a,b)=>a.localeCompare(b));
-   const ds=ALL.map(r=>r.date).filter(Boolean).sort((a,b)=>dkey(a)-dkey(b));
-   $('period').textContent=ds.length?ds[0]+' A '+ds[ds.length-1]:'SEM PERÍODO';$('upd').textContent='HTML da indústria • dados incorporados no arquivo';
-   curInd=window.__COLETOR_EXPORTED_INDUSTRY__ || (suppliers[0]||'__all__');$('indIn').disabled=true;$('pdfBtn').disabled=false;$('indIn').value=curInd==='__all__'?ALLTXT:curInd;document.body.classList.add('exported-view');document.title=curInd==='__all__'?'ColetorPRO | Geral':'ColetorPRO | '+curInd;
+  let sourceRows=[];const exported=!!window.__COLETOR_EXPORTED_DATA__;
+  if(exported){
+   sourceRows=Array.isArray(window.__COLETOR_EXPORTED_DATA__)?window.__COLETOR_EXPORTED_DATA__.slice():[];
+   $('upd').textContent='HTML da indústria • dados incorporados no arquivo';
+   $('indIn').disabled=true;$('pdfBtn').disabled=false;document.body.classList.add('exported-view');
   }else{
-   const {data:su,error:se}=await sb.storage.from(BUCKET).createSignedUrl(FILE,60);if(se||!su)throw new Error('sem acesso à base');const res=await fetch(su.signedUrl,{cache:'no-store'});if(!res.ok)throw new Error('dados.json não encontrado');ALL=await res.json();if(!Array.isArray(ALL))throw new Error('dados.json inválido');
-   /* Dados publicados também são normalizados, caso o JSON antigo contenha datas em formatos diferentes. */
-   ALL=ALL.map(r=>({...r,date:normalizarData(r.date),tempo:+r.tempo||0,nota:+r.nota||0,contr:+r.contr||0}));
-   suppliers=[...new Set(ALL.map(r=>r.forn))].filter(Boolean).sort((a,b)=>a.localeCompare(b));
-   const ds=ALL.map(r=>r.date).filter(Boolean).sort((a,b)=>dkey(a)-dkey(b));$('period').textContent=ds.length?ds[0]+' A '+ds[ds.length-1]:'SEM PERÍODO';$('upd').textContent='Dados publicados em '+new Date().toLocaleDateString('pt-BR');$('indIn').disabled=false;$('pdfBtn').disabled=false;curInd='__all__';$('indIn').value=ALLTXT;
+   const {data:su,error:se}=await sb.storage.from(BUCKET).createSignedUrl(FILE,60);if(se||!su)throw new Error('sem acesso à base');
+   const res=await fetch(su.signedUrl,{cache:'no-store'});if(!res.ok)throw new Error('dados.json não encontrado');
+   sourceRows=await res.json();if(!Array.isArray(sourceRows))throw new Error('dados.json inválido');
+   $('upd').textContent='Dados publicados em '+new Date().toLocaleDateString('pt-BR');$('indIn').disabled=false;$('pdfBtn').disabled=false;
   }
-  /* Segurança extra para HTMLs exportados: normaliza também os registros já incorporados. */
-  ALL=ALL.map(r=>({...r,date:normalizarData(r.date),tempo:+r.tempo||0,nota:+r.nota||0,contr:+r.contr||0}));
+  // O painel, o Detalhamento completo e o PDF recebem exatamente o mesmo recorte:
+  // somente o mês definido pela janela como base vigente (mês anterior).
+  const prepared=prepararBaseVigente(sourceRows);
+  if(sourceRows.length&&!prepared.rows.length){
+   const label=prepared.mes.split('-').reverse().join('/');
+   throw new Error('A base publicada contém '+fI(sourceRows.length)+' registros, mas nenhum pertence à base vigente ('+label+'). Para evitar misturar períodos, o dashboard não carregou registros de outros meses. Importe/substitua o arquivo de visitas desse mês.');
+  }
+  ALL=prepared.rows;window.COLETOR_BASE_VIGENTE={mes:prepared.mes,totalRecebido:prepared.total,incluidos:prepared.rows.length,ignorados:prepared.ignorados};
+  suppliers=[...new Set(ALL.map(r=>r.forn))].filter(Boolean).sort((a,b)=>a.localeCompare(b));
+  const ds=ALL.map(r=>r.date).filter(Boolean).sort((a,b)=>dkey(a)-dkey(b));
+  $('period').textContent=ds.length?ds[0]+' A '+ds[ds.length-1]:'SEM PERÍODO';
+  if(exported){curInd=window.__COLETOR_EXPORTED_INDUSTRY__ || (suppliers[0]||'__all__');$('indIn').value=curInd==='__all__'?ALLTXT:curInd;document.title=curInd==='__all__'?'ColetorPRO | Geral':'ColetorPRO | '+curInd;}
+  else{curInd='__all__';$('indIn').value=ALLTXT;}
   await loadAuxBases();
   $('empty').classList.add('hidden');render();if(ME)applyPermissionUI();else $('app').classList.remove('hidden');return true;
  }catch(err){console.error(err);$('empty').classList.remove('hidden');$('empty').innerHTML='<strong>Não foi possível carregar o dashboard.</strong><br><span style="font-size:12px">'+esc(err?.message||'Confira a base publicada e as permissões de acesso.')+'</span>';if(ME&&!(canPerm('dashboard')||canPerm('consult_industries')||canPerm('visit_details'))) $('app').classList.add('hidden');return false}finally{hideAppLoading()}
@@ -1104,7 +1143,7 @@ $('upFile').onchange=async e=>{
  const f=e.target.files[0];e.target.value='';if(!f||!await requireServerPerm('update_data'))return;const st=$('upStatus');
  try{
   st.textContent='Validando arquivo…';if(f.size>50*1048576)throw new Error('arquivo acima de 50 MB');
-  let rows,body=f;
+  let rows;
   if(/\.json$/i.test(f.name))rows=JSON.parse(await f.text());
   else{
    if(!window.XLSX)throw new Error('leitor de planilhas não carregou; confira a conexão e recarregue a página');
@@ -1119,13 +1158,15 @@ $('upFile').onchange=async e=>{
    if(!wb.SheetNames||!wb.SheetNames.length)throw new Error('não foi possível ler a planilha/CSV');
    rows=parse(xlsxToCsv(wb.Sheets[wb.SheetNames[0]]));
    if(!rows.length)throw new Error('nenhuma visita encontrada. Use o CSV ou Excel exportado do ColetorPRO, com cabeçalho na primeira linha e as colunas originais de visitas.');
-   body=new Blob([JSON.stringify(rows)],{type:'application/json'});
   }
   const S=['loja','forn','comp','prom','status','date'],N=['tempo','nota','contr'];
   if(!Array.isArray(rows)||!rows.length)throw new Error('o arquivo precisa ser uma lista de visitas');
   const bad=rows.findIndex(r=>!r||typeof r!=='object'||S.some(k=>typeof r[k]!=='string')||N.some(k=>typeof r[k]!=='number'||!isFinite(r[k])));
   if(bad>=0)throw new Error('registro '+(bad+1)+' fora do padrão (campos: '+S.concat(N).join(', ')+')');
-  if(!confirm('Substituir a base atual por '+fI(rows.length)+' registros?')){st.textContent='';return}
+  const prepared=prepararBaseVigente(rows),mesLabel=prepared.mes.split('-').reverse().join('/');
+  if(!prepared.rows.length)throw new Error('O arquivo não contém visitas da base vigente ('+mesLabel+'). Nenhuma informação foi alterada.');
+  rows=prepared.rows;const body=new Blob([JSON.stringify(rows)],{type:'application/json'});
+  if(!confirm('Substituir a base vigente ('+mesLabel+') por '+fI(rows.length)+' registros?'+(prepared.ignorados?'\n\n'+fI(prepared.ignorados)+' registros de outros períodos serão descartados.':'')+'\n\nSomente esses registros alimentarão o Dashboard e o Detalhamento completo.')){st.textContent='';return}
   st.textContent='Enviando '+(body.size/1048576).toFixed(1)+' MB…';
   const{error}=await sb.storage.from(BUCKET).upload(FILE,body,{upsert:true,contentType:'application/json',cacheControl:'0'});
   if(error)throw error;
@@ -1309,6 +1350,12 @@ const COMP_MONTHS=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','
 function comparativoMonthKey(date){const m=String(date||'').match(/^\d{2}\/(\d{2})\/(\d{4})$/);return m?`${m[2]}-${m[1]}`:''}
 function comparativoKey(mes,forn){return String(mes||'')+'|'+String(forn||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('pt-BR').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ')}
 function comparativoWindow(){const now=new Date(),base=new Date(now.getFullYear(),now.getMonth()-1,1),out=[];for(let offset=2;offset>=0;offset--){const d=new Date(base.getFullYear(),base.getMonth()-offset,1),mes=String(d.getFullYear())+'-'+String(d.getMonth()+1).padStart(2,'0');out.push({mes,label:COMP_MONTHS[d.getMonth()].toUpperCase()+'/'+d.getFullYear(),fullLabel:COMP_MONTHS[d.getMonth()].toUpperCase()+'/'+d.getFullYear()})}return out}
+function prepararBaseVigente(rows,mesVigente=comparativoWindow()[2].mes){
+ const normalized=(Array.isArray(rows)?rows:[]).map(normalizarRegistroVisita);
+ const selected=normalized.filter(r=>comparativoMonthKey(r.date)===mesVigente);
+ return{rows:selected,mes:mesVigente,total:normalized.length,ignorados:normalized.length-selected.length};
+}
+
 function comparativoSummaries(rows){
  const by=new Map();
  for(const original of (Array.isArray(rows)?rows:[])){
@@ -1449,6 +1496,7 @@ async function parseComparativoImportFile(file){
  if(!Array.isArray(rows)||!rows.length)throw new Error('O arquivo não contém uma lista válida de visitas.');
  const bad=rows.findIndex(r=>!r||typeof r!=='object'||S.some(k=>typeof r[k]!=='string')||N.some(k=>typeof r[k]!=='number'||!isFinite(r[k])));
  if(bad>=0)throw new Error('Registro '+(bad+1)+' fora do padrão esperado para a base de visitas.');
+ rows=rows.map(normalizarRegistroVisita);
  if(!comparativoSummaries(rows).length)throw new Error('Não encontrei datas válidas para gerar resumos mensais.');
  return rows;
 }
