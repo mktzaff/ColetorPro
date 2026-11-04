@@ -495,11 +495,10 @@ const fI=n=>new Intl.NumberFormat('pt-BR').format(Math.round(n)),fP=n=>(Number(n
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const normSt=s=>{
  const raw=String(s??'').trim();
- const t=raw.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ');
- // O status de ausência precisa ser identificado pelo "não". A palavra
- // isolada "compareceu" não pode ser classificada como falta.
- if(/\bnao\s+compareceu\b/.test(t)||/\bnao\s+comparecimento\b/.test(t)||/\bausente\b/.test(t)||/\bfaltou\b/.test(t))return 'Não Compareceu';
- if(t.startsWith('conclu')||t.includes('avaliacao pendente')||/^compareceu(?:\b|$)/.test(t))return 'Concluido';
+ const t=raw.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
+ // Ausência tem precedência para nunca ser confundida com agendamento ou conclusão.
+ if(t.includes('nao compareceu')||t.includes('nao comparecimento')||t.includes('ausente')||t.includes('faltou'))return 'Não Compareceu';
+ if(t.startsWith('conclu')||t.includes('avaliacao pendente')||t==='compareceu')return 'Concluido';
  if(t.includes('andamento'))return 'Em Andamento';
  if(t.includes('agendad'))return 'Agendado';
  return raw;
@@ -684,16 +683,29 @@ function storesWithoutVisits(){
 function parse(txt){
  const lines=String(txt||'').replace(/^\uFEFF/,'').split(/\r?\n/);const out=[];
  if(!lines.length)return out;
- // Usa os títulos do relatório quando disponíveis, mas mantém fallback para o layout original.
- const header=lines[0].split(';').map(v=>v.trim().toLocaleLowerCase('pt-BR'));
+ const normalizeHeader=v=>String(v??'').replace(/^\"|\"$/g,'').trim().toLocaleLowerCase('pt-BR');
+ let headerIndex=0,header=lines[0].split(';').map(normalizeHeader);
+ // Alguns relatórios trazem título, data de emissão ou linhas em branco antes do cabeçalho.
+ for(let i=0;i<Math.min(lines.length,20);i++){
+  const candidate=lines[i].split(';').map(normalizeHeader);
+  const hasStore=candidate.some(h=>h.includes('loja'));
+  const hasSupplier=candidate.some(h=>h.includes('fornecedor'));
+  const hasStatus=candidate.some(h=>h.includes('status'));
+  if(hasStore&&hasSupplier&&hasStatus){headerIndex=i;header=candidate;break}
+ }
  const findCol=(patterns,fallback)=>{const i=header.findIndex(h=>patterns.some(p=>h===p||h.includes(p)));return i>=0?i:fallback};
+ const findPriority=patterns=>{for(const p of patterns){const i=header.findIndex(h=>h===p||h.includes(p));if(i>=0)return i}return -1};
+ const dateCol=findPriority(['data agendada','data programada','data prevista','data da visita','data visita','dia da visita','data da agenda','agendamento','planejamento','data']);
  const ix={loja:findCol(['loja'],0),forn:findCol(['fornecedor'],1),comp:findCol(['comprador'],2),prom:findCol(['promotor'],3),status:findCol(['status'],5),periodo:findCol(['entrada e saída','entrada e saida'],6),tempo:findCol(['tempo'],7),aval:findCol(['avaliação','avaliacao'],9),nota:findCol(['nota'],10),contr:findCol(['total horas contratadas','horas contratadas'],13)};
- for(let i=1;i<lines.length;i++){
+ for(let i=headerIndex+1;i<lines.length;i++){
   const l=lines[i];if(!l.trim())continue;const c=l.split(';');
-  // O CSV recebido tem campos vazios extras no fim; eles são ignorados sem deslocar as colunas nomeadas.
-  if(c.length<Math.max(ix.loja,ix.forn,ix.status,ix.periodo,ix.tempo,ix.nota,ix.contr)+1)continue;
+  if(c.length<Math.max(ix.loja,ix.forn,ix.status,ix.periodo,ix.tempo,ix.nota,ix.contr,dateCol)+1)continue;
   const val=k=>(c[ix[k]]??'').trim();
-  const periodo=val('periodo');const ent=periodo.split(/\s+-\s+/);const d=normalizarData(ent[0]||'');
+  const periodo=val('periodo');const ent=periodo.split(/\s+-\s+/);
+  const dataExplicita=dateCol>=0?String(c[dateCol]??'').trim():'';
+  const dataRaw=ent[0]||dataExplicita||'';
+  const dataMatch=String(dataRaw).match(/\d{1,2}\/\d{1,2}\/(?:\d{4}|\d{2})(?=\s|$)/);
+  const d=normalizarData(dataMatch?dataMatch[0]:dataRaw);
   const numeroNota=Number(String(val('nota')).replace(',','.'));
   out.push({loja:val('loja'),forn:val('forn'),comp:val('comp'),prom:val('prom'),status:normSt(val('status')),date:d,tempo:hm(val('tempo')),nota:Number.isFinite(numeroNota)?numeroNota:0,contr:hm(val('contr')),loja_ok:1,aval:val('aval')});
  }
@@ -1138,6 +1150,14 @@ function xlsxToCsv(ws){
    row.push(v.replace(/[;\r\n]+/g,' '));}
   out.push(row.join(';'));}
  return out.join('\n')}
+function parseVisitsWorkbook(wb){
+ const names=Array.isArray(wb?.SheetNames)?wb.SheetNames:[];if(!names.length)return[];
+ const candidates=names.map(name=>{const text=xlsxToCsv(wb.Sheets[name]);const rows=parse(text);return{name,text,rows}});
+ const withVisitData=candidates.filter(x=>x.rows.some(r=>r.loja&&r.forn&&r.status));
+ const pool=withVisitData.length?withVisitData:candidates;
+ pool.sort((a,b)=>b.rows.length-a.rows.length);
+ return pool[0]?.rows||[];
+}
 $('upBtn').onclick=async()=>{if(await requireServerPerm('update_data'))$('upFile').click()};
 $('upFile').onchange=async e=>{
  const f=e.target.files[0];e.target.value='';if(!f||!await requireServerPerm('update_data'))return;const st=$('upStatus');
@@ -1156,21 +1176,26 @@ $('upFile').onchange=async e=>{
     wb=XLSX.read(await f.arrayBuffer(),{type:'array',cellNF:true});
    }
    if(!wb.SheetNames||!wb.SheetNames.length)throw new Error('não foi possível ler a planilha/CSV');
-   rows=parse(xlsxToCsv(wb.Sheets[wb.SheetNames[0]]));
+   rows=parseVisitsWorkbook(wb);
    if(!rows.length)throw new Error('nenhuma visita encontrada. Use o CSV ou Excel exportado do ColetorPRO, com cabeçalho na primeira linha e as colunas originais de visitas.');
   }
   const S=['loja','forn','comp','prom','status','date'],N=['tempo','nota','contr'];
   if(!Array.isArray(rows)||!rows.length)throw new Error('o arquivo precisa ser uma lista de visitas');
   const bad=rows.findIndex(r=>!r||typeof r!=='object'||S.some(k=>typeof r[k]!=='string')||N.some(k=>typeof r[k]!=='number'||!isFinite(r[k])));
   if(bad>=0)throw new Error('registro '+(bad+1)+' fora do padrão (campos: '+S.concat(N).join(', ')+')');
+  rows=rows.map(normalizarRegistroVisita);
+  const ausenciasNoArquivo=rows.filter(r=>normSt(r.status)==='Não Compareceu').length;
+  const semDataAusencia=rows.filter(r=>normSt(r.status)==='Não Compareceu'&&!comparativoMonthKey(r.date)).length;
   const prepared=prepararBaseVigente(rows),mesLabel=prepared.mes.split('-').reverse().join('/');
+  const ausenciasNaBase=prepared.rows.filter(r=>normSt(r.status)==='Não Compareceu').length;
   if(!prepared.rows.length)throw new Error('O arquivo não contém visitas da base vigente ('+mesLabel+'). Nenhuma informação foi alterada.');
   rows=prepared.rows;const body=new Blob([JSON.stringify(rows)],{type:'application/json'});
-  if(!confirm('Substituir a base vigente ('+mesLabel+') por '+fI(rows.length)+' registros?'+(prepared.ignorados?'\n\n'+fI(prepared.ignorados)+' registros de outros períodos serão descartados.':'')+'\n\nSomente esses registros alimentarão o Dashboard e o Detalhamento completo.')){st.textContent='';return}
+  const diagnostico='\n\nStatus “Não Compareceu” reconhecidos: '+fI(ausenciasNoArquivo)+' no arquivo; '+fI(ausenciasNaBase)+' na base vigente.'+(semDataAusencia?'\n'+fI(semDataAusencia)+' registro(s) com esse status estão sem data/mês identificável e não entram no recorte vigente.':'');
+  if(!confirm('Substituir a base vigente ('+mesLabel+') por '+fI(rows.length)+' registros?'+(prepared.ignorados?'\n\n'+fI(prepared.ignorados)+' registros de outros períodos serão descartados.':'')+diagnostico+'\n\nSomente esses registros alimentarão o Dashboard e o Detalhamento completo.')){st.textContent='';return}
   st.textContent='Enviando '+(body.size/1048576).toFixed(1)+' MB…';
   const{error}=await sb.storage.from(BUCKET).upload(FILE,body,{upsert:true,contentType:'application/json',cacheControl:'0'});
   if(error)throw error;
-  const loaded=await loadPublishedData();if(!loaded)throw new Error('O arquivo foi enviado, mas o dashboard não conseguiu carregar a base. Confira o formato dos registros e o acesso ao arquivo dados.json.');await setUpdated();st.textContent='Base atualizada: '+fI(rows.length)+' registros.';
+  const loaded=await loadPublishedData();if(!loaded)throw new Error('O arquivo foi enviado, mas o dashboard não conseguiu carregar a base. Confira o formato dos registros e o acesso ao arquivo dados.json.');await setUpdated();st.textContent='Base atualizada: '+fI(rows.length)+' registros • Não Compareceu: '+fI(rows.filter(r=>normSt(r.status)==='Não Compareceu').length)+'.';
  }catch(err){st.textContent='Erro: '+(err.message||err)}
 };
 /* ===== Conta e gestão de usuários ===== */
@@ -1490,7 +1515,7 @@ async function parseComparativoImportFile(file){
   if(/\.csv$/i.test(file.name)||/csv/i.test(file.type)){const text=(await file.text()).replace(/^\uFEFF/,'');wb=XLSX.read(text,{type:'string',cellNF:true,raw:false})}
   else wb=XLSX.read(await file.arrayBuffer(),{type:'array',cellNF:true});
   if(!wb.SheetNames||!wb.SheetNames.length)throw new Error('Não foi possível ler a planilha/CSV.');
-  rows=parse(xlsxToCsv(wb.Sheets[wb.SheetNames[0]]));
+  rows=parseVisitsWorkbook(wb);
  }
  const S=['loja','forn','comp','prom','status','date'],N=['tempo','nota','contr'];
  if(!Array.isArray(rows)||!rows.length)throw new Error('O arquivo não contém uma lista válida de visitas.');
