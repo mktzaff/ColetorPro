@@ -453,7 +453,7 @@ html:not(.is-admin) .admin-only{display:none!important}
 <div class="grid-kpi" id="kpis"></div>
 <div class="section-title">Visão operacional</div>
 <div class="grid2"><section class="card visits-day-card"><div class="card-title" id="chTitle"></div><div class="card-sub" id="chSub"></div><div class="bar-chart" id="chart"></div><div class="legend"><span><i class="r"></i>Realizadas</span><span><i class="n"></i>Agendadas</span></div></section>
-<section class="card operation-card"><div class="card-title">Aproveitamento da operação</div><div class="card-sub">Execução das visitas e utilização das horas contratadas</div><div class="progress-wrap"><div class="progress-top"><span>Visitas realizadas</span><strong id="vp"></strong></div><div class="progress"><div class="exec" id="vb"></div></div></div><div class="progress-wrap"><div class="progress-top"><span>Horas executadas</span><strong id="hp"></strong></div><div class="progress"><div class="hours" id="hb"></div></div></div><div class="metric-row"><span>Gap de visitas</span><b id="vg"></b></div><div class="metric-row"><span>Gap de horas</span><b id="hg"></b></div><div class="metric-row"><span>Não compareceu</span><b id="nc"></b></div><div class="metric-row"><span>Em andamento</span><b id="ea"></b></div><div class="metric-row"><span>Agendado (a realizar)</span><b id="sc"></b></div></section></div>
+<section class="card operation-card"><div class="card-title">Aproveitamento da operação</div><div class="card-sub">Execução das visitas e utilização das horas contratadas</div><div class="progress-wrap"><div class="progress-top"><span>Visitas realizadas</span><strong id="vp"></strong></div><div class="progress"><div class="exec" id="vb"></div></div></div><div class="progress-wrap"><div class="progress-top"><span>Horas executadas</span><strong id="hp"></strong></div><div class="progress"><div class="hours" id="hb"></div></div></div><div class="metric-row"><span>Gap de visitas</span><b id="vg"></b></div><div class="metric-row"><span>Gap de horas</span><b id="hg"></b></div><div class="metric-row"><span>Não compareceu</span><b id="nc"></b></div><div class="metric-row"><span>Em andamento</span><b id="ea"></b></div><div class="metric-row"><span>Agendado (a realizar)</span><b id="sc"></b></div><div class="metric-row"><span>Outros (visita avulsa etc.)</span><b id="ou"></b></div></section></div>
 <section class="card visits-store-card"><div class="card-title" id="storeChTitle">Visitas por loja</div><div class="card-sub" id="storeChSub">Agendadas x realizadas por loja</div><div class="bar-chart store-chart" id="storeChart"></div><div class="legend"><span><i class="r"></i>Realizadas</span><span><i class="n"></i>Agendadas</span></div></section>
 <div class="section-title">Tempo de atendimento e qualidade</div>
 <div class="grid3"><section class="card"><div class="card-title">Tempo médio de atendimento</div><div class="card-sub">Por visita realizada</div><div class="score"><div><div class="score-num" id="at"></div><div class="score-max">por visita</div></div><div><div class="small-note">Menor atendimento</div><div class="score-num" style="font-size:32px" id="mt"></div><div class="score-max">minutos</div></div></div></section>
@@ -493,8 +493,19 @@ const $=id=>document.getElementById(id);
 let appLoadingDepth=0;function showAppLoading(message='Carregando informações. Aguarde um instante…'){appLoadingDepth++;const el=$('appLoading');if(el){$('appLoadingText').textContent=message;el.classList.add('show');document.body.style.overflow='hidden'}}function hideAppLoading(){appLoadingDepth=Math.max(0,appLoadingDepth-1);if(!appLoadingDepth){const el=$('appLoading');if(el){el.classList.remove('show');document.body.style.overflow=''}}}
 const fI=n=>new Intl.NumberFormat('pt-BR').format(Math.round(n)),fP=n=>(Number(n)||0).toFixed(1).replace('.',',')+'%',fH=m=>{m=Math.round(Number(m)||0);const s=m<0?'-':'';m=Math.abs(m);return s+String(Math.floor(m/60)).padStart(2,'0')+'h'+String(m%60).padStart(2,'0')},fMin=m=>m==null?'—':Math.round(m)+' min',fN=n=>n?n.toFixed(2).replace('.',','):'—';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const normSt=s=>{const t=(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();if(t.startsWith('conclu')||t.includes('avaliacao pendente'))return 'Concluido';if(t.includes('andamento'))return 'Em Andamento';if(t.includes('agendad'))return 'Agendado';if(t.includes('compareceu'))return 'Não Compareceu';return s.trim()};
-const hm=s=>{s=(s||'').trim();if(!s.includes(':'))return 0;const[a,b]=s.split(':');return (+a||0)*60+(+b||0)};
+const normSt=s=>{
+ const raw=String(s??'').trim();
+ const t=raw.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[_-]+/g,' ').replace(/\s+/g,' ').trim();
+ // A classificação é feita exclusivamente pelo conteúdo da coluna STATUS.
+ // A ordem evita que "não compareceu" seja confundido com outros termos.
+ if(/nao\s*(compareceu|comparec|comparecimento)|nao\s*foi|ausente|\bfalta\b|no\s*show/.test(t))return 'Não Compareceu';
+ if(/avaliacao\s+pendente|^conclu|\bconcluid/.test(t))return 'Concluido';
+ if(/andamento|em\s+atendimento|atendimento\s+iniciado/.test(t))return 'Em Andamento';
+ if(/agend/.test(t))return 'Agendado'; // inclui "Agendando" e "Agendado"
+ if(/avulsa/.test(t))return 'Visita Avulsa';
+ return raw||'Sem status';
+};
+const hm=s=>{s=String(s??'').trim();const m=s.match(/^(-?\d+):(-?\d{1,2})$/);if(!m)return 0;const h=Number(m[1]),min=Number(m[2]);if(!Number.isFinite(h)||!Number.isFinite(min)||Math.abs(min)>59)return 0;const sign=(h<0||min<0)?-1:1;return sign*(Math.abs(h)*60+Math.abs(min))};
 
 /* CORREÇÃO: normaliza datas com ano de 2 ou 4 dígitos para o mesmo padrão DD/MM/AAAA. */
 const normalizarData=s=>{
@@ -667,29 +678,171 @@ function parse(txt){
  // Usa os títulos do relatório quando disponíveis, mas mantém fallback para o layout original.
  const header=lines[0].split(';').map(v=>v.trim().toLocaleLowerCase('pt-BR'));
  const findCol=(patterns,fallback)=>{const i=header.findIndex(h=>patterns.some(p=>h===p||h.includes(p)));return i>=0?i:fallback};
- const ix={loja:findCol(['loja'],0),forn:findCol(['fornecedor'],1),comp:findCol(['comprador'],2),prom:findCol(['promotor'],3),status:findCol(['status'],5),periodo:findCol(['entrada e saída','entrada e saida'],6),tempo:findCol(['tempo'],7),aval:findCol(['avaliação','avaliacao'],9),nota:findCol(['nota'],10),contr:findCol(['total horas contratadas','horas contratadas'],13)};
+ const ix={plan:findCol(['planejamento'],4),loja:findCol(['loja'],0),forn:findCol(['fornecedor'],1),comp:findCol(['comprador'],2),prom:findCol(['promotor'],3),status:findCol(['status'],5),periodo:findCol(['entrada e saída','entrada e saida'],6),tempo:findCol(['tempo'],7),aval:findCol(['usuário avaliação','usuario avaliacao','avaliação','avaliacao'],8),nota:findCol(['nota'],10),contr:findCol(['total horas contratadas','horas contratadas'],13)};
  for(let i=1;i<lines.length;i++){
-  const l=lines[i];if(!l.trim())continue;const c=l.split(';');
-  // O CSV recebido tem campos vazios extras no fim; eles são ignorados sem deslocar as colunas nomeadas.
-  if(c.length<Math.max(ix.loja,ix.forn,ix.status,ix.periodo,ix.tempo,ix.nota,ix.contr)+1)continue;
+  const l=lines[i];if(!l.trim())continue;
+  // Não elimina linhas idênticas: sem um identificador único de visita,
+  // não é possível afirmar que sejam duplicatas. Cada linha do relatório conta.
+  const c=l.split(';');
+  if(c.length<Math.max(ix.loja,ix.forn,ix.status,ix.periodo,ix.tempo)+1)continue;
+  // Colunas do fim lidas de trás para frente (ignora vazios finais), porque campos de texto com ';' deslocam as colunas.
+  const t=c.slice();while(t.length&&!String(t[t.length-1]).trim())t.pop();
+  const fromEnd=n=>(t[t.length-n]??'').trim();
   const val=k=>(c[ix[k]]??'').trim();
-  const periodo=val('periodo');const ent=periodo.split(/\s+-\s+/);const d=normalizarData(ent[0]||'');
-  const numeroNota=Number(String(val('nota')).replace(',','.'));
-  out.push({loja:val('loja'),forn:val('forn'),comp:val('comp'),prom:val('prom'),status:normSt(val('status')),date:d,tempo:hm(val('tempo')),nota:Number.isFinite(numeroNota)?numeroNota:0,contr:hm(val('contr')),loja_ok:1,aval:val('aval')});
+  const periodo=val('periodo');const ent=periodo.split(/\s+-\s+/);
+  // A linha é a unidade da visita. Planejamento é a data principal; Entrada e Saída
+  // só fornece uma data de apoio quando Planejamento está vazio (ex.: concluídas).
+  let d=normalizarData(val('plan'));if(!d)d=normalizarData(ent[0]||'');
+  const numeroNota=Number(fromEnd(6).replace(',','.'));
+  out.push({loja:val('loja'),forn:val('forn'),comp:val('comp'),prom:val('prom'),status:normSt(val('status')),date:d,tempo:hm(val('tempo')),nota:Number.isFinite(numeroNota)?numeroNota:0,contr:hm(fromEnd(3)),loja_ok:1,aval:val('aval')});
  }
  return out
 }
+/* Importação mensal robusta: lê diretamente a matriz do Excel/CSV, sem reconstruir CSV
+   por split(';'). Assim, campos vazios ou textos com delimitadores não deslocam a coluna Status. */
+function parseWorksheet(ws){
+ const matrix=XLSX.utils.sheet_to_json(ws,{header:1,defval:'',raw:false});
+ if(!matrix.length)return [];
+ const headers=matrix[0].map(normHeaderVisit);
+ const find=(names,fallback=-1)=>{const i=headers.findIndex(h=>names.some(n=>h===n||h.includes(n)));return i>=0?i:fallback};
+ const ix={
+  loja:find(['loja'],0),forn:find(['fornecedor'],1),comp:find(['comprador'],2),prom:find(['promotor'],3),
+  plan:find(['planejamento'],4),status:find(['status'],5),periodo:find(['entradaesaida'],6),tempo:find(['tempo'],7),
+  aval:find(['usuarioavaliacao'],8),avaliacao:find(['avaliacao'],9),nota:find(['nota'],10),contr:find(['totalhorascontratadas'],13)
+ };
+ if(ix.status<0||ix.loja<0||ix.forn<0)throw new Error('Não encontrei as colunas Loja, Fornecedor e Status no arquivo. Confira o cabeçalho original do relatório.');
+ const get=(row,k)=>String(row[ix[k]]??'').trim();
+ const out=[];
+ for(let i=1;i<matrix.length;i++){
+  const row=matrix[i];if(!row||!row.some(v=>String(v??'').trim()))continue;
+  /*
+   * O CSV original tem campos de avaliação/comentários que podem conter ponto e vírgula
+   * sem aspas. Nessas linhas, o leitor abre colunas extras no meio do registro e desloca
+   * Nota, médias e horas. As seis colunas finais são fixas: Nota, Média Promotor,
+   * Média Fornecedor, Total Horas Contratadas, Total de Horas Executadas e Saldo.
+   * Por isso, localizamos esse bloco a partir do último campo não vazio da linha,
+   * em vez de confiar em posições absolutas depois da coluna Avaliação. Se o bloco
+   * estiver incompleto, a visita continua sendo importada; campos financeiros
+   * e de avaliação ausentes recebem apenas o fallback do próprio cabeçalho.
+   */
+  let last=-1;for(let j=row.length-1;j>=0;j--){if(String(row[j]??'').trim()){last=j;break}}
+  // As colunas finais (Nota, médias, horas e saldo) podem estar vazias
+  // em algumas linhas do Excel. A ausência desses campos opcionais NUNCA
+  // pode descartar uma visita. Quando o bloco final completo existe, lemos
+  // de trás para frente para tolerar ';' dentro do texto da avaliação;
+  // quando está incompleto, usamos os índices dos cabeçalhos e mantemos
+  // os valores ausentes como zero, sem excluir a linha.
+  const tailStart=last-5;
+  const hasCompleteTail=tailStart>=10 && last>=15;
+  const notaRaw=String((hasCompleteTail?row[tailStart]:row[ix.nota])??'').trim().replace(',','.');
+  const nota=notaRaw?Number(notaRaw):0;
+  const contratoRaw=String((hasCompleteTail?row[tailStart+3]:row[ix.contr])??'').trim();
+  const periodo=get(row,'periodo'),ent=periodo.split(/\s+-\s+/);
+  // Planejamento prevalece para filtros por data. Entrada e Saída é fallback
+  // apenas para linhas concluídas sem data de planejamento.
+  const planning=normalizarDataVisita(row[ix.plan]);
+  let date=planning;if(!date)date=normalizarDataVisita(row[ix.periodo]??ent[0]??'');
+  out.push({
+   loja:get(row,'loja'),forn:get(row,'forn'),comp:get(row,'comp'),prom:get(row,'prom'),
+   status:normSt(get(row,'status')),date,planning,tempo:hm(get(row,'tempo')),
+   nota:Number.isFinite(nota)?nota:0,contr:hm(contratoRaw),loja_ok:1,aval:get(row,'aval')
+  });
+ }
+ return out;
+}
+function normHeaderVisit(v){return String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'')}
+function normalizarDataVisita(value){
+ if(value instanceof Date&&!isNaN(value))return `${String(value.getUTCDate()).padStart(2,'0')}/${String(value.getUTCMonth()+1).padStart(2,'0')}/${value.getUTCFullYear()}`;
+ if(typeof value==='number'&&Number.isFinite(value)&&value>20000&&value<80000){const d=new Date(Date.UTC(1899,11,30)+Math.round(value)*86400000);return `${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCMonth()+1).padStart(2,'0')}/${d.getUTCFullYear()}`}
+ const s=String(value??'').trim();if(!s)return '';
+ let m=s.match(/(\d{1,4})[\/.-](\d{1,2})[\/.-](\d{2,4})/);if(!m)return normalizarData(s);
+ let a=Number(m[1]),b=Number(m[2]),c=Number(m[3]),day,month,year;
+ if(m[1].length===4){year=a;month=b;day=c}
+ else if(a>12){day=a;month=b;year=c}
+ else if(b>12){month=a;day=b;year=c}
+ else{day=a;month=b;year=c} // O relatório é brasileiro: DD/MM/AA.
+ if(year<100)year+=2000;const dt=new Date(Date.UTC(year,month-1,day));
+ if(dt.getUTCFullYear()!==year||dt.getUTCMonth()!==month-1||dt.getUTCDate()!==day)return '';
+ return `${String(day).padStart(2,'0')}/${String(month).padStart(2,'0')}/${year}`;
+}
+function parseVisitCsv(text){
+ const lines=String(text??'').replace(/^\uFEFF/,'').split(/\r?\n/);if(!lines.length)return [];
+ const delimiter=(lines[0].match(/;/g)||[]).length>=(lines[0].match(/,/g)||[]).length?';':',';
+ const headers=lines[0].split(delimiter).map(normHeaderVisit);
+ const find=(names,fallback)=>{const i=headers.findIndex(h=>names.some(n=>h===n||h.includes(n)));return i>=0?i:fallback};
+ const ix={loja:find(['loja'],0),forn:find(['fornecedor'],1),comp:find(['comprador'],2),prom:find(['promotor'],3),plan:find(['planejamento'],4),status:find(['status'],5),periodo:find(['entradaesaida'],6),tempo:find(['tempo'],7),aval:find(['usuarioavaliacao'],8)};
+ if(ix.status<0||ix.loja<0||ix.forn<0)throw new Error('Não encontrei Loja, Fornecedor e Status no cabeçalho do CSV.');
+ const out=[];
+ for(let i=1;i<lines.length;i++){
+  const line=lines[i];if(!line.trim())continue;
+  // Os campos necessários para a visita estão antes da coluna Avaliação.
+  // Delimitadores extras nos comentários não deslocam Planejamento nem Status.
+  const c=line.split(delimiter),val=k=>String(c[ix[k]]??'').trim();
+  const tail=c.slice();while(tail.length&&!String(tail[tail.length-1]).trim())tail.pop();
+  const fromEnd=n=>String(tail[tail.length-n]??'').trim();
+  const periodo=val('periodo'),entrada=(periodo.split(/\s+-\s+/)[0]||'');
+  const planning=normalizarDataVisita(val('plan'));
+  const date=planning||normalizarDataVisita(entrada);
+  const notaRaw=fromEnd(6).replace(',','.');const notaNum=notaRaw?Number(notaRaw):0;
+  out.push({loja:val('loja'),forn:val('forn'),comp:val('comp'),prom:val('prom'),status:normSt(val('status')),date,planning,tempo:hm(val('tempo')),nota:Number.isFinite(notaNum)?notaNum:0,contr:hm(fromEnd(3)),loja_ok:1,aval:val('aval')});
+ }
+ return out;
+}
+
+function visitKeyPart(v){
+ return String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim();
+}
+function visitPlanningKey(r){
+ // Planejamento identifica a visita agendada. Não usar Entrada e Saída aqui:
+ // uma visita pode ter sido concluída por outro promotor na mesma data planejada.
+ const plan=normalizarDataVisita(r.planning||'');
+ if(!plan)return '';
+ return [visitKeyPart(r.loja),visitKeyPart(r.forn),visitKeyPart(r.comp),plan].join('|');
+}
+function visitDate(r){
+ // Planejamento é a data de referência da visita planejada.
+ // Para visitas já realizadas sem Planejamento preenchido, usa-se a data real
+ // de Entrada e Saída, previamente guardada em date durante a importação.
+ return normalizarDataVisita(r?.planning||'') || normalizarDataVisita(r?.date||'');
+}
+function effectiveVisitRows(rows){
+ // REGRA DEFINITIVA: CADA LINHA DO RELATÓRIO É UMA VISITA INDIVIDUAL.
+ // Planejamento determina a data de referência; Status determina a categoria.
+ // Nunca agrupar ou deduplicar por loja, fornecedor, comprador, planejamento,
+ // entrada/saída ou status. Duas linhas iguais continuam sendo duas visitas.
+ return (Array.isArray(rows)?rows:[]).map(r=>({...r,date:visitDate(r),status:normSt(r?.status)}));
+}
+
 function agg(rows){
- const lojas=new Set(),cm={};let ag=0,re=0,nc=0,ea=0,sc=0,tm=0,mn=null,ns=0,nn=0;
- for(const r of rows){lojas.add(r.loja);cm[r.forn+'|'+r.loja]=r.contr;ag++;
-  if(r.status==='Não Compareceu')nc++;else if(r.status==='Em Andamento')ea++;else if(r.status==='Agendado')sc++;
-  else if(r.status==='Concluido'){re++;tm+=r.tempo;if(r.tempo>0&&(mn==null||r.tempo<mn))mn=r.tempo;if(r.nota>0){ns+=r.nota;nn++}}}
- let c=0;for(const k in cm)c+=cm[k];
- return{lojas:lojas.size,ag,real:re,nc,ea,sc,contr:c,exec:tm,pct:ag?re/ag*100:0,util:c?tm/c*100:null,avg:re?tm/re:0,min:mn,nota:nn?ns/nn:0}}
+ const allRows=rows,visitRows=effectiveVisitRows(rows);
+ const lojas=new Set(),cm={};
+ // TOTAL DE VISITAS = quantidade de linhas recebidas. Não depende do Status.
+ // Assim, status vazio/novo/não mapeado nunca faz uma visita desaparecer do total.
+ let ag=visitRows.length,re=0,nc=0,ea=0,sc=0,ou=0,tm=0,mn=null,ns=0,nn=0;
+ // Preserva a apuração original de lojas e horas contratadas usando todas as linhas.
+ for(const r of allRows){
+  if(r.loja)lojas.add(r.loja);
+  cm[r.forn+'|'+r.loja]=r.contr;
+ }
+ // Status classifica cada linha, mas nunca cria ou remove uma visita do total.
+ for(const r of visitRows){
+  const status=normSt(r.status);
+  if(status==='Não Compareceu'){nc++}
+  else if(status==='Em Andamento'){ea++}
+  else if(status==='Agendado'){sc++}
+  else if(status==='Concluido'){
+   re++;tm+=Number(r.tempo)||0;
+   if(r.tempo>0&&(mn==null||r.tempo<mn))mn=r.tempo;
+   if(r.nota>0){ns+=r.nota;nn++}
+  }else ou++;
+ }
+ let c=0;for(const k in cm)c+=Number(cm[k])||0;
+ return{lojas:lojas.size,ag,real:re,nc,ea,sc,ou,contr:c,exec:tm,pct:ag?re/ag*100:0,util:c?tm/c*100:null,avg:re?tm/re:0,min:mn,nota:nn?ns/nn:0}
+}
 function group(rows,key){const m=new Map();for(const r of rows){const k=typeof key==='function'?key(r):r[key];if(!m.has(k))m.set(k,[]);m.get(k).push(r)}return[...m].map(([k,v])=>({name:k,...agg(v),rows:v}))}
 const dkey=d=>dataOrdenavel(d);
 function render(){
- const sel=curInd,all=sel==='__all__';cur=all?ALL:ALL.filter(r=>r.forn===sel);const O=agg(cur);
+ const sel=curInd,all=sel==='__all__';cur=all?ALL:ALL.filter(r=>auxPairMatches(r.forn,sel));const O=agg(cur);
  $('ttl').innerHTML=all?'EXECUÇÃO GERAL <span>| Dashboard</span>':'INDÚSTRIA <span>| '+esc(sel.length>48?sel.slice(0,46)+'…':sel)+'</span>';
  $('sub').textContent=all?'Panorama consolidado de todas as indústrias, lojas, horas, visitas e qualidade':sel+' • visão detalhada por loja, promotor e visita';
  ctrMsg();
@@ -718,7 +871,7 @@ function render(){
  $('kpis').innerHTML='<div class="kpi-primary-grid">'+primary.map((x,i)=>`<div class="kpi-primary ${x[3]}"><div class="kpi-primary-label"><span class="kpi-dot"></span>${x[0]}</div><div class="kpi-primary-value">${x[1]}</div><div class="kpi-primary-note">${x[2]}</div></div>`).join('')+'</div>'+
   '<div class="kpi-secondary-grid'+(all?' five':'')+'">'+secondary.map(x=>`<div class="kpi-secondary"><div class="kpi-secondary-label">${x[0]}</div><div class="kpi-secondary-value">${x[1]}</div><div class="kpi-secondary-note">${x[2]}</div></div>`).join('')+contractCard+revenueCard+'</div>';
  $('vp').textContent=fP(O.pct);$('hp').textContent=O.util==null?'—':fP(O.util);$('vb').style.width=Math.min(O.pct,100)+'%';$('hb').style.width=Math.min(O.util||0,100)+'%';
- $('vg').textContent=fI(O.real-O.ag)+' visitas';$('hg').textContent=fH(O.exec-O.contr);$('nc').textContent=fI(O.nc);$('ea').textContent=fI(O.ea);$('sc').textContent=fI(O.sc);
+ $('vg').textContent=fI(O.real-O.ag)+' visitas';$('hg').textContent=fH(O.exec-O.contr);$('nc').textContent=fI(O.nc);$('ea').textContent=fI(O.ea);$('sc').textContent=fI(O.sc);$('ou').textContent=fI(O.ou);
  $('at').textContent=fH(O.avg);$('mt').textContent=O.min??'—';$('as').textContent=fN(O.nota);const rating=Math.max(0,Math.min(5,Number(O.nota)||0)),stars=$('asStars');if(stars){stars.style.setProperty('--star-fill',(rating/5*100)+'%');stars.setAttribute('aria-label',rating>0?'Nota média '+fN(O.nota)+' de 5':'Sem avaliações registradas')}
  let cg,title,sub;
  if(all){cg=group(cur,'forn').sort((a,b)=>b.real-a.real).slice(0,12);title='Visitas por indústria';sub='Top 12 por visitas realizadas • agendadas x realizadas'}
@@ -756,43 +909,52 @@ function render(){
 }
 function renderTable(){
  const q=$('q').value.toLowerCase();let cols,data,title,sub;
- const std=[['ag','Agendadas',x=>fI(x.ag)],['real','Realizadas',x=>fI(x.real)],['pct','Execução',x=>badge(x.pct)],['nc','Não comp.',x=>fI(x.nc)],['ea','Em andamento',x=>fI(x.ea)],['sc','Agendado',x=>fI(x.sc)],['contr','H. contratadas',x=>fH(x.contr)],['exec','H. executadas',x=>fH(x.exec)],['util','Util. horas',x=>badge(x.util)],['avg','Tempo médio',x=>fH(x.avg)],['min','Menor min.',x=>fMin(x.min)],['nota','Nota / 5',x=>fN(x.nota)]];
+ const std=[['ag','Total de visitas',x=>fI(x.ag)],['real','Concluídas',x=>fI(x.real)],['pct','Execução',x=>badge(x.pct)],['nc','Não comp.',x=>fI(x.nc)],['ea','Em andamento',x=>fI(x.ea)],['sc','Agendado',x=>fI(x.sc)],['ou','Outros',x=>fI(x.ou)],['contr','H. contratadas',x=>fH(x.contr)],['exec','H. executadas',x=>fH(x.exec)],['util','Util. horas',x=>badge(x.util)],['avg','Tempo médio',x=>fH(x.avg)],['min','Menor min.',x=>fMin(x.min)],['nota','Nota / 5',x=>fN(x.nota)]];
  if(tab==='visitas'){
-  title='Todas as visitas';data=cur.map(r=>({...r}));
-  cols=[['date','Data',x=>esc(x.date)],['loja','Loja',x=>esc(x.loja)],['prom','Promotor',x=>esc(x.prom)],['comp','Comprador',x=>esc(x.comp||'—')],['status','Status',x=>`<span class="badge ${x.status==='Concluido'?'ok':x.status==='Não Compareceu'?'bad':x.status==='Agendado'?'':'warn'}">${esc(x.status)}</span>`],['tempo','Tempo',x=>fH(x.tempo)],['nota','Nota',x=>x.nota?esc(x.nota):'—']];
+  title='Todas as visitas';data=effectiveVisitRows(cur).map(r=>({...r}));
+  cols=[['date','Planejamento / data',x=>esc(x.date)],['loja','Loja',x=>esc(x.loja)],['prom','Promotor',x=>esc(x.prom)],['comp','Comprador',x=>esc(x.comp||'—')],['status','Status',x=>`<span class="badge ${x.status==='Concluido'?'ok':x.status==='Não Compareceu'?'bad':x.status==='Agendado'?'':'warn'}">${esc(x.status)}</span>`],['tempo','Tempo',x=>fH(x.tempo)],['nota','Nota',x=>x.nota?esc(x.nota):'—']];
   data=data.filter(x=>(x.loja+x.prom+x.comp+x.status).toLowerCase().includes(q));sub=fI(data.length)+' visitas';
  }else{
   const key=tab==='forn'?'forn':tab==='lojas'?'loja':'prom';const lab=tab==='forn'?'Indústria':tab==='lojas'?'Loja':'Promotor';
   data=group(cur,key);
    if(tab==='lojas'&&curInd!=='__all__'){
-    // Une lojas pelo número. A mesma unidade não vira duas linhas por trazer
-    // região, prefixo ou escrita diferentes entre visitas e faturamento.
+    // Monta o detalhamento diretamente a partir de cada visita da indústria.
+    // A chave considera bandeira + número da loja para não misturar, por exemplo,
+    // STOK LOJA 21 com COMERCIAL ZAFFARI LOJA 21.
     const storeMap=new Map();
-    const storeIdentityKey=name=>{const id=auxStoreIdentity(name);return id.number?'#'+id.number:'name:'+auxStoreKey(name)};
-    const registerStore=x=>{
-     const key=storeIdentityKey(x.name),current=storeMap.get(key);
-     if(!current){storeMap.set(key,{...x,rows:Array.isArray(x.rows)?x.rows.slice():[]});return}
-     const mergedRows=[...(current.rows||[]),...(x.rows||[])];
-     const metrics=mergedRows.length?agg(mergedRows):current;
-     if(mergedRows.length){
-      // Contrato é contado uma única vez por loja, mesmo quando o nome veio
-      // duplicado na base operacional com outra grafia/região.
-      const contracts=new Map();
-      for(const visit of mergedRows){const id=auxStoreIdentity(visit.loja),store=id.number?'#'+id.number:'name:'+auxCanonical(visit.loja);contracts.set(auxIndustryCanonical(visit.forn)+'|'+store,Number(visit.contr)||0)}
-      metrics.lojas=1;metrics.contr=[...contracts.values()].reduce((sum,value)=>sum+value,0);metrics.util=metrics.contr?metrics.exec/metrics.contr*100:null;
-     }
-     storeMap.set(key,{...metrics,name:current.name||x.name,rows:mergedRows});
+    const storeIdentityKey=name=>{
+     const id=auxStoreIdentity(name),brand=id.brand||'sem-bandeira';
+     return brand+'|'+(id.number?'#'+id.number:'name:'+auxStoreKey(name));
     };
-    for(const x of data)registerStore(x);
-    const addAuxStore=row=>{
+    for(const visit of cur){
+     if(!visit.loja)continue;
+     const key=storeIdentityKey(visit.loja);
+     if(!storeMap.has(key))storeMap.set(key,{name:visit.loja,rows:[]});
+     storeMap.get(key).rows.push(visit);
+    }
+    data=[...storeMap.entries()].map(([key,item])=>{
+     const metrics=agg(item.rows),contracts=new Map();
+     for(const visit of item.rows){
+      const contractKey=auxIndustryCanonical(visit.forn)+'|'+storeIdentityKey(visit.loja);
+      contracts.set(contractKey,Number(visit.contr)||0);
+     }
+     metrics.lojas=1;
+     metrics.contr=[...contracts.values()].reduce((sum,value)=>sum+value,0);
+     metrics.util=metrics.contr?metrics.exec/metrics.contr*100:null;
+     return {...metrics,name:item.name,rows:item.rows};
+    });
+    // Acrescenta lojas existentes no faturamento da indústria mesmo sem visita,
+    // sem alterar os totais das lojas que possuem registros operacionais.
+    const addRevenueStore=row=>{
      if(!row||!auxPairMatches(row.forn,curInd))return;
      const id=auxStoreIdentity(row.loja);if(id.number==='100')return;
-     if(storeMap.has(storeIdentityKey(row.loja)))return;
-     const empty={lojas:0,ag:0,real:0,pct:0,nc:0,ea:0,sc:0,contr:0,exec:0,util:null,avg:0,min:null,nota:0,rows:[]};
-     registerStore({...empty,name:row.loja});
+     const key=storeIdentityKey(row.loja);
+     if(storeMap.has(key)||data.some(x=>storeIdentityKey(x.name)===key))return;
+     const empty={lojas:0,ag:0,real:0,pct:0,nc:0,ea:0,sc:0,ou:0,contr:0,exec:0,util:null,avg:0,min:null,nota:0,rows:[]};
+     data.push({...empty,name:row.loja});
     };
-    STORE_DB.forEach(addAuxStore);REVENUE_DB.forEach(addAuxStore);
-    data=[...storeMap.values()].filter(x=>x.name.toLowerCase().includes(q));
+    REVENUE_DB.forEach(addRevenueStore);
+    data=data.filter(x=>x.name.toLowerCase().includes(q));
     data.forEach(x=>{x.faturamento=revenueFor(curInd,x.name)});
     cols=[['name',lab,x=>esc(x.name)],['faturamento','Faturamento',x=>x.faturamento==null?'—':`<span class="revenue-display" data-revenue-display="${esc(fBRL(x.faturamento))}">${revenueVisible?esc(fBRL(x.faturamento)):'••••••'}</span>`],...std];
    }else if(tab==='forn'){
@@ -805,7 +967,7 @@ function renderTable(){
     data.forEach(x=>{const v=revenueTotal(x.name);x.faturamento=REVENUE_DB.length?v:null});
     cols=[['name',lab,x=>esc(x.name)],['lojas','Lojas',x=>x.lojas],['faturamento','Faturamento',x=>x.faturamento==null?'—':`<span class="revenue-display" data-revenue-display="${esc(fBRL(x.faturamento))}">${revenueVisible?esc(fBRL(x.faturamento)):'••••••'}</span>`],...std]
    }else{data=data.filter(x=>x.name.toLowerCase().includes(q));cols=[['name',lab,x=>esc(x.name)],['lojas','Lojas',x=>x.lojas],...std]}
-  title='Todas as '+(tab==='forn'?'indústrias':tab==='lojas'?'lojas':'promotores');sub=fI(data.length)+' registros • busca e ordenação';
+  title='Todas as '+(tab==='forn'?'indústrias':tab==='lojas'?'lojas':'promotores');sub=fI(data.length)+' registros • total de visitas pela quantidade de linhas; Status apenas classifica cada visita • busca e ordenação';
  }
  const s=sortS;data.sort((a,b)=>{const A=a[s.key],B=b[s.key];if(A==null&&B==null)return 0;if(A==null)return 1;if(B==null)return -1;if(typeof A==='string'||typeof B==='string')return String(A).localeCompare(String(B),'pt-BR',{numeric:true,sensitivity:'base'})*s.dir;return (Number(A)-Number(B))*s.dir});
  $('tbTitle').textContent=title;$('tbSub').textContent=sub;
@@ -851,11 +1013,11 @@ function buildPdfRank(id,data,cols){
  tb.querySelector('thead').innerHTML=th+'</tr>';tb.querySelector('tbody').innerHTML=body;
 }
 function buildPdfDetail(){
- const selectedIndustry=curInd,rows=selectedIndustry==='__all__'?ALL.slice():ALL.filter(r=>r.forn===selectedIndustry),O=agg(rows),all=selectedIndustry==='__all__';
- const std=[['ag','Agendadas',x=>fI(x.ag)],['real','Realizadas',x=>fI(x.real)],['pct','Execução',x=>fP(x.pct)],['nc','Não compareceu',x=>fI(x.nc)],['ea','Em andamento',x=>fI(x.ea)],['sc','Agendado (a realizar)',x=>fI(x.sc)],['contr','Horas contratadas',x=>fH(x.contr)],['exec','Horas executadas',x=>fH(x.exec)],['util','Utilização das horas',x=>x.util==null?'—':fP(x.util)],['avg','Tempo médio',x=>fH(x.avg)],['min','Menor atendimento',x=>fMin(x.min)],['nota','Nota / 5',x=>fN(x.nota)]];
+ const selectedIndustry=curInd,rows=selectedIndustry==='__all__'?ALL.slice():ALL.filter(r=>auxPairMatches(r.forn,selectedIndustry)),O=agg(rows),all=selectedIndustry==='__all__';
+ const std=[['ag','Total de visitas',x=>fI(x.ag)],['real','Concluídas',x=>fI(x.real)],['pct','Execução',x=>fP(x.pct)],['nc','Não compareceu',x=>fI(x.nc)],['ea','Em andamento',x=>fI(x.ea)],['sc','Agendado (a realizar)',x=>fI(x.sc)],['ou','Outros (avulsa etc.)',x=>fI(x.ou)],['contr','Horas contratadas',x=>fH(x.contr)],['exec','Horas executadas',x=>fH(x.exec)],['util','Utilização das horas',x=>x.util==null?'—':fP(x.util)],['avg','Tempo médio',x=>fH(x.avg)],['min','Menor atendimento',x=>fMin(x.min)],['nota','Nota / 5',x=>fN(x.nota)]];
  $('pdfTitle').textContent=all?'Execução geral — relatório completo':'Indústria — '+selectedIndustry;$('pdfContext').textContent=(all?'Todas as indústrias — banco completo':'Indústria selecionada: '+selectedIndustry)+' • '+fI(rows.length)+' visitas';
  const pdfContract=$('pdfContractContext');if(pdfContract){let cc=null;if(!all){if('__COLETOR_EXPORTED_CONTRATO__' in window)cc=window.__COLETOR_EXPORTED_CONTRATO__;else cc=CTR.find(x=>nk(x.fornecedor)===nk(selectedIndustry));}pdfContract.textContent=cc?('Contrato: '+(cc.recebido?'recebido dia '+fD(cc.recebido):'ainda não recebido')+' • '+(cc.atualizado?'atualizado dia '+fD(cc.atualizado):'ainda não atualizado')):'';}
- const summary=[['Visitas agendadas',fI(O.ag),'programadas'],['Visitas realizadas',fI(O.real),fP(O.pct)+' de execução'],['Horas contratadas',fH(O.contr),'base registrada'],['Horas executadas',fH(O.exec),O.util==null?'sem horas contratadas':fP(O.util)+' das contratadas'],['Tempo médio',fH(O.avg),'por visita realizada'],['Nota média',fN(O.nota),'escala máxima 5,0'],['Não compareceu',fI(O.nc),'visitas'],['Em andamento',fI(O.ea),'visitas'],['Agendado (a realizar)',fI(O.sc),'visitas'],['Gap de visitas',fI(O.real-O.ag),'realizadas − agendadas'],['Gap de horas',fH(O.exec-O.contr),'executadas − contratadas'],['Menor atendimento',fMin(O.min),'entre realizadas']];
+ const summary=[['Total de visitas',fI(O.ag),'conforme os status operacionais'],['Visitas realizadas',fI(O.real),fP(O.pct)+' de execução'],['Horas contratadas',fH(O.contr),'base registrada'],['Horas executadas',fH(O.exec),O.util==null?'sem horas contratadas':fP(O.util)+' das contratadas'],['Tempo médio',fH(O.avg),'por visita realizada'],['Nota média',fN(O.nota),'escala máxima 5,0'],['Não compareceu',fI(O.nc),'visitas'],['Em andamento',fI(O.ea),'visitas'],['Agendado (a realizar)',fI(O.sc),'visitas'],['Outros (avulsa etc.)',fI(O.ou),'visitas'],['Gap de visitas',fI(O.real-O.ag),'realizadas − agendadas'],['Gap de horas',fH(O.exec-O.contr),'executadas − contratadas'],['Menor atendimento',fMin(O.min),'entre realizadas']];
  $('pdfSummary').innerHTML=summary.map(x=>`<div class="pdf-summary-item"><div class="label">${x[0]}</div><div class="value">${x[1]}</div><div class="note">${x[2]}</div></div>`).join('');
  // Reproduz no PDF o mesmo comparativo de três meses apresentado no painel.
  const evolutionChart=$('pdfEvolutionChart'),evolutionStats=$('pdfEvolutionStats'),evolutionNote=$('pdfEvolutionNote');
@@ -872,13 +1034,13 @@ function buildPdfDetail(){
  const days=group(rows,'date').filter(g=>g.name).sort((a,b)=>dkey(a.name)-dkey(b.name)),dmx=mxOf(days),showV=days.length<=31;
  $('pdfDayChart').innerHTML=days.map(x=>`<div class="g"><div class="bs"><div class="b n" style="height:${x.ag/dmx*84}px">${showV?`<i>${x.ag}</i>`:''}</div><div class="b r" style="height:${x.real/dmx*84}px">${showV?`<i>${x.real}</i>`:''}</div></div><div class="lb">${esc(x.name.slice(0,5))}</div></div>`).join('');
  const prog=(l,p,c)=>`<div class="pdf-prog"><div class="t"><span>${l}</span><span>${p==null?'—':fP(p)}</span></div><div class="pb"><div style="width:${Math.min(p||0,100)}%;background:${c}"></div></div></div>`,mrow=(l,v)=>`<div class="pdf-m"><span>${l}</span><b>${v}</b></div>`;
- $('pdfOpSide').innerHTML='<div class="pdf-chart-title">Aproveitamento da operação</div>'+prog('Visitas realizadas',O.pct,'#e30613')+prog('Horas executadas',O.util,'#0b2742')+mrow('Gap de visitas',fI(O.real-O.ag)+' visitas')+mrow('Gap de horas',fH(O.exec-O.contr))+mrow('Não compareceu',fI(O.nc))+mrow('Em andamento',fI(O.ea))+mrow('Agendado (a realizar)',fI(O.sc))+mrow('Tempo médio por visita',fH(O.avg))+mrow('Menor atendimento',fMin(O.min))+mrow('Nota média do repositor',fN(O.nota)+' / 5');
+ $('pdfOpSide').innerHTML='<div class="pdf-chart-title">Aproveitamento da operação</div>'+prog('Visitas realizadas',O.pct,'#e30613')+prog('Horas executadas',O.util,'#0b2742')+mrow('Gap de visitas',fI(O.real-O.ag)+' visitas')+mrow('Gap de horas',fH(O.exec-O.contr))+mrow('Não compareceu',fI(O.nc))+mrow('Em andamento',fI(O.ea))+mrow('Agendado (a realizar)',fI(O.sc))+mrow('Outros (avulsa etc.)',fI(O.ou))+mrow('Tempo médio por visita',fH(O.avg))+mrow('Menor atendimento',fMin(O.min))+mrow('Nota média do repositor',fN(O.nota)+' / 5');
  const sg=group(rows,'loja').sort((a,b)=>b.real-a.real||b.ag-a.ag||byName(a,b));$('pdfStoreTitle').textContent='Visitas por loja — todas ('+fI(sg.length)+')';buildPdfRank('pdfStoreChart',sg,[['name','Loja',x=>esc(x.name)],barCol(mxOf(sg)),['ag','Ag.',x=>fI(x.ag)],['real','Real.',x=>fI(x.real)]]);
  ['pdfIndChartTitle','pdfIndChartWrap','pdfIndTitle','pdfIndWrap'].forEach(i=>$(i).style.display=all?'':'none');
  if(all){const ig=group(rows,'forn').sort((a,b)=>b.real-a.real||b.ag-a.ag||byName(a,b));$('pdfIndChartTitle').textContent='Visitas por indústria — todas ('+fI(ig.length)+')';buildPdfRank('pdfIndChart',ig,[['name','Indústria',x=>esc(x.name)],barCol(mxOf(ig)),['ag','Ag.',x=>fI(x.ag)],['real','Real.',x=>fI(x.real)]]);buildPdfTable('pdfInd',ig,[['name','Indústria',x=>esc(x.name)],['lojas','Qtd. lojas',x=>x.lojas],...std])}
  const lojaData=group(rows,'loja').sort((a,b)=>b.real-a.real||a.name.localeCompare(b.name)),promData=group(rows,'prom').sort((a,b)=>b.real-a.real||a.name.localeCompare(b.name));
  buildPdfTable('pdfLojas',lojaData,[['name','Loja',x=>esc(x.name)],['lojas','Qtd. lojas',x=>x.lojas],...std]);buildPdfTable('pdfProm',promData,[['name','Promotor',x=>nomePrivado(x.name)],['lojas','Qtd. lojas',x=>x.lojas],...std]);
- const visitData=rows.slice().sort((a,b)=>dkey(a.date)-dkey(b.date)||a.loja.localeCompare(b.loja)||a.prom.localeCompare(b.prom));
+ const visitData=effectiveVisitRows(rows).slice().sort((a,b)=>dkey(a.date)-dkey(b.date)||a.loja.localeCompare(b.loja)||a.prom.localeCompare(b.prom));
  buildPdfTable('pdfVisitas',visitData,[['date','Data',x=>esc(x.date)],['loja','Loja',x=>esc(x.loja)],['prom','Promotor',x=>nomePrivado(x.prom)],['comp','Comprador',x=>nomePrivado(x.comp||'—')],['status','Status',x=>esc(x.status)],['tempo','Tempo',x=>fH(x.tempo)],['nota','Nota',x=>x.nota?esc(x.nota):'—']]);
  $('pdfDetail').dataset.industry=selectedIndustry;
 }
@@ -988,12 +1150,12 @@ async function loadPublishedData(){
   }else{
    const {data:su,error:se}=await sb.storage.from(BUCKET).createSignedUrl(FILE,60);if(se||!su)throw new Error('sem acesso à base');const res=await fetch(su.signedUrl,{cache:'no-store'});if(!res.ok)throw new Error('dados.json não encontrado');ALL=await res.json();if(!Array.isArray(ALL))throw new Error('dados.json inválido');
    /* Dados publicados também são normalizados, caso o JSON antigo contenha datas em formatos diferentes. */
-   ALL=ALL.map(r=>({...r,date:normalizarData(r.date),tempo:+r.tempo||0,nota:+r.nota||0,contr:+r.contr||0}));
+   ALL=ALL.map(r=>({...r,status:normSt(r.status),date:normalizarData(r.date),planning:normalizarData(r.planning||''),tempo:+r.tempo||0,nota:+r.nota||0,contr:+r.contr||0}));
    suppliers=[...new Set(ALL.map(r=>r.forn))].filter(Boolean).sort((a,b)=>a.localeCompare(b));
    const ds=ALL.map(r=>r.date).filter(Boolean).sort((a,b)=>dkey(a)-dkey(b));$('period').textContent=ds.length?ds[0]+' A '+ds[ds.length-1]:'SEM PERÍODO';$('upd').textContent='Dados publicados em '+new Date().toLocaleDateString('pt-BR');$('indIn').disabled=false;$('pdfBtn').disabled=false;curInd='__all__';$('indIn').value=ALLTXT;
   }
   /* Segurança extra para HTMLs exportados: normaliza também os registros já incorporados. */
-  ALL=ALL.map(r=>({...r,date:normalizarData(r.date),tempo:+r.tempo||0,nota:+r.nota||0,contr:+r.contr||0}));
+  ALL=ALL.map(r=>({...r,status:normSt(r.status),date:normalizarData(r.date),planning:normalizarData(r.planning||''),tempo:+r.tempo||0,nota:+r.nota||0,contr:+r.contr||0}));
   await loadAuxBases();
   $('empty').classList.add('hidden');render();if(ME)applyPermissionUI();else $('app').classList.remove('hidden');return true;
  }catch(err){console.error(err);$('empty').classList.remove('hidden');$('empty').innerHTML='<strong>Não foi possível carregar o dashboard.</strong><br><span style="font-size:12px">'+esc(err?.message||'Confira a base publicada e as permissões de acesso.')+'</span>';if(ME&&!(canPerm('dashboard')||canPerm('consult_industries')||canPerm('visit_details'))) $('app').classList.add('hidden');return false}finally{hideAppLoading()}
@@ -1108,16 +1270,13 @@ $('upFile').onchange=async e=>{
   if(/\.json$/i.test(f.name))rows=JSON.parse(await f.text());
   else{
    if(!window.XLSX)throw new Error('leitor de planilhas não carregou; confira a conexão e recarregue a página');
-   let wb;
    if(/\.csv$/i.test(f.name)||/csv/i.test(f.type)){
-    // Aceita CSV UTF-8, com separador vírgula ou ponto e vírgula; SheetJS detecta o delimitador.
-    const csvText=(await f.text()).replace(/^\uFEFF/,'');
-    wb=XLSX.read(csvText,{type:'string',cellNF:true,raw:false});
+    rows=parseVisitCsv(await f.text());
    }else{
-    wb=XLSX.read(await f.arrayBuffer(),{type:'array',cellNF:true});
+    const wb=XLSX.read(await f.arrayBuffer(),{type:'array',cellNF:true});
+    if(!wb.SheetNames||!wb.SheetNames.length)throw new Error('não foi possível ler a planilha');
+    rows=parseWorksheet(wb.Sheets[wb.SheetNames[0]]);
    }
-   if(!wb.SheetNames||!wb.SheetNames.length)throw new Error('não foi possível ler a planilha/CSV');
-   rows=parse(xlsxToCsv(wb.Sheets[wb.SheetNames[0]]));
    if(!rows.length)throw new Error('nenhuma visita encontrada. Use o CSV ou Excel exportado do ColetorPRO, com cabeçalho na primeira linha e as colunas originais de visitas.');
    body=new Blob([JSON.stringify(rows)],{type:'application/json'});
   }
@@ -1125,11 +1284,17 @@ $('upFile').onchange=async e=>{
   if(!Array.isArray(rows)||!rows.length)throw new Error('o arquivo precisa ser uma lista de visitas');
   const bad=rows.findIndex(r=>!r||typeof r!=='object'||S.some(k=>typeof r[k]!=='string')||N.some(k=>typeof r[k]!=='number'||!isFinite(r[k])));
   if(bad>=0)throw new Error('registro '+(bad+1)+' fora do padrão (campos: '+S.concat(N).join(', ')+')');
-  if(!confirm('Substituir a base atual por '+fI(rows.length)+' registros?')){st.textContent='';return}
+  const statusCounts={concluido:0,agendado:0,andamento:0,naoCompareceu:0,avulsa:0,outros:0};
+  for(const row of rows){const status=normSt(row.status);if(status==='Concluido')statusCounts.concluido++;else if(status==='Agendado')statusCounts.agendado++;else if(status==='Em Andamento')statusCounts.andamento++;else if(status==='Não Compareceu')statusCounts.naoCompareceu++;else if(status==='Visita Avulsa')statusCounts.avulsa++;else statusCounts.outros++}
+  const semPlanejamento=rows.filter(row=>!normalizarData(row.planning)).length;
+  const semData=rows.filter(row=>!visitDate(row)).length;
+  const preview=agg(rows);
+  const resumoStatus='\n\nCONFERÊNCIA DA IMPORTAÇÃO (cada linha = 1 visita):\n• Linhas importadas: '+fI(rows.length)+'\n• Concluídas (inclui Avaliação Pendente): '+fI(statusCounts.concluido)+'\n• Não Compareceu: '+fI(statusCounts.naoCompareceu)+'\n• Agendado/Agendando: '+fI(statusCounts.agendado)+'\n• Em andamento: '+fI(statusCounts.andamento)+'\n• Visita avulsa/outros: '+fI(statusCounts.avulsa+statusCounts.outros)+'\n• Linhas sem Planejamento: '+fI(semPlanejamento)+' (mantidas; usa Entrada e Saída como data alternativa quando disponível)'+(semData?'\n• Linhas sem nenhuma data: '+fI(semData)+' (mantidas e contadas pelo Status)':'')+'\n\nIndicadores de visitas antes de publicar:\n• Visitas programadas/operacionais: '+fI(preview.ag)+'\n• Visitas concluídas: '+fI(preview.real)+'\n• Não Compareceu: '+fI(preview.nc)+'\n• Em andamento: '+fI(preview.ea)+'\n• Agendado: '+fI(preview.sc)+'\n\nOs totais de horas e notas seguem os cálculos já existentes.';
+  if(!confirm('Substituir a base atual por '+fI(rows.length)+' registros?'+resumoStatus)){st.textContent='';return}
   st.textContent='Enviando '+(body.size/1048576).toFixed(1)+' MB…';
   const{error}=await sb.storage.from(BUCKET).upload(FILE,body,{upsert:true,contentType:'application/json',cacheControl:'0'});
   if(error)throw error;
-  const loaded=await loadPublishedData();if(!loaded)throw new Error('O arquivo foi enviado, mas o dashboard não conseguiu carregar a base. Confira o formato dos registros e o acesso ao arquivo dados.json.');await setUpdated();st.textContent='Base atualizada: '+fI(rows.length)+' registros.';
+  const loaded=await loadPublishedData();if(!loaded)throw new Error('O arquivo foi enviado, mas o dashboard não conseguiu carregar a base. Confira o formato dos registros e o acesso ao arquivo dados.json.');await setUpdated();st.textContent='Base atualizada: '+fI(rows.length)+' registros • Não compareceu: '+fI(statusCounts.naoCompareceu)+' • Agendado: '+fI(statusCounts.agendado)+'.';
  }catch(err){st.textContent='Erro: '+(err.message||err)}
 };
 /* ===== Conta e gestão de usuários ===== */
@@ -1440,10 +1605,12 @@ async function parseComparativoImportFile(file){
  else{
   if(!window.XLSX)throw new Error('Leitor de planilhas não carregou. Recarregue a página e tente novamente.');
   let wb;
-  if(/\.csv$/i.test(file.name)||/csv/i.test(file.type)){const text=(await file.text()).replace(/^\uFEFF/,'');wb=XLSX.read(text,{type:'string',cellNF:true,raw:false})}
-  else wb=XLSX.read(await file.arrayBuffer(),{type:'array',cellNF:true});
-  if(!wb.SheetNames||!wb.SheetNames.length)throw new Error('Não foi possível ler a planilha/CSV.');
-  rows=parse(xlsxToCsv(wb.Sheets[wb.SheetNames[0]]));
+  if(/\.csv$/i.test(file.name)||/csv/i.test(file.type))rows=parseVisitCsv(await file.text());
+  else{
+   wb=XLSX.read(await file.arrayBuffer(),{type:'array',cellNF:true});
+   if(!wb.SheetNames||!wb.SheetNames.length)throw new Error('Não foi possível ler a planilha.');
+   rows=parseWorksheet(wb.Sheets[wb.SheetNames[0]]);
+  }
  }
  const S=['loja','forn','comp','prom','status','date'],N=['tempo','nota','contr'];
  if(!Array.isArray(rows)||!rows.length)throw new Error('O arquivo não contém uma lista válida de visitas.');
@@ -1474,9 +1641,21 @@ $('monthFile').onchange=async e=>{
  try{
   st.textContent='Validando arquivo…';let rows;
   if(kind==='visits'){
-   const all=await parseComparativoImportFile(f);rows=all.map(r=>({...r,date:normalizarData(r.date)})).filter(r=>comparativoMonthKey(r.date)===mes);
+   const all=await parseComparativoImportFile(f);
+   const normalized=all.map(r=>({...r,planning:normalizarDataVisita(r.planning||''),date:visitDate(r)}));
+   const dated=normalized.filter(r=>{const d=visitDate(r);return d&&comparativoMonthKey(d)===mes});
+   const undated=normalized.filter(r=>!visitDate(r));
+   const otherMonths=normalized.filter(r=>{const d=visitDate(r);return d&&comparativoMonthKey(d)!==mes});
+   rows=[...dated,...undated];
    if(!rows.length)throw new Error('O arquivo não tem nenhuma visita de '+lbl+'.');
-   if(!confirm('Substituir as visitas de '+lbl+' por '+fI(rows.length)+' registros'+(rows.length<all.length?' ('+fI(all.length-rows.length)+' linhas de outros meses serão ignoradas)':'')+(isCur?'? A base do dashboard passará a mostrar somente este mês.':'?'))){st.textContent='';return}
+   const note=undated.length?' • '+fI(undated.length)+' registro(s) sem Planejamento nem data de Entrada e Saída serão mantidos':'';
+   const monthAudit='\n\nAuditoria da data: '+fI(dated.length)+' registros no mês de '+lbl+' + '+fI(undated.length)+' sem data = '+fI(rows.length)+' registros selecionados. '+fI(otherMonths.length)+' registros com data de outro mês serão ignorados. Cada linha é uma visita; nenhuma é deduplicada.';
+   const counts={realizadas:0,naoCompareceu:0,agendadas:0,andamento:0,avulsas:0,outros:0};
+   for(const r of rows){const status=normSt(r.status);if(status==='Concluido')counts.realizadas++;else if(status==='Não Compareceu')counts.naoCompareceu++;else if(status==='Agendado')counts.agendadas++;else if(status==='Em Andamento')counts.andamento++;else if(status==='Visita Avulsa')counts.avulsas++;else counts.outros++;}
+   const confer='\n\nConferência por Status (cada linha = 1 visita):\n• Concluídas: '+fI(counts.realizadas)+'\n• Não Compareceu: '+fI(counts.naoCompareceu)+'\n• Agendadas: '+fI(counts.agendadas)+'\n• Em andamento: '+fI(counts.andamento)+'\n• Visitas avulsas: '+fI(counts.avulsas)+'\n• Outros/sem status reconhecido: '+fI(counts.outros);
+   const referencia42=rows.filter(r=>{const id=auxStoreIdentity(r.loja);return id.number==='42'&&id.brand==='stok'&&auxIndustryCanonical(r.forn)===auxIndustryCanonical('BONARE - GOIAS VERDE ALIMENTOS LTDA')});
+   const auditoriaReferencia=referencia42.length?'\n• Conferência STOK CENTER LOJA 42 + BONARE: '+fI(referencia42.length)+' visitas ('+fI(referencia42.filter(r=>normSt(r.status)==='Concluido').length)+' concluídas; '+fI(referencia42.filter(r=>normSt(r.status)==='Não Compareceu').length)+' não comparecimentos)':'';
+   if(!confirm('Substituir as visitas de '+lbl+' por '+fI(rows.length)+' registros'+(otherMonths.length?' ('+fI(otherMonths.length)+' linhas de outros meses serão ignoradas)':'')+note+confer+auditoriaReferencia+monthAudit+(isCur?'? A base do dashboard passará a mostrar somente este mês.':'?'))){st.textContent='';return}
   }else{
    if(!isCur)throw new Error('O faturamento só é aceito para a base vigente ('+comparativoWindow()[2].mes.split('-').reverse().join('/')+').');rows=await parseAuxFile(f,'revenue');
    if(!confirm('Substituir o faturamento de '+lbl+' por '+fI(rows.length)+' registros?'+(isCur?' Ele também passa a ser o faturamento do dashboard.':''))){st.textContent='';return}
