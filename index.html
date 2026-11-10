@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'unsafe-inline'; img-src data:; font-src data:; connect-src https://*.supabase.co; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>ColetorPRO | Dashboard por Indústria</title><style>
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/ https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/; style-src 'unsafe-inline'; img-src data:; font-src data:; connect-src https://*.supabase.co; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>ColetorPRO | Dashboard por Indústria</title><style>
 :root{--navy:#0b2742;--navy2:#123b5f;--red:#e30613;--bg:#f4f6f8;--card:#fff;--muted:#6c7783;--line:#e5e9ee;--green:#20a36a;--amber:#f0a51a;--danger:#d92935;--shadow:0 8px 24px rgba(11,39,66,.08)}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--navy);font-family:Arial,Helvetica,sans-serif}.header{min-height:150px;background:#fff;position:relative;overflow:hidden;border-bottom:1px solid #e8ebef;padding:28px 44px 24px}.header:after{content:"";position:absolute;right:-30px;top:-100px;width:270px;height:310px;background:var(--red);transform:rotate(16deg);border-radius:24px}.header:before{content:"";position:absolute;right:105px;top:-95px;width:85px;height:300px;border:2px solid var(--red);transform:rotate(16deg);border-radius:20px}.brand{position:relative;z-index:2}.eyebrow{font-size:12px;letter-spacing:3px;font-weight:800;color:var(--red);text-transform:uppercase}h1{margin:4px 0 3px;font-size:38px;letter-spacing:-1.4px;font-weight:900}h1 span{color:var(--red)}.subtitle{font-size:14px;color:var(--muted);font-weight:600}.period{position:absolute;z-index:3;right:45px;bottom:24px;background:var(--navy);color:#fff;padding:9px 15px;border-radius:8px;font-size:12px;font-weight:800}.wrap{padding:24px 44px 44px;max-width:1700px;margin:auto}.grid-kpi{display:grid;grid-template-columns:repeat(8,1fr);gap:12px;margin-bottom:20px}.kpi{background:var(--card);border-radius:12px;padding:16px;box-shadow:var(--shadow);border-top:4px solid var(--red);min-height:112px}.kpi.dark{background:var(--navy);color:#fff}.kpi .label{font-size:10px;color:var(--muted);text-transform:uppercase;font-weight:800;letter-spacing:.7px}.kpi.dark .label{color:#d8e1e9}.kpi .value{font-size:27px;font-weight:900;margin-top:7px;letter-spacing:-1px}.kpi .note{font-size:10px;color:var(--muted);margin-top:5px}.kpi.dark .note{color:#d8e1e9}.section-title{display:flex;align-items:center;gap:10px;margin:25px 0 12px;font-size:18px;font-weight:900;text-transform:uppercase}.section-title:before{content:"";width:7px;height:24px;background:var(--red);border-radius:3px}.grid2{display:grid;grid-template-columns:1fr;gap:18px}.visits-day-card{min-height:0}.operation-card{min-height:0}.grid3{display:grid;grid-template-columns:.82fr .82fr 1.36fr;gap:18px}.card{background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:20px}.card-title{font-size:14px;font-weight:900;text-transform:uppercase;margin-bottom:4px}.card-sub{font-size:11px;color:var(--muted);margin-bottom:14px}.bar-chart{height:350px;display:flex;align-items:flex-end;gap:9px;padding:18px 8px 70px;border-bottom:1px solid var(--line);overflow:visible!important}.bar-group{height:100%;flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;position:relative;min-width:35px}.bars{height:245px;width:100%;display:flex;align-items:flex-end;justify-content:center;gap:4px}.bar{width:24px;border-radius:5px 5px 0 0;position:relative;min-height:2px}.bar.red{background:var(--red)}.bar.navy{background:var(--navy)}.bar span{position:absolute;top:-17px;left:50%;transform:translateX(-50%);font-size:8px;font-weight:800;white-space:nowrap}.bar-label{font-size:8px;color:var(--muted);font-weight:800;position:absolute;bottom:-48px;width:88px;white-space:normal;line-height:1.15;text-align:center;overflow:visible;word-break:break-word;transform:translateX(-50%);left:50%;transform-origin:center top}.legend{display:flex;gap:15px;font-size:10px;color:var(--muted);margin-top:12px}.legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px}.legend .r{background:var(--red)}.legend .n{background:var(--navy)}.progress-wrap{margin:15px 0}.progress-top{display:flex;justify-content:space-between;font-size:11px;font-weight:800}.progress{height:13px;background:#e9edf1;border-radius:8px;overflow:hidden;margin-top:6px}.progress>div{height:100%;border-radius:8px}.exec{background:var(--red)}.hours{background:var(--navy)}.grid3>.card:nth-child(1),.grid3>.card:nth-child(2){padding:16px}.grid3>.card:nth-child(1) .score,.grid3>.card:nth-child(2) .score{gap:12px}.grid3>.card:nth-child(1) .score-num,.grid3>.card:nth-child(2) .score-num{font-size:44px}.grid3>.card:nth-child(1) .score-num[style],.grid3>.card:nth-child(2) .score-num[style]{font-size:28px!important}.score{display:flex;align-items:center;gap:20px}.score-num{font-size:52px;font-weight:900;color:var(--red);line-height:1}.score-max{font-size:13px;color:var(--muted);font-weight:800}.stars{font-size:22px;letter-spacing:2px;color:#f0a51a}.metric-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);font-size:12px}.metric-row:last-child{border-bottom:0}.metric-row b{font-size:13px}.callout{background:#f8fafb;border-left:5px solid var(--red);border-radius:8px;padding:12px 13px;margin-top:15px;font-size:12px;line-height:1.45}.tabs{display:flex;gap:8px;margin-bottom:12px}.tab{border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 12px;font-size:11px;font-weight:900;cursor:pointer}.tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}.table-tools{display:flex;justify-content:space-between;gap:10px;margin-bottom:10px;align-items:center}.search{border:1px solid var(--line);border-radius:8px;padding:9px 11px;width:300px;font-size:12px}select{border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-size:12px;background:#fff;color:var(--navy)}.table-wrap{overflow:auto;max-height:650px}table{width:100%;border-collapse:collapse;font-size:10px}th{position:sticky;top:0;background:var(--navy);color:#fff;text-align:left;padding:10px 8px;font-size:9px;text-transform:uppercase;letter-spacing:.3px;cursor:pointer;z-index:1}td{padding:8px;border-bottom:1px solid var(--line);font-weight:600;white-space:nowrap}tr:hover td{background:#fafbfc}.badge{padding:4px 7px;border-radius:5px;font-size:9px;font-weight:900}.ok{background:#e4f6ee;color:#13724b}.warn{background:#fff1d8;color:#95650b}.bad{background:#ffe5e7;color:#b51d28}.footer{margin-top:18px;color:#8a949e;font-size:10px;display:flex;justify-content:space-between}.small-note{font-size:10px;color:var(--muted);line-height:1.4}.rank-list{display:flex;flex-direction:column;gap:9px}.rank-item{display:grid;grid-template-columns:30px 1fr 70px;gap:8px;align-items:center;font-size:10px}.rank-num{font-weight:900;color:var(--red)}.rank-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rank-bar{height:7px;background:#e9edf1;border-radius:5px;overflow:hidden;margin-top:4px}.rank-bar>div{height:100%;background:var(--navy)}.rank-val{text-align:right;font-weight:900}
 .rank-switch{display:flex;gap:5px;margin:10px 0 12px}
@@ -61,7 +61,7 @@
  .pdf-detail tr{page-break-inside:avoid}
 }
 .pdf-detail{display:none}
-.pdf-confidential-footer{display:none}
+.confidential-footer.pdf-confidential-footer{display:none}
 @media print{.pdf-confidential-footer{display:flex!important;margin-top:8px;padding:6px 10px;font-size:8px;break-inside:avoid}}
 .pdf-detail table{width:100%;border-collapse:collapse}
 .pdf-detail th{background:var(--navy);color:#fff;text-align:left}
@@ -397,6 +397,16 @@ html:not(.is-admin) .admin-only{display:none!important}
 .pdf-evolution-note{grid-column:1/-1;font-size:8px;color:var(--muted)}
 @media(max-width:760px){.mf-head{display:none}.mf-row{grid-template-columns:1fr}}
 @media print{.pdf-evolution{break-inside:avoid!important;page-break-inside:avoid!important}.pdf-evolution-chart .cmp-svg{max-height:190px!important}.pdf-evolution-chart .cmp-line{animation:none!important;stroke-dashoffset:0!important}.pdf-evolution-chart .cmp-area{animation:none!important;opacity:1!important}.pdf-evolution-chart .cmp-pt{animation:none!important}}
+.pdf-evolution{grid-template-columns:1fr!important}.pdf-evolution-stats{display:none!important}
+.pdf-evolution-chart .cmp-legend{display:none!important}
+.pdf-evolution-chart .cmp-metric-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important}
+.pdf-evolution-chart .cmp-metric-card{padding:6px 8px!important;border-radius:6px;box-shadow:none;break-inside:avoid}
+.pdf-evolution-chart .cmp-metric-head{gap:5px!important;margin-bottom:2px!important;min-height:0!important}
+.pdf-evolution-chart .cmp-metric-dot{width:6px!important;height:6px!important;flex:0 0 6px!important}
+.pdf-evolution-chart .cmp-metric-title{font-size:8px!important;line-height:1.2;overflow-wrap:normal;word-break:normal}
+.pdf-evolution-chart .cmp-month-row{padding:3px 4px 4px!important;margin:2px -4px 0!important;border-radius:4px}
+.pdf-evolution-chart .cmp-month-name{font-size:7px!important}.pdf-evolution-chart .cmp-month-value{font-size:9px!important}
+.pdf-evolution-chart .cmp-meter{height:4px!important;margin-top:3px!important}
 </style>
 <style id="rating-stars-fill-fix">
 .stars{display:inline-block;color:transparent!important;background:linear-gradient(90deg,#f0a51a var(--star-fill,0%),#dfe4e9 var(--star-fill,0%))!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important}
@@ -505,7 +515,7 @@ const normSt=s=>{
  if(/avulsa/.test(t))return 'Visita Avulsa';
  return raw||'Sem status';
 };
-const hm=s=>{s=String(s??'').trim();const m=s.match(/^(-?\d+):(-?\d{1,2})$/);if(!m)return 0;const h=Number(m[1]),min=Number(m[2]);if(!Number.isFinite(h)||!Number.isFinite(min)||Math.abs(min)>59)return 0;const sign=(h<0||min<0)?-1:1;return sign*(Math.abs(h)*60+Math.abs(min))};
+const hm=s=>{s=String(s??'').trim();const m=s.match(/^(-?\d+):(-?\d{1,2})(?::\d{1,2}(?:[.,]\d+)?)?$/);if(!m)return 0;const h=Number(m[1]),min=Number(m[2]);if(!Number.isFinite(h)||!Number.isFinite(min)||Math.abs(min)>59)return 0;const sign=(h<0||min<0)?-1:1;return sign*(Math.abs(h)*60+Math.abs(min))};
 
 /* CORREÇÃO: normaliza datas com ano de 2 ou 4 dígitos para o mesmo padrão DD/MM/AAAA. */
 const normalizarData=s=>{
@@ -606,7 +616,7 @@ function buildRevenueIndexes(){
  }
 }
 function revenueFor(forn,loja){
- const wanted=auxStoreIdentity(loja),cacheKey=auxIndustryCanonical(forn)+'|'+(wanted.number||auxCanonical(loja));
+ const wanted=auxStoreIdentity(loja),cacheKey=auxIndustryCanonical(forn)+'|'+(wanted.number?'#'+wanted.number:auxCanonical(loja));
  if(REVENUE_LOOKUP_CACHE.has(cacheKey))return REVENUE_LOOKUP_CACHE.get(cacheKey);
  const matches=new Set();
  for(const industryKey of auxIndustryMatchKeys(forn)){
@@ -656,7 +666,11 @@ function storesWithoutVisits(){
   if(!candidates.has(key))candidates.set(key,{forn:row.forn,loja:row.loja,industry,identity,sources:new Set([source])});
   else candidates.get(key).sources.add(source);
  };
- STORE_DB.forEach(row=>addCandidate(row,'cadastro'));
+ // O cadastro de lojas é por BANDEIRA (STOK / COMERCIAL ZAFFARI), não por indústria.
+ // Linhas antigas, em que "forn" ainda é uma indústria, seguem a regra anterior.
+ const isBrandName=v=>/^(stok(\s+center)?|comercial\s+zaffari)$/.test(String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim());
+ const brandStores=STORE_DB.filter(row=>row&&isBrandName(row.forn));
+ STORE_DB.forEach(row=>{if(!isBrandName(row?.forn))addCandidate(row,'cadastro')});
  REVENUE_DB.forEach(row=>addCandidate(row,'faturamento'));
  const visitIndex=new Map();
  for(const visit of ALL){
@@ -665,11 +679,26 @@ function storesWithoutVisits(){
   if(!visitIndex.has(key))visitIndex.set(key,[]);
   visitIndex.get(key).push(visit);
  }
- return [...candidates.values()].filter(candidate=>{
+ const withoutVisits=[...candidates.values()].filter(candidate=>{
   const id=candidate.identity,base=candidate.industry+'|'+(id.number?'#'+id.number:'name:'+auxStoreKey(candidate.loja));
   const possible=visitIndex.get(base)||[];
   return !possible.some(visit=>auxStoreMatches(visit.loja,candidate.loja));
- }).sort((a,b)=>a.loja.localeCompare(b.loja,'pt-BR',{numeric:true})||a.forn.localeCompare(b.forn,'pt-BR'));
+ });
+ // Loja do cadastro (identificada pelo número, único na rede) sem nenhuma visita na base, em qualquer indústria.
+ // Só se aplica à visão geral: o cadastro não informa quais indústrias atendem cada loja.
+ if(curInd==='__all__'&&brandStores.length){
+  const storeKeyOf=(id,name)=>id.number?'#'+id.number:'name:'+auxStoreKey(name);
+  const visited=new Set();
+  for(const visit of ALL){const id=auxStoreIdentity(visit.loja);visited.add(storeKeyOf(id,visit.loja))}
+  const seen=new Set();
+  for(const row of brandStores){
+   if(!row.loja)continue;
+   const id=auxStoreIdentity(row.forn+' '+row.loja);if(id.number==='100')continue;
+   const k=storeKeyOf(id,row.loja);if(seen.has(k)||visited.has(k))continue;seen.add(k);
+   withoutVisits.push({forn:row.forn,loja:row.loja,industry:'',identity:id,sources:new Set(['cadastro'])});
+  }
+ }
+ return withoutVisits.sort((a,b)=>a.loja.localeCompare(b.loja,'pt-BR',{numeric:true})||a.forn.localeCompare(b.forn,'pt-BR'));
 }
 
 function parse(txt){
@@ -712,6 +741,13 @@ function parseWorksheet(ws){
  };
  if(ix.status<0||ix.loja<0||ix.forn<0)throw new Error('Não encontrei as colunas Loja, Fornecedor e Status no arquivo. Confira o cabeçalho original do relatório.');
  const get=(row,k)=>String(row[ix[k]]??'').trim();
+ // Células de data/hora reais do Excel: o texto formatado pode vir em M/D/AA e inverter dia e mês.
+ // Por isso, quando a célula é numérica com formato de data, usa-se o número de série.
+ const rg=XLSX.utils.decode_range(ws['!ref']||'A1:A1');
+ const rawCell=(i,col)=>col<0?null:ws[XLSX.utils.encode_cell({r:rg.s.r+i,c:rg.s.c+col})];
+ const isDateCell=c=>!!c&&((c.t==='n'&&c.z&&XLSX.SSF.is_date(c.z))||c.t==='d');
+ const dateValue=(i,col,fallback)=>{const c=rawCell(i,col);return isDateCell(c)?(c.t==='d'?c.v:Number(c.v)):fallback};
+ const minutesValue=(i,col,text)=>{const c=rawCell(i,col);if(c&&c.t==='n'&&c.z&&XLSX.SSF.is_date(c.z))return Math.round(Number(c.v)*1440);return hm(text)};
  const out=[];
  for(let i=1;i<matrix.length;i++){
   const row=matrix[i];if(!row||!row.some(v=>String(v??'').trim()))continue;
@@ -740,12 +776,12 @@ function parseWorksheet(ws){
   const periodo=get(row,'periodo'),ent=periodo.split(/\s+-\s+/);
   // Planejamento prevalece para filtros por data. Entrada e Saída é fallback
   // apenas para linhas concluídas sem data de planejamento.
-  const planning=normalizarDataVisita(row[ix.plan]);
-  let date=planning;if(!date)date=normalizarDataVisita(row[ix.periodo]??ent[0]??'');
+  const planning=normalizarDataVisita(dateValue(i,ix.plan,row[ix.plan]));
+  let date=planning;if(!date)date=normalizarDataVisita(dateValue(i,ix.periodo,row[ix.periodo]??ent[0]??''));
   out.push({
    loja:get(row,'loja'),forn:get(row,'forn'),comp:get(row,'comp'),prom:get(row,'prom'),
-   status:normSt(get(row,'status')),date,planning,tempo:hm(get(row,'tempo')),
-   nota:Number.isFinite(nota)?nota:0,contr:hm(contratoRaw),loja_ok:1,aval:get(row,'aval')
+   status:normSt(get(row,'status')),date,planning,tempo:minutesValue(i,ix.tempo,get(row,'tempo')),
+   nota:Number.isFinite(nota)?nota:0,contr:hasCompleteTail?hm(contratoRaw):minutesValue(i,ix.contr,contratoRaw),loja_ok:1,aval:get(row,'aval')
   });
  }
  return out;
@@ -753,7 +789,7 @@ function parseWorksheet(ws){
 function normHeaderVisit(v){return String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'')}
 function normalizarDataVisita(value){
  if(value instanceof Date&&!isNaN(value))return `${String(value.getUTCDate()).padStart(2,'0')}/${String(value.getUTCMonth()+1).padStart(2,'0')}/${value.getUTCFullYear()}`;
- if(typeof value==='number'&&Number.isFinite(value)&&value>20000&&value<80000){const d=new Date(Date.UTC(1899,11,30)+Math.round(value)*86400000);return `${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCMonth()+1).padStart(2,'0')}/${d.getUTCFullYear()}`}
+ if(typeof value==='number'&&Number.isFinite(value)&&value>20000&&value<80000){const d=new Date(Date.UTC(1899,11,30)+Math.floor(value)*86400000);return `${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCMonth()+1).padStart(2,'0')}/${d.getUTCFullYear()}`}
  const s=String(value??'').trim();if(!s)return '';
  let m=s.match(/(\d{1,4})[\/.-](\d{1,2})[\/.-](\d{2,4})/);if(!m)return normalizarData(s);
  let a=Number(m[1]),b=Number(m[2]),c=Number(m[3]),day,month,year;
@@ -770,7 +806,7 @@ function parseVisitCsv(text){
  const delimiter=(lines[0].match(/;/g)||[]).length>=(lines[0].match(/,/g)||[]).length?';':',';
  const headers=lines[0].split(delimiter).map(normHeaderVisit);
  const find=(names,fallback)=>{const i=headers.findIndex(h=>names.some(n=>h===n||h.includes(n)));return i>=0?i:fallback};
- const ix={loja:find(['loja'],0),forn:find(['fornecedor'],1),comp:find(['comprador'],2),prom:find(['promotor'],3),plan:find(['planejamento'],4),status:find(['status'],5),periodo:find(['entradaesaida'],6),tempo:find(['tempo'],7),aval:find(['usuarioavaliacao'],8)};
+ const ix={loja:find(['loja'],0),forn:find(['fornecedor'],1),comp:find(['comprador'],2),prom:find(['promotor'],3),plan:find(['planejamento'],4),status:find(['status'],5),periodo:find(['entradaesaida'],6),tempo:find(['tempo'],7),aval:find(['usuarioavaliacao'],8),nota:find(['nota'],10),contr:find(['totalhorascontratadas'],13)};
  if(ix.status<0||ix.loja<0||ix.forn<0)throw new Error('Não encontrei Loja, Fornecedor e Status no cabeçalho do CSV.');
  const out=[];
  for(let i=1;i<lines.length;i++){
@@ -778,16 +814,22 @@ function parseVisitCsv(text){
   // Os campos necessários para a visita estão antes da coluna Avaliação.
   // Delimitadores extras nos comentários não deslocam Planejamento nem Status.
   const c=line.split(delimiter),val=k=>String(c[ix[k]]??'').trim();
-  const tail=c.slice();while(tail.length&&!String(tail[tail.length-1]).trim())tail.pop();
-  const fromEnd=n=>String(tail[tail.length-n]??'').trim();
+  // Nota e Horas Contratadas ficam depois da coluna Avaliação. Se o comentário tiver
+  // delimitadores extras, a linha ganha colunas e essas posições se deslocam exatamente
+  // pela diferença para o cabeçalho. Colunas finais vazias (ex.: Saldo) não são descartadas.
+  const shift=Math.max(0,c.length-headers.length);
+  const after=k=>String(c[ix[k]+shift]??'').trim();
   const periodo=val('periodo'),entrada=(periodo.split(/\s+-\s+/)[0]||'');
   const planning=normalizarDataVisita(val('plan'));
   const date=planning||normalizarDataVisita(entrada);
-  const notaRaw=fromEnd(6).replace(',','.');const notaNum=notaRaw?Number(notaRaw):0;
-  out.push({loja:val('loja'),forn:val('forn'),comp:val('comp'),prom:val('prom'),status:normSt(val('status')),date,planning,tempo:hm(val('tempo')),nota:Number.isFinite(notaNum)?notaNum:0,contr:hm(fromEnd(3)),loja_ok:1,aval:val('aval')});
+  const notaRaw=after('nota').replace(',','.');const notaNum=notaRaw?Number(notaRaw):0;
+  out.push({loja:val('loja'),forn:val('forn'),comp:val('comp'),prom:val('prom'),status:normSt(val('status')),date,planning,tempo:hm(val('tempo')),nota:Number.isFinite(notaNum)?notaNum:0,contr:hm(after('contr')),loja_ok:1,aval:val('aval')});
  }
  return out;
 }
+// CSV exportado em Windows-1252 (ANSI) vira "N\uFFFDo Compareceu" se lido como UTF-8.
+// Lê como UTF-8 estrito e, se houver bytes inválidos, relê como Windows-1252.
+async function readFileText(file){const buf=await file.arrayBuffer();try{return new TextDecoder('utf-8',{fatal:true}).decode(buf)}catch(e){return new TextDecoder('windows-1252').decode(buf)}}
 
 function visitKeyPart(v){
  return String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim();
@@ -919,12 +961,12 @@ function renderTable(){
   data=group(cur,key);
    if(tab==='lojas'&&curInd!=='__all__'){
     // Monta o detalhamento diretamente a partir de cada visita da indústria.
-    // A chave considera bandeira + número da loja para não misturar, por exemplo,
-    // STOK LOJA 21 com COMERCIAL ZAFFARI LOJA 21.
+    // REGRA: o número da loja é único na rede. A loja é identificada só pelo número;
+    // bandeira, região e grafia ("LOJA 01", "01- FILIAL 1") não criam lojas diferentes.
     const storeMap=new Map();
     const storeIdentityKey=name=>{
-     const id=auxStoreIdentity(name),brand=id.brand||'sem-bandeira';
-     return brand+'|'+(id.number?'#'+id.number:'name:'+auxStoreKey(name));
+     const id=auxStoreIdentity(name);
+     return id.number?'#'+id.number:'name:'+auxStoreKey(name);
     };
     for(const visit of cur){
      if(!visit.loja)continue;
@@ -949,6 +991,8 @@ function renderTable(){
      if(!row||!auxPairMatches(row.forn,curInd))return;
      const id=auxStoreIdentity(row.loja);if(id.number==='100')return;
      const key=storeIdentityKey(row.loja);
+     // Mesmo número = mesma loja: o faturamento aparece na linha da loja que já tem
+     // visitas, sem criar uma linha repetida.
      if(storeMap.has(key)||data.some(x=>storeIdentityKey(x.name)===key))return;
      const empty={lojas:0,ag:0,real:0,pct:0,nc:0,ea:0,sc:0,ou:0,contr:0,exec:0,util:null,avg:0,min:null,nota:0,rows:[]};
      data.push({...empty,name:row.loja});
@@ -960,14 +1004,14 @@ function renderTable(){
    }else if(tab==='forn'){
     // Faturamento por indústria: soma todas as lojas da indústria na base de faturamento.
     // Indústrias que só aparecem no faturamento (sem visitas) também entram na lista.
-    const empty={lojas:0,ag:0,real:0,pct:0,nc:0,ea:0,sc:0,contr:0,exec:0,util:null,avg:0,min:null,nota:0,rows:[]};
+    const empty={lojas:0,ag:0,real:0,pct:0,nc:0,ea:0,sc:0,ou:0,contr:0,exec:0,util:null,avg:0,min:null,nota:0,rows:[]};
     const seen=new Set(data.map(x=>auxIndustryCanonical(x.name)));
     for(const r of REVENUE_DB){const k=auxIndustryCanonical(r.forn);if(!k||seen.has(k))continue;seen.add(k);data.push({...empty,name:r.forn})}
     data=data.filter(x=>x.name.toLowerCase().includes(q));
     data.forEach(x=>{const v=revenueTotal(x.name);x.faturamento=REVENUE_DB.length?v:null});
     cols=[['name',lab,x=>esc(x.name)],['lojas','Lojas',x=>x.lojas],['faturamento','Faturamento',x=>x.faturamento==null?'—':`<span class="revenue-display" data-revenue-display="${esc(fBRL(x.faturamento))}">${revenueVisible?esc(fBRL(x.faturamento)):'••••••'}</span>`],...std]
    }else{data=data.filter(x=>x.name.toLowerCase().includes(q));cols=[['name',lab,x=>esc(x.name)],['lojas','Lojas',x=>x.lojas],...std]}
-  title='Todas as '+(tab==='forn'?'indústrias':tab==='lojas'?'lojas':'promotores');sub=fI(data.length)+' registros • total de visitas pela quantidade de linhas; Status apenas classifica cada visita • busca e ordenação';
+  title='Todas as '+(tab==='forn'?'indústrias':tab==='lojas'?'lojas':'promotores');sub=fI(data.length)+' registros';
  }
  const s=sortS;data.sort((a,b)=>{const A=a[s.key],B=b[s.key];if(A==null&&B==null)return 0;if(A==null)return 1;if(B==null)return -1;if(typeof A==='string'||typeof B==='string')return String(A).localeCompare(String(B),'pt-BR',{numeric:true,sensitivity:'base'})*s.dir;return (Number(A)-Number(B))*s.dir});
  $('tbTitle').textContent=title;$('tbSub').textContent=sub;
@@ -1025,11 +1069,11 @@ function buildPdfDetail(){
  if(evolutionChart)evolutionChart.innerHTML=sourceChart&&sourceChart.innerHTML?sourceChart.innerHTML:'<div class="cmp-empty">Evolução não disponível para esta seleção.</div>';
  if(evolutionStats)evolutionStats.innerHTML=sourceStats&&sourceStats.innerHTML?sourceStats.innerHTML:'';
  if(evolutionNote)evolutionNote.textContent=(sourceIndustry&&sourceIndustry.textContent?sourceIndustry.textContent+' • ':'')+'Comparativo da base vigente com os dois meses anteriores, conforme os dados disponíveis no painel.';
- const byName=(a,b)=>a.name.localeCompare(b.name),rankBase=all?group(rows,'forn'):group(rows,'loja'),noneBase=all?group(rows,r=>r.loja+' — '+r.forn):rankBase;
- const moreL=[...rankBase].sort((a,b)=>b.exec-a.exec||byName(a,b)),lessL=rankBase.filter(x=>x.real>0).sort((a,b)=>a.exec-b.exec||byName(a,b)),noneL=noneBase.filter(x=>x.real===0).sort(byName),nm=all?'Indústria':'Loja';
- const rankCols=[['name',nm,x=>esc(x.name)],['ag','Agend.',x=>fI(x.ag)],['real','Realiz.',x=>fI(x.real)],['contr','H. contrat.',x=>fH(x.contr)],['exec','H. exec.',x=>fH(x.exec)],['util','Util. horas',x=>x.util==null?'—':fP(x.util)]],rankNoneCols=[['name',all?'Loja — Indústria':'Loja',x=>esc(x.name)],['ag','Agend.',x=>fI(x.ag)],['nc','Não comp.',x=>fI(x.nc)],['ea','Em and.',x=>fI(x.ea)],['sc','A realizar',x=>fI(x.sc)]];
+ const byName=(a,b)=>a.name.localeCompare(b.name),rankBase=all?group(rows,'forn'):group(rows,'loja'),noneStores=storesWithoutVisits();
+ const moreL=[...rankBase].sort((a,b)=>b.exec-a.exec||byName(a,b)),lessL=rankBase.filter(x=>x.real>0).sort((a,b)=>a.exec-b.exec||byName(a,b)),noneL=noneStores.map(x=>({name:all?(x.loja+' — '+x.forn):x.loja,origem:[...x.sources].map(o=>o==='cadastro'?'Cadastro de lojas':'Base de faturamento').join(' + ')})),nm=all?'Indústria':'Loja';
+ const rankCols=[['name',nm,x=>esc(x.name)],['ag','Agend.',x=>fI(x.ag)],['real','Realiz.',x=>fI(x.real)],['contr','H. contrat.',x=>fH(x.contr)],['exec','H. exec.',x=>fH(x.exec)],['util','Util. horas',x=>x.util==null?'—':fP(x.util)]],rankNoneCols=[['name',all?'Loja — Indústria / bandeira':'Loja',x=>esc(x.name)],['origem','Origem',x=>esc(x.origem)]];
  buildPdfRank('pdfRankMore',moreL,rankCols);buildPdfRank('pdfRankLess',lessL,rankCols);buildPdfRank('pdfRankNone',noneL,rankNoneCols);
- const pl=all?'Indústrias':'Lojas';$('pdfMoreTitle').textContent=pl+' — mais horas executadas ('+fI(moreL.length)+')';$('pdfLessTitle').textContent=pl+' — menos horas executadas ('+fI(lessL.length)+')';$('pdfNoneTitle').textContent='Lojas — sem visitas realizadas ('+fI(noneL.length)+')';
+ const pl=all?'Indústrias':'Lojas';$('pdfMoreTitle').textContent=pl+' — mais horas executadas ('+fI(moreL.length)+')';$('pdfLessTitle').textContent=pl+' — menos horas executadas ('+fI(lessL.length)+')';$('pdfNoneTitle').textContent='Lojas — sem visitas agendadas na base atual ('+fI(noneL.length)+')';
  const mxOf=a=>Math.max(1,...a.map(x=>Math.max(x.ag,x.real))),barCol=mx=>['bar','Agend. × Realiz.',x=>`<div style="min-width:48px"><div class="hb n" style="width:${Math.max(x.ag/mx*100,1)}%"></div><div class="hb r" style="width:${Math.max(x.real/mx*100,1)}%"></div></div>`];
  const days=group(rows,'date').filter(g=>g.name).sort((a,b)=>dkey(a.name)-dkey(b.name)),dmx=mxOf(days),showV=days.length<=31;
  $('pdfDayChart').innerHTML=days.map(x=>`<div class="g"><div class="bs"><div class="b n" style="height:${x.ag/dmx*84}px">${showV?`<i>${x.ag}</i>`:''}</div><div class="b r" style="height:${x.real/dmx*84}px">${showV?`<i>${x.real}</i>`:''}</div></div><div class="lb">${esc(x.name.slice(0,5))}</div></div>`).join('');
@@ -1090,7 +1134,7 @@ async function parseAuxFile(file,kind){
  if(/\.json$/i.test(file.name)){raw=JSON.parse(await file.text());if(!Array.isArray(raw))throw new Error('O JSON precisa conter uma lista de registros.');}
  else{
   if(!window.XLSX)throw new Error('Leitor de planilhas não carregou. Confira a conexão e recarregue a página.');
-  let wb;if(/\.csv$/i.test(file.name)||/csv/i.test(file.type))wb=XLSX.read((await file.text()).replace(/^\uFEFF/,''),{type:'string',raw:false});else wb=XLSX.read(await file.arrayBuffer(),{type:'array',raw:false});
+  let wb;if(/\.csv$/i.test(file.name)||/csv/i.test(file.type))wb=XLSX.read((await readFileText(file)).replace(/^\uFEFF/,''),{type:'string',raw:false});else wb=XLSX.read(await file.arrayBuffer(),{type:'array',raw:false});
   if(!wb.SheetNames?.length)throw new Error('Não foi possível ler a planilha/CSV.');
   const matrix=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:'',raw:true});if(matrix.length<2)throw new Error('O arquivo precisa ter cabeçalho e ao menos um registro.');
   const headers=matrix[0].map(normAuxHeader);const pick=names=>headers.findIndex(h=>names.some(n=>h===n||h.includes(n)));
@@ -1105,7 +1149,7 @@ async function parseAuxFile(file,kind){
  const result=[];for(let i=0;i<raw.length;i++){const r=raw[i]||{};const keys=Object.keys(r).reduce((m,k)=>(m[normAuxHeader(k)]=r[k],m),{});const forn=kind==='revenue'?(r.forn??keys.fornecedor):(r.forn??keys.industria??keys.fornecedor??keys.bandeira),loja=r.loja??keys.empresa??keys.loja??keys.nomedaloja??keys.nomefantasia;const item={forn:String(forn??'').trim(),loja:String(loja??'').trim()};if(!item.forn||!item.loja)continue;if(kind==='revenue'){const val=parseMoney(r.faturamento??keys.venda??keys.faturamento??keys.valorfaturamento??keys.valorvenda??keys.vendas);if(!Number.isFinite(val))throw new Error('Venda/faturamento inválido na linha '+(i+2)+'.');item.faturamento=val;}result.push(item)}
  if(!result.length)throw new Error('Nenhum registro válido encontrado. Confira os cabeçalhos e o conteúdo do arquivo.');
  // A planilha de faturamento pode ter várias linhas para a mesma indústria e empresa. Somar essas linhas evita perder vendas por sobrescrita.
- const unique=new Map();for(const r of result){const key=auxKey(r.forn,r.loja);if(kind==='revenue'&&unique.has(key)){const prev=unique.get(key);prev.faturamento+=r.faturamento;}else unique.set(key,{...r});}return [...unique.values()];
+ const unique=new Map();for(const r of result){const num=auxStoreIdentity(r.loja).number,key=num?(kind==='revenue'?auxIndustryCanonical(r.forn)+'|':'')+'#'+num:auxKey(r.forn,r.loja);if(kind==='revenue'&&unique.has(key)){const prev=unique.get(key);prev.faturamento+=r.faturamento;}else unique.set(key,{...r});}return [...unique.values()];
 }
 async function uploadAuxBase(kind,file){
  const st=$('upStatus'),isRevenue=kind==='revenue',path=isRevenue?REVENUE_FILE:STORE_FILE;
@@ -1127,12 +1171,12 @@ $('visitBaseOpenBtn').onclick=async()=>{if(!canPerm('update_data')||!await requi
 $('storeEditOpenBtn').onclick=async()=>{if(!await requireServerPerm('manage_bases'))return;openStoreEditor()};
 $('storeImportOpenBtn').onclick=async()=>{if(await requireServerPerm('manage_bases'))$('storeDbFile').click()};
 $('revenueImportOpenBtn').onclick=async()=>{if(await requireServerPerm('manage_bases'))$('revenueDbFile').click()};
-$('storeAddRowBtn').onclick=()=>{if(!requirePerm('manage_bases'))return;const forn=$('storeNewBrand').value,loja=$('storeNewName').value.trim().toUpperCase().replace(/\s+/g,' ');if(!forn||!loja){$('storeEditStatus').textContent='Selecione a bandeira e informe a loja no formato LOJA X - REG X.';return}if(!/^LOJA\s+.+\s+-\s+REG\s+.+$/i.test(loja)){ $('storeEditStatus').textContent='Use o formato LOJA X - REG X. Exemplo: LOJA 12 - REG 3.';return}if(STORE_DRAFT.some(r=>auxKey(r.forn,r.loja)===auxKey(forn,loja))){$('storeEditStatus').textContent='Essa loja já está cadastrada para essa bandeira.';return}STORE_DRAFT.push({forn,loja});$('storeNewName').value='';$('storeEditStatus').textContent='Loja adicionada. Clique em Salvar cadastro para gravar.';renderStoreEditor()};
+$('storeAddRowBtn').onclick=()=>{if(!requirePerm('manage_bases'))return;const forn=$('storeNewBrand').value,loja=$('storeNewName').value.trim().toUpperCase().replace(/\s+/g,' ');if(!forn||!loja){$('storeEditStatus').textContent='Selecione a bandeira e informe a loja no formato LOJA X - REG X.';return}if(!/^LOJA\s+.+\s+-\s+REG\s+.+$/i.test(loja)){ $('storeEditStatus').textContent='Use o formato LOJA X - REG X. Exemplo: LOJA 12 - REG 3.';return}{const num=auxStoreIdentity(loja).number,dup=STORE_DRAFT.find(r=>num?auxStoreIdentity(r.loja).number===num:auxKey(r.forn,r.loja)===auxKey(forn,loja));if(dup){$('storeEditStatus').textContent='O número de loja é único na rede e já está cadastrado: '+dup.forn+' '+dup.loja+'.';return}}STORE_DRAFT.push({forn,loja});$('storeNewName').value='';$('storeEditStatus').textContent='Loja adicionada. Clique em Salvar cadastro para gravar.';renderStoreEditor()};
 $('storeEditRows').addEventListener('input',e=>{const el=e.target.closest('[data-store-field]');if(!el)return;const i=Number(el.dataset.row);if(!STORE_DRAFT[i])return;STORE_DRAFT[i][el.dataset.storeField]=el.value;$('storeEditStatus').textContent='Há alterações não salvas.'});
 $('storeEditRows').addEventListener('click',e=>{const b=e.target.closest('[data-store-delete]');if(!b||!requirePerm('manage_bases'))return;const i=Number(b.dataset.storeDelete);if(!STORE_DRAFT[i])return;STORE_DRAFT.splice(i,1);renderStoreEditor();$('storeEditStatus').textContent='Loja removida da edição. Clique em Salvar cadastro para confirmar.'});
 $('storeEditSearch').addEventListener('input',renderStoreEditor);
 $('storeEditCancelBtn').onclick=()=>{if(!confirm('Descartar todas as alterações não salvas?'))return;openStoreEditor()};
-$('storeEditSaveBtn').onclick=async()=>{if(!await requireServerPerm('manage_bases'))return;const rows=STORE_DRAFT.map(r=>({forn:String(r.forn||'').trim(),loja:String(r.loja||'').trim()}));if(rows.some(r=>!['STOK','COMERCIAL ZAFFARI'].includes(r.forn)||!/^LOJA\s+.+\s+-\s+REG\s+.+$/i.test(r.loja)))return $('storeEditStatus').textContent='Cada registro deve ter bandeira STOK ou COMERCIAL ZAFFARI e loja no formato LOJA X - REG X.';const unique=new Map();for(const r of rows)unique.set(auxKey(r.forn,r.loja),r);if(unique.size!==rows.length&&!confirm('Existem lojas duplicadas para a mesma bandeira. Salvar removendo duplicatas?'))return;const clean=[...unique.values()];const b=$('storeEditSaveBtn');b.disabled=true;$('storeEditStatus').textContent='Salvando cadastro independente...';try{await saveAuxRows('stores',clean);STORE_DRAFT=STORE_DB.map(r=>({...r}));renderStoreEditor();$('storeEditStatus').textContent='Cadastro salvo: '+clean.length.toLocaleString('pt-BR')+' lojas.';$('basesStatus').textContent='Cadastro de lojas salvo com sucesso.'}catch(e){$('storeEditStatus').textContent='Erro ao salvar: '+(e.message||e)}finally{b.disabled=false}};
+$('storeEditSaveBtn').onclick=async()=>{if(!await requireServerPerm('manage_bases'))return;const rows=STORE_DRAFT.map(r=>({forn:String(r.forn||'').trim(),loja:String(r.loja||'').trim()}));if(rows.some(r=>!['STOK','COMERCIAL ZAFFARI'].includes(r.forn)||!/^LOJA\s+.+\s+-\s+REG\s+.+$/i.test(r.loja)))return $('storeEditStatus').textContent='Cada registro deve ter bandeira STOK ou COMERCIAL ZAFFARI e loja no formato LOJA X - REG X.';const unique=new Map();for(const r of rows){const num=auxStoreIdentity(r.loja).number;unique.set(num?'#'+num:auxKey(r.forn,r.loja),r)}if(unique.size!==rows.length&&!confirm('Existem lojas com o mesmo número (o número é único na rede). Salvar mantendo apenas uma linha por número?'))return;const clean=[...unique.values()];const b=$('storeEditSaveBtn');b.disabled=true;$('storeEditStatus').textContent='Salvando cadastro independente...';try{await saveAuxRows('stores',clean);STORE_DRAFT=STORE_DB.map(r=>({...r}));renderStoreEditor();$('storeEditStatus').textContent='Cadastro salvo: '+clean.length.toLocaleString('pt-BR')+' lojas.';$('basesStatus').textContent='Cadastro de lojas salvo com sucesso.'}catch(e){$('storeEditStatus').textContent='Erro ao salvar: '+(e.message||e)}finally{b.disabled=false}};
 $('storeDbBtn').onclick=async()=>{if(await requireServerPerm('manage_bases'))$('storeDbFile').click()};
 $('revenueDbBtn').onclick=async()=>{if(await requireServerPerm('manage_bases'))$('revenueDbFile').click()};
 $('storeDbFile').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(f&&await requireServerPerm('manage_bases')){await uploadAuxBase('stores',f);await loadAuxBases();updateBasesSummary()}};
@@ -1203,7 +1247,7 @@ function applyPermissionUI(){
  const op=$('chart')?.closest('.grid2')?.querySelector('.operation-card');if(op)op.style.display=canPerm('dashboard')?'':'none';
  const store=$('storeChart')?.closest('.visits-store-card');if(store)store.style.display=canPerm('consult_industries')?'':'none';
  const quality=$('at')?.closest('.grid3');if(quality)quality.style.display=canPerm('dashboard')?'':'none';
- document.querySelectorAll('#app>.section-title').forEach(el=>{const t=el.textContent.trim();if(t==='Detalhamento completo')el.style.display=showDetails?'':'none';else if(t==='Visão operacional')el.style.display=canBrowse?'':'none';else el.style.display=canPerm('dashboard')?'':'none'});
+ document.querySelectorAll('#app>.section-title').forEach(el=>{const t=el.textContent.trim();if(t==='Detalhamento completo')el.style.display=showDetails?'':'none';else if(t==='Visão operacional')el.style.display=canBrowse?'':'none';else if(t==='Evolução da marca na rede')el.style.display=canPerm('consult_industries')?'':'none';else el.style.display=canPerm('dashboard')?'':'none'});
  $('app').classList.toggle('hidden',!hasMain);
 }
 async function loadMyPermissions(userId){
@@ -1271,7 +1315,7 @@ $('upFile').onchange=async e=>{
   else{
    if(!window.XLSX)throw new Error('leitor de planilhas não carregou; confira a conexão e recarregue a página');
    if(/\.csv$/i.test(f.name)||/csv/i.test(f.type)){
-    rows=parseVisitCsv(await f.text());
+    rows=parseVisitCsv(await readFileText(f));
    }else{
     const wb=XLSX.read(await f.arrayBuffer(),{type:'array',cellNF:true});
     if(!wb.SheetNames||!wb.SheetNames.length)throw new Error('não foi possível ler a planilha');
@@ -1387,7 +1431,7 @@ function ctrMsg(){
  if(!c&&Array.isArray(window.__COLETOR_EXPORTED_CONTRATOS__))c=window.__COLETOR_EXPORTED_CONTRATOS__.find(x=>nk(x.fornecedor)===nk(curInd));
  if(!c){const k=nk(curInd);c=CTR.find(x=>nk(x.fornecedor)===k)}
  if(!c){el.classList.add('hidden');return}
- el.innerHTML='Contrato '+(c.recebido?'recebido dia '+fD(c.recebido):'ainda não recebido')+'<span>•</span>'+(c.atualizado?'Atualizado dia '+fD(c.atualizado):'ainda não atualizado');
+ el.innerHTML='Contrato '+(c.recebido?'recebido dia '+esc(fD(c.recebido)):'ainda não recebido')+'<span>•</span>'+(c.atualizado?'Atualizado dia '+esc(fD(c.atualizado)):'ainda não atualizado');
  el.classList.remove('hidden');
 }
 const ctrSt=(t,bad)=>{const s=$('ctrStatus');s.textContent=t||'';s.style.color=bad?'var(--danger)':'var(--green)'};
@@ -1405,7 +1449,7 @@ function ctrGrid(){
  const canEdit=canPerm('contracts_access');
  const q=nk($('ctrQ').value),ag=$('ctrFAg').value,st=$('ctrFSt').value;
  const L=CTR.filter(c=>(!q||nk(c.fornecedor).includes(q))&&(!ag||(c.agencia||'')===ag)&&(!st||(st==='pr'&&!c.recebido)||(st==='pa'&&!c.atualizado)||(st==='ok'&&c.recebido&&c.atualizado)));
- $('ctrTb').querySelector('tbody').innerHTML=L.map((c,i)=>`<tr><td class="num">${i+1}</td><td>${canEdit?`<input data-id="${c.id}" data-f="agencia" value="${esc(c.agencia)}" style="min-width:110px">`:esc(c.agencia)}</td><td class="f">${canEdit?`<input data-id="${c.id}" data-f="fornecedor" value="${esc(c.fornecedor)}">`:esc(c.fornecedor)}</td><td>${canEdit?`<input type="date" data-id="${c.id}" data-f="recebido" value="${c.recebido||''}">`:esc(fD(c.recebido))}</td><td>${canEdit?`<input type="date" data-id="${c.id}" data-f="atualizado" value="${c.atualizado||''}">`:esc(fD(c.atualizado))}</td><td>${canEdit?`<input data-id="${c.id}" data-f="obs" value="${esc(c.obs)}" style="min-width:150px">`:esc(c.obs||'')}</td><td>${canEdit?`<button class="xdel" data-del="${c.id}" title="Remover">✕</button>`:''}</td></tr>`).join('')||'<tr><td colspan="7">Nenhum fornecedor.</td></tr>';
+ $('ctrTb').querySelector('tbody').innerHTML=L.map((c,i)=>`<tr><td class="num">${i+1}</td><td>${canEdit?`<input data-id="${esc(c.id)}" data-f="agencia" value="${esc(c.agencia)}" style="min-width:110px">`:esc(c.agencia)}</td><td class="f">${canEdit?`<input data-id="${esc(c.id)}" data-f="fornecedor" value="${esc(c.fornecedor)}">`:esc(c.fornecedor)}</td><td>${canEdit?`<input type="date" data-id="${esc(c.id)}" data-f="recebido" value="${esc(c.recebido||'')}">`:esc(fD(c.recebido))}</td><td>${canEdit?`<input type="date" data-id="${esc(c.id)}" data-f="atualizado" value="${esc(c.atualizado||'')}">`:esc(fD(c.atualizado))}</td><td>${canEdit?`<input data-id="${esc(c.id)}" data-f="obs" value="${esc(c.obs)}" style="min-width:150px">`:esc(c.obs||'')}</td><td>${canEdit?`<button class="xdel" data-del="${esc(c.id)}" title="Remover">✕</button>`:''}</td></tr>`).join('')||'<tr><td colspan="7">Nenhum fornecedor.</td></tr>';
 }
 function ctrRender(){ctrDash();ctrGrid()}
 async function openContractsView(){if(!await requireServerPerm('contracts_access'))return;const app=$('app'),view=$('ctr');app.classList.add('view-leave');setTimeout(()=>{app.classList.add('hidden');app.classList.remove('view-leave');view.classList.remove('hidden');view.classList.add('view-enter');requestAnimationFrame(()=>requestAnimationFrame(()=>view.classList.remove('view-enter')))},130);ctrSt('Carregando…');await loadContratos();ctrSt('');ctrRender()}
@@ -1530,7 +1574,7 @@ function renderComparativo(history,industry,warning=''){
   return '<div class="cmp-stat" style="--c:'+sr.color+'"><div class="l">'+sr.name+'</div><div class="v">'+(cur==null?'—':sr.fmt(cur))+'</div><span class="d '+c+'">'+d+'</span></div>'}).join('');
 }
 const COMP_SERIES=[
- {k:'pct',name:'% de execução — visitas realizadas (agendando)',color:'#123b5f',axis:'L',fmt:v=>fP(v),dfmt:x=>x.toFixed(1).replace('.',',')+' p.p.'},
+ {k:'pct',name:'% de execução — visitas realizadas',color:'#123b5f',axis:'L',fmt:v=>fP(v),dfmt:x=>x.toFixed(1).replace('.',',')+' p.p.'},
  {k:'util',name:'% de horas executadas/contratadas',color:'#e30613',axis:'L',fmt:v=>fP(v),dfmt:x=>x.toFixed(1).replace('.',',')+' p.p.'},
  {k:'avg',name:'Tempo médio',color:'#e08a00',axis:'R',dash:true,fmt:v=>Math.round(v)+' min',dfmt:x=>Math.round(x)+' min'},
  {k:'nota',name:'Nota média',color:'#20a36a',axis:'L',scale:20,fmt:v=>fN(v),dfmt:x=>x.toFixed(2).replace('.',',')+' pt'}];
@@ -1605,7 +1649,7 @@ async function parseComparativoImportFile(file){
  else{
   if(!window.XLSX)throw new Error('Leitor de planilhas não carregou. Recarregue a página e tente novamente.');
   let wb;
-  if(/\.csv$/i.test(file.name)||/csv/i.test(file.type))rows=parseVisitCsv(await file.text());
+  if(/\.csv$/i.test(file.name)||/csv/i.test(file.type))rows=parseVisitCsv(await readFileText(file));
   else{
    wb=XLSX.read(await file.arrayBuffer(),{type:'array',cellNF:true});
    if(!wb.SheetNames||!wb.SheetNames.length)throw new Error('Não foi possível ler a planilha.');
@@ -1663,7 +1707,7 @@ $('monthFile').onchange=async e=>{
   st.textContent='Enviando…';await mfUpload(MFILE(kind,mes),rows);
   if(kind==='visits'){
    if(isCur)await mfUpload(FILE,rows);
-   try{await saveComparativoHistory(rows)}catch(h){console.error(h)}
+   try{await saveComparativoHistory(rows,{skipArchive:true})}catch(h){console.error(h)}
    if(isCur){await loadPublishedData();await setUpdated()}
   }else if(isCur){await mfUpload(REVENUE_FILE,rows);await loadAuxBases();render();updateBasesSummary()}
   st.textContent=(kind==='visits'?'Visitas':'Faturamento')+' de '+lbl+' atualizado: '+fI(rows.length)+' registros.';
@@ -1671,7 +1715,7 @@ $('monthFile').onchange=async e=>{
  }catch(err){st.textContent='Erro: '+(err?.message||err)}
 };
 /* Mantém cópias mensais das visitas que forem registradas no histórico. */
-{const _sch=saveComparativoHistory;saveComparativoHistory=async function(rows){const r=await _sch.apply(this,arguments);try{const keep=new Set(comparativoWindow().map(m=>m.mes)),by={};for(const x of rows||[]){const d=normalizarData(x.date),m=comparativoMonthKey(d);if(keep.has(m))(by[m]=by[m]||[]).push({...x,date:d})}for(const m in by)await mfUpload(MFILE('visits',m),by[m])}catch(e){console.warn('Cópia mensal de visitas falhou',e)}return r};
+{const _sch=saveComparativoHistory;saveComparativoHistory=async function(rows,opts){const r=await _sch.apply(this,arguments);if(opts&&opts.skipArchive)return r;try{const keep=new Set(comparativoWindow().map(m=>m.mes)),by={};for(const x of rows||[]){const d=normalizarData(x.date),m=comparativoMonthKey(d);if(keep.has(m))(by[m]=by[m]||[]).push({...x,date:d})}for(const m in by)await mfUpload(MFILE('visits',m),by[m])}catch(e){console.warn('Cópia mensal de visitas falhou',e)}return r};
  const _uab=uploadAuxBase;uploadAuxBase=async function(kind){await _uab.apply(this,arguments);if(kind==='revenue'&&!/^Erro/.test($('upStatus').textContent)){try{const rows=await readAuxPublished(REVENUE_FILE);if(rows.length)await mfUpload(MFILE('revenue',comparativoWindow()[2].mes),rows)}catch(e){console.warn(e)}}}}
 {const _o=$('basesOpenBtn').onclick;$('basesOpenBtn').onclick=async function(){await _o.apply(this,arguments);renderMonthFiles()};const _r=$('basesRefreshBtn').onclick;$('basesRefreshBtn').onclick=async function(){await _r.apply(this,arguments);renderMonthFiles()}}
 
