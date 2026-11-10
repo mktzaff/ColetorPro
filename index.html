@@ -278,6 +278,27 @@ html:not(.is-admin) .admin-only{display:none!important}
 
 #basesModal{position:fixed;inset:0;z-index:1100;background:rgba(8,24,40,.68);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:16px}#basesModal.hidden{display:none}#basesModal .bases-box{background:#fff;border-radius:16px;width:100%;max-width:1100px;max-height:92vh;overflow:auto;padding:22px;box-shadow:0 24px 70px rgba(0,0,0,.3);border-top:5px solid var(--navy2)}#basesModal .bases-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:18px}#basesModal h2{margin:0;font-size:23px;color:var(--navy)}#basesModal .bases-intro{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.5}#basesModal .bases-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}#basesModal .bases-card{border:1px solid var(--line);border-radius:12px;padding:15px;min-width:0}#basesModal .bases-card h3{font-size:15px;margin:0 0 5px;color:var(--navy)}#basesModal .bases-card p{font-size:12px;line-height:1.5;color:var(--muted);margin:0 0 12px}#basesModal .bases-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}#basesModal .bases-editor{margin-top:16px;border:1px solid var(--line);border-radius:12px;padding:15px}#basesModal .bases-editor-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}#basesModal .bases-editor-head h3{margin:0;font-size:15px}#basesModal .bases-add{display:grid;grid-template-columns:minmax(150px,1fr) minmax(150px,1fr) auto;gap:8px;margin:10px 0}#basesModal input,#basesModal select{border:1px solid var(--line);border-radius:8px;padding:9px 10px;font-size:12px;min-width:0;width:100%;box-sizing:border-box}#basesModal .bases-table-wrap{overflow:auto;max-height:330px;border:1px solid var(--line);border-radius:9px}#basesModal table{width:100%;border-collapse:collapse;font-size:12px}#basesModal th{position:sticky;top:0;background:#f1f5f9;text-align:left;padding:9px;z-index:1}#basesModal td{padding:6px;border-top:1px solid var(--line)}#basesModal td input{min-width:140px}#basesModal .bases-delete{border:0;background:#fff0f0;color:#b4232f;border-radius:7px;padding:8px 10px;font-weight:800;cursor:pointer}#basesModal .bases-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px}#basesModal #storeEditStatus{font-size:12px;font-weight:700;color:var(--muted)}#basesModal .bases-hidden{display:none!important}#basesModal .bases-grid,#basesModal #storeEditor{display:none!important}@media(max-width:700px){#basesModal .bases-box{padding:15px}#basesModal .bases-grid{grid-template-columns:1fr}#basesModal .bases-add{grid-template-columns:1fr}#basesModal h2{font-size:20px}}
 
+
+/* Ajustes visuais da revisão */
+.upd-mini:empty{display:none!important}
+#kpis .kpi-secondary.revenue-card{grid-template-columns:1fr!important;align-content:center;row-gap:2px}
+#kpis .kpi-secondary.revenue-card .kpi-secondary-label{grid-column:1!important;grid-row:1!important}
+#kpis .kpi-secondary.revenue-card .kpi-secondary-value{grid-column:1!important;grid-row:2!important;justify-self:start;display:flex;align-items:center;white-space:nowrap}
+#kpis .kpi-secondary.revenue-card .kpi-secondary-note{grid-column:1!important;grid-row:3!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:700px){
+ .header{min-height:0;padding:20px 18px 18px}
+ .header:before{display:none}
+ .header:after{right:-150px;top:-150px;width:200px;height:240px;opacity:.9}
+ .header h1{font-size:26px;letter-spacing:-.8px;overflow-wrap:anywhere}
+ .eyebrow{font-size:10px;letter-spacing:2px}
+ .period{position:static;display:inline-block;margin-top:12px}
+}
+
+.grid3>.card:nth-child(1),.grid3>.card:nth-child(2){display:flex;flex-direction:column}
+.grid3>.card:nth-child(1) .score,.grid3>.card:nth-child(2) .score{flex:1;justify-content:center;gap:28px}
+.grid3>.card:nth-child(1) .score-num,.grid3>.card:nth-child(2) .score-num{font-size:54px}
+.grid3>.card:nth-child(1) .score-num[style]{font-size:34px!important}
+.grid3>.card:nth-child(2) .stars{font-size:30px}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
@@ -462,9 +483,9 @@ html:not(.is-admin) .admin-only{display:none!important}
 <div class="ctr-msg hidden" id="ctrMsg"></div>
 <div class="grid-kpi" id="kpis"></div>
 <div class="section-title">Visão operacional</div>
-<div class="grid2"><section class="card visits-day-card"><div class="card-title" id="chTitle"></div><div class="card-sub" id="chSub"></div><div class="bar-chart" id="chart"></div><div class="legend"><span><i class="r"></i>Realizadas</span><span><i class="n"></i>Agendadas</span></div></section>
+<div class="grid2"><section class="card visits-day-card"><div class="card-title" id="chTitle"></div><div class="card-sub" id="chSub"></div><div class="bar-chart" id="chart"></div><div class="legend"><span><i class="n"></i>Agendadas</span><span><i class="r"></i>Realizadas</span></div></section>
 <section class="card operation-card"><div class="card-title">Aproveitamento da operação</div><div class="card-sub">Execução das visitas e utilização das horas contratadas</div><div class="progress-wrap"><div class="progress-top"><span>Visitas realizadas</span><strong id="vp"></strong></div><div class="progress"><div class="exec" id="vb"></div></div></div><div class="progress-wrap"><div class="progress-top"><span>Horas executadas</span><strong id="hp"></strong></div><div class="progress"><div class="hours" id="hb"></div></div></div><div class="metric-row"><span>Gap de visitas</span><b id="vg"></b></div><div class="metric-row"><span>Gap de horas</span><b id="hg"></b></div><div class="metric-row"><span>Não compareceu</span><b id="nc"></b></div><div class="metric-row"><span>Em andamento</span><b id="ea"></b></div><div class="metric-row"><span>Agendado (a realizar)</span><b id="sc"></b></div><div class="metric-row"><span>Outros (visita avulsa etc.)</span><b id="ou"></b></div></section></div>
-<section class="card visits-store-card"><div class="card-title" id="storeChTitle">Visitas por loja</div><div class="card-sub" id="storeChSub">Agendadas x realizadas por loja</div><div class="bar-chart store-chart" id="storeChart"></div><div class="legend"><span><i class="r"></i>Realizadas</span><span><i class="n"></i>Agendadas</span></div></section>
+<section class="card visits-store-card"><div class="card-title" id="storeChTitle">Visitas por loja</div><div class="card-sub" id="storeChSub">Agendadas x realizadas por loja</div><div class="bar-chart store-chart" id="storeChart"></div><div class="legend"><span><i class="n"></i>Agendadas</span><span><i class="r"></i>Realizadas</span></div></section>
 <div class="section-title">Tempo de atendimento e qualidade</div>
 <div class="grid3"><section class="card"><div class="card-title">Tempo médio de atendimento</div><div class="card-sub">Por visita realizada</div><div class="score"><div><div class="score-num" id="at"></div><div class="score-max">por visita</div></div><div><div class="small-note">Menor atendimento</div><div class="score-num" style="font-size:32px" id="mt"></div><div class="score-max">minutos</div></div></div></section>
 <section class="card"><div class="card-title">Nota média do repositor</div><div class="card-sub">Escala máxima = 5,0</div><div class="score"><div class="score-num" id="as"></div><div><div class="stars" id="asStars" role="img" aria-label="Sem avaliações registradas">★★★★★</div><div class="small-note">média das avaliações registradas</div></div></div></section>
@@ -886,7 +907,7 @@ const dkey=d=>dataOrdenavel(d);
 function render(){
  const sel=curInd,all=sel==='__all__';cur=all?ALL:ALL.filter(r=>auxPairMatches(r.forn,sel));const O=agg(cur);
  $('ttl').innerHTML=all?'EXECUÇÃO GERAL <span>| Dashboard</span>':'INDÚSTRIA <span>| '+esc(sel.length>48?sel.slice(0,46)+'…':sel)+'</span>';
- $('sub').textContent=all?'Panorama consolidado de todas as indústrias, lojas, horas, visitas e qualidade':sel+' • visão detalhada por loja, promotor e visita';
+ $('sub').textContent=all?'Panorama consolidado de todas as indústrias, lojas, horas, visitas e qualidade':'Visão detalhada por loja, promotor e visita';
  ctrMsg();
  $('ctrMsg').classList.add('hidden');
  const primary=[
@@ -920,7 +941,7 @@ function render(){
  else{cg=group(cur,'date').filter(g=>g.name).sort((a,b)=>dkey(a.name)-dkey(b.name));title='Visitas por dia';sub='Agendadas x realizadas ao longo do período'}
  $('chTitle').textContent=title;$('chSub').textContent=sub;
  const mx=Math.max(1,...cg.map(x=>Math.max(x.ag,x.real))),sn=s=>s.replace(/ - .*/,'').replace(/\s+(LTDA|S\.A\.?)$/,'');
- $('chart').className='bar-chart'+(all?' industry-chart':'');$('chart').innerHTML=cg.map(x=>`<div class="bar-group" style="min-width:${all?120:22}px;flex:${all?'0 0 120px':'1'}"><div class="bars"><div class="bar navy" style="height:${x.ag/mx*220}px"><span>${x.ag}</span></div><div class="bar red" style="height:${x.real/mx*220}px"><span>${x.real}</span></div></div><div class="bar-label" title="${esc(x.name)}">${esc(all?x.name:x.name.slice(0,5))}</div></div>`).join('');
+ $('chart').className='bar-chart'+(all?' industry-chart':'');$('chart').innerHTML=cg.map(x=>`<div class="bar-group" style="min-width:${all?120:22}px;flex:${all?'1 0 120px':'1'}"><div class="bars"><div class="bar navy" style="height:${x.ag/mx*220}px"><span>${x.ag}</span></div><div class="bar red" style="height:${x.real/mx*220}px"><span>${x.real}</span></div></div><div class="bar-label" title="${esc(x.name)}">${esc(all?x.name:x.name.slice(0,5))}</div></div>`).join('');
  const sg=group(cur,'loja').sort((a,b)=>b.real-a.real||b.ag-a.ag).slice(0,20);
  const smx=Math.max(1,...sg.map(x=>Math.max(x.ag,x.real)));
  $('storeChTitle').textContent='Visitas por loja';
@@ -1576,7 +1597,7 @@ function renderComparativo(history,industry,warning=''){
 const COMP_SERIES=[
  {k:'pct',name:'% de execução — visitas realizadas',color:'#123b5f',axis:'L',fmt:v=>fP(v),dfmt:x=>x.toFixed(1).replace('.',',')+' p.p.'},
  {k:'util',name:'% de horas executadas/contratadas',color:'#e30613',axis:'L',fmt:v=>fP(v),dfmt:x=>x.toFixed(1).replace('.',',')+' p.p.'},
- {k:'avg',name:'Tempo médio',color:'#e08a00',axis:'R',dash:true,fmt:v=>Math.round(v)+' min',dfmt:x=>Math.round(x)+' min'},
+ {k:'avg',name:'Tempo médio',color:'#e08a00',axis:'R',dash:true,fmt:v=>fH(v),dfmt:x=>fH(x)},
  {k:'nota',name:'Nota média',color:'#20a36a',axis:'L',scale:20,fmt:v=>fN(v),dfmt:x=>x.toFixed(2).replace('.',',')+' pt'}];
 function compLineSVG(items){
  // Cartões compactos lado a lado; os valores usam os indicadores já calculados.
