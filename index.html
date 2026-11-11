@@ -595,10 +595,48 @@ const auxIndustryCanonical=v=>{
  if(hasZaffari)tokens=tokens.filter(t=>t!=='comercial');
  return [...new Set(tokens)].sort().join(' ');
 };
+// =====================================================================
+// DE-PARA DE INDÚSTRIAS: [nome na base de VISITAS, nome na base de FATURAMENTO]
+// Use quando a indústria vem com nomes diferentes nas duas bases.
+// Maiúsculas, acentos, pontuação e sufixos (LTDA, S/A...) não importam.
+// Um mesmo nome de faturamento pode aparecer em mais de uma linha: o valor
+// aparece em cada indústria ligada a ele (o total geral não é duplicado).
+// =====================================================================
+const INDUSTRY_REVENUE_ALIASES=[
+ ['Alfajor Punta Balena','RAFAEL ELIAS HERNANDES CUESTA'],
+ ['Arroz Brilhante','ARROZEIRA PELOTAS IND CEREAIS LTDA'],
+ ['Arroz Tio João','JOSAPAR JOAQUIM OLIVEIRA SA PART.'],
+ ['Ballena','BALLENA COMERCIO DE BEBIDAS LTDA'],
+ ['Baly','BEBIDAS GRASSI DO BRASIL LTDA'],
+ ['Batata Boa','JOSE LUIZ MORAES CARVALHO'],
+ ['Beautycolor','LOGIKA DISTRIBUIDORA DE COSMETICOS LTDA'],
+ ['Cantu Vinhos','FUTURA COMERCIAL TRADING LTDA'],
+ ['Cha leao','LEÃO ALIMENTOS E BEBIDAS LTDA'],
+ ['Cotton Baby','HIGIE PLUS COTTONBABY IND E COM LTDA'],
+ ['Dane-se energetico','SENEDA COMERCIO DE BEBIDAS LTDA'],
+ ['Doces Santo Antonio','DSA INDUSTRIA COMERCIO LTDA'],
+ ['Evateira Marsango','INDUSTRIA COMERCIO E EXPORTACAO EBM LTDA'],
+ ['Extremo Sabor','ABRAHAM INDUSTRIA DE ESPECIARIAS LTDA'],
+ ['Freddo','VIAREGGIO IND COM DE SORVETES LTDA'],
+];
+let INDUSTRY_ALIAS_MAP=null;
+const industryAliasMap=()=>{
+ if(INDUSTRY_ALIAS_MAP)return INDUSTRY_ALIAS_MAP;
+ const m=new Map();
+ for(const[visit,revenue]of INDUSTRY_REVENUE_ALIASES){
+  const r=auxIndustryCanonical(revenue),v=auxIndustryCanonical(visit);
+  if(!r||!v||r===v)continue;
+  if(!m.has(r))m.set(r,new Set());m.get(r).add(v);
+ }
+ return INDUSTRY_ALIAS_MAP=m;
+};
+// Chaves de indústria de uma linha de FATURAMENTO/CADASTRO: o próprio nome + as
+// indústrias de visitas ligadas a ele pelo de-para.
 // Não reutiliza auxMatchKeys para indústria: ela remove nomes das bandeiras.
-const auxIndustryMatchKeys=v=>{const k=auxIndustryCanonical(v);return k?[k]:[]};
+const auxIndustryMatchKeys=v=>{const k=auxIndustryCanonical(v);if(!k)return[];const extra=industryAliasMap().get(k);return extra?[k,...extra]:[k]};
 const auxKey=(forn,loja)=>auxIndustryCanonical(forn)+'|'+auxCanonical(loja);
-const auxPairMatches=(a,b)=>{const ka=auxIndustryCanonical(a),kb=auxIndustryCanonical(b);return !!ka&&ka===kb};
+// a = nome no faturamento/cadastro, b = indústria da base de visitas.
+const auxPairMatches=(a,b)=>{const kb=auxIndustryCanonical(b);return !!kb&&auxIndustryMatchKeys(a).includes(kb)};
 const auxStoreKey=v=>auxMatchKey(v)
  .replace(/\b(?:center|loja|reg|regiao|unidade|filial)\b/g,' ')
  .replace(/\s+/g,' ').trim().split(' ').filter(Boolean).sort().join(' ');
@@ -640,7 +678,7 @@ function revenueFor(forn,loja){
  const wanted=auxStoreIdentity(loja),cacheKey=auxIndustryCanonical(forn)+'|'+(wanted.number?'#'+wanted.number:auxCanonical(loja));
  if(REVENUE_LOOKUP_CACHE.has(cacheKey))return REVENUE_LOOKUP_CACHE.get(cacheKey);
  const matches=new Set();
- for(const industryKey of auxIndustryMatchKeys(forn)){
+ for(const industryKey of [auxIndustryCanonical(forn)]){
   const index=REVENUE_INDEX.get(industryKey);if(!index)continue;
   if(wanted.number){for(const row of index.byNumber.get(wanted.number)||[])matches.add(row)}
   else for(const key of auxMatchKeys(loja)){for(const row of index.exact.get(key)||[])matches.add(row)}
@@ -667,7 +705,7 @@ const REVENUE_ROWS_CACHE=new Map();
 function revenueRows(forn){
  const ck=auxIndustryCanonical(forn);if(REVENUE_ROWS_CACHE.has(ck))return REVENUE_ROWS_CACHE.get(ck);
  let rows=REVENUE_DB.filter(row=>auxPairMatches(row.forn,forn));
- if(!rows.length)rows=REVENUE_DB.filter(row=>auxFuzzyMatch(row.forn,forn));
+ if(!rows.length)rows=REVENUE_DB.filter(row=>!industryAliasMap().has(auxIndustryCanonical(row.forn))&&auxFuzzyMatch(row.forn,forn));
  REVENUE_ROWS_CACHE.set(ck,rows);return rows;
 }
 function revenueTotal(forn=null){
@@ -678,14 +716,23 @@ function storesWithoutVisits(){
  // Junta cadastro e faturamento, depois cruza com visitas usando índice por indústria e número da loja.
  // Isso evita varrer toda a base de visitas para cada loja e mantém a aba responsiva.
  const candidates=new Map();
+ // Nome exibido: o da base de visitas quando a indústria foi ligada pelo de-para.
+ const visitNames=new Map();for(const v of ALL){const k=auxIndustryCanonical(v.forn);if(k&&!visitNames.has(k))visitNames.set(k,v.forn)}
+ const selKey=curInd==='__all__'?null:auxIndustryCanonical(curInd);
  const addCandidate=(row,source)=>{
   if(!row||!row.forn||!row.loja)return;
   const identity=auxStoreIdentity(row.loja);
   if(identity.number==='100')return;
-  if(curInd!=='__all__'&&!auxPairMatches(row.forn,curInd))return;
-  const industry=auxIndustryCanonical(row.forn),key=industry+'|'+(identity.number?'#'+identity.number:'name:'+auxStoreKey(row.loja));
-  if(!candidates.has(key))candidates.set(key,{forn:row.forn,loja:row.loja,industry,identity,sources:new Set([source])});
-  else candidates.get(key).sources.add(source);
+  const own=auxIndustryCanonical(row.forn);
+  for(const industry of auxIndustryMatchKeys(row.forn)){
+   if(selKey&&industry!==selKey)continue;
+   // Nome de faturamento ligado pelo de-para: conta só nas indústrias de visitas.
+   if(industry===own&&industryAliasMap().has(own)&&!visitNames.has(own))continue;
+   const key=industry+'|'+(identity.number?'#'+identity.number:'name:'+auxStoreKey(row.loja));
+   const forn=industry===own?row.forn:(visitNames.get(industry)||row.forn);
+   if(!candidates.has(key))candidates.set(key,{forn,loja:row.loja,industry,identity,sources:new Set([source])});
+   else candidates.get(key).sources.add(source);
+  }
  };
  // O cadastro de lojas é por BANDEIRA (STOK / COMERCIAL ZAFFARI), não por indústria.
  // Linhas antigas, em que "forn" ainda é uma indústria, seguem a regra anterior.
